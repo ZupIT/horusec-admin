@@ -59,10 +59,10 @@ func main() {
 
 	// rest api
 	api := chi.NewRouter()
-	api.Get("/health", func(w http.ResponseWriter, r *http.Request) { err := rnd.JSON(w, http.StatusOK, nil); checkErr(err) })
-	api.Post("/auth", func(w http.ResponseWriter, r *http.Request) { err := rnd.JSON(w, http.StatusOK, nil); checkErr(err) })
-	api.Get("/config", func(w http.ResponseWriter, r *http.Request) { err := rnd.JSON(w, http.StatusOK, nil); checkErr(err) })
-	api.Patch("/config", func(w http.ResponseWriter, r *http.Request) { err := rnd.JSON(w, http.StatusOK, nil); checkErr(err) })
+	api.Get("/health", func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(http.StatusNoContent) })
+	api.Post("/auth", func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(http.StatusNoContent) })
+	api.Get("/config", func(w http.ResponseWriter, r *http.Request) { err := rnd.JSON(w, http.StatusOK, "{}"); checkErr(err) })
+	api.Patch("/config", func(w http.ResponseWriter, r *http.Request) { err := rnd.JSON(w, http.StatusOK, "{}"); checkErr(err) })
 	r.Mount("/api", api)
 
 	// static files
