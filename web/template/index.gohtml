@@ -3,12 +3,12 @@
 <html lang="en">
 
 <head>
-    <%- include('../partials/head'); %>
+    {{ template "head" }}
         <link href="/styles/auth.css" rel="stylesheet" />
 </head>
 
 <body>
-    <%- include('../partials/snackbar'); %>
+    {{ template "snackbar" }}
 
     <section class="container">
         <img class="logo" src="/images/logo.svg" alt="Horusec Logo">

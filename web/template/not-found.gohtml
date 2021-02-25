@@ -3,12 +3,12 @@
 <html lang="en">
 
 <head>
-    <%- include('../partials/head'); %>
+    {{ template "head" }}
         <link href="/styles/error.css" rel="stylesheet" />
 </head>
 
 <body>
-    <%- include('../partials/logo'); %>
+    {{ template "logo" }}
 
     <section class="container">
         <img src="/images/not_found.svg" alt="Not Found">

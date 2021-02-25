@@ -3,13 +3,13 @@
 <html lang="en">
 
 <head>
-    <%- include('../partials/head'); %>
+    {{ template "head" }}
     <link href="/styles/config-general.css" rel="stylesheet" />
 </head>
 
 <body>
-    <%- include('../partials/snackbar'); %>
-    <%- include('../partials/logo'); %>
+    {{ template "snackbar" }}
+    {{ template "logo" }}
 
     <section class="container">
         <form onsubmit="event.preventDefault();submitManagerForm()">
