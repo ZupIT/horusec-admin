@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../partials/head'); %>
+    <link href="/styles/home.css" rel="stylesheet" />
+</head>
+
+<body>
+    <%- include('../partials/logo'); %>
+
+    <section class="container">
+        <img src="/images/horusec_config.svg" class="illustration" alt="Horusec Config Illustation">
+
+        <h1>Welcome to Horusec Admin</h1>
+
+        <h2>Choose a category below to get started:</h2>
+
+        <ul>
+            <li>
+                <a href="/view/config-general">
+                    <span>General</span>
+                    <img src="/icons/settings.svg" alt="settings">
+                </a>
+            </li>
+
+            <li>
+                <a href="/view/config-auth">
+                    <span>Authentication</span>
+                    <img src="/icons/unlocked.svg" alt="settings">
+                </a>
+            </li>
+
+            <li>
+                <a href="/view/config-manager">
+                    <span>Manager</span>
+                    <img src="/icons/pie.svg" alt="settings">
+                </a>
+            </li>
+        </ul>
+    </section>
+</body>
+
+<script type="text/javascript">
+
+</script>
+
+</html>
