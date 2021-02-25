@@ -25,6 +25,7 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 
+	// views
 	view := chi.NewRouter()
 	view.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		err := rnd.HTML(w, http.StatusOK, "index", nil)
@@ -55,16 +56,27 @@ func main() {
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/view", http.StatusMovedPermanently)
 	})
-	r.NotFound(func(w http.ResponseWriter, r *http.Request) {
-		err := rnd.HTML(w, http.StatusNotFound, "not-found", nil)
-		checkErr(err)
-	})
 
+	// rest api
+	api := chi.NewRouter()
+	api.Get("/health", func(w http.ResponseWriter, r *http.Request) { err := rnd.JSON(w, http.StatusOK, nil); checkErr(err) })
+	api.Post("/auth", func(w http.ResponseWriter, r *http.Request) { err := rnd.JSON(w, http.StatusOK, nil); checkErr(err) })
+	api.Get("/config", func(w http.ResponseWriter, r *http.Request) { err := rnd.JSON(w, http.StatusOK, nil); checkErr(err) })
+	api.Patch("/config", func(w http.ResponseWriter, r *http.Request) { err := rnd.JSON(w, http.StatusOK, nil); checkErr(err) })
+	r.Mount("/api", api)
+
+	// static files
 	dir, _ := os.Getwd()
 	fileServer(r, "/icons", http.Dir(filepath.Join(dir, "web/static/icons")))
 	fileServer(r, "/images", http.Dir(filepath.Join(dir, "web/static/images")))
 	fileServer(r, "/scripts", http.Dir(filepath.Join(dir, "web/static/scripts")))
 	fileServer(r, "/styles", http.Dir(filepath.Join(dir, "web/static/styles")))
+
+	// error page
+	r.NotFound(func(w http.ResponseWriter, r *http.Request) {
+		err := rnd.HTML(w, http.StatusNotFound, "not-found", nil)
+		checkErr(err)
+	})
 
 	srv := &http.Server{Addr: addr, Handler: r}
 	go func() {
