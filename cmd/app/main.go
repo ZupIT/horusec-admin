@@ -2,9 +2,6 @@ package main
 
 import (
 	"context"
-	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
-	"github.com/thedevsaddam/renderer"
 	"log"
 	"net/http"
 	"os"
@@ -12,6 +9,10 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/go-chi/chi"
+	"github.com/thedevsaddam/renderer"
+	"github.com/tiagoangelozup/horusec-admin/internal/http/router"
 )
 
 var rnd = renderer.New(renderer.Options{ParseGlobPattern: "web/template/*.gohtml"})
@@ -22,8 +23,7 @@ func main() {
 	stopChan := make(chan os.Signal)
 	signal.Notify(stopChan, os.Interrupt)
 
-	r := chi.NewRouter()
-	r.Use(middleware.Logger)
+	r := router.New()
 
 	// views
 	view := chi.NewRouter()
@@ -56,14 +56,6 @@ func main() {
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/view", http.StatusMovedPermanently)
 	})
-
-	// rest api
-	api := chi.NewRouter()
-	api.Get("/health", func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(http.StatusNoContent) })
-	api.Post("/auth", func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(http.StatusNoContent) })
-	api.Get("/config", func(w http.ResponseWriter, r *http.Request) { err := rnd.JSON(w, http.StatusOK, "{}"); checkErr(err) })
-	api.Patch("/config", func(w http.ResponseWriter, r *http.Request) { err := rnd.JSON(w, http.StatusOK, "{}"); checkErr(err) })
-	r.Mount("/api", api)
 
 	// static files
 	dir, _ := os.Getwd()
@@ -100,7 +92,7 @@ func fileServer(r chi.Router, path string, root http.FileSystem) {
 	}
 
 	if path != "/" && path[len(path)-1] != '/' {
-		r.Get(path, http.RedirectHandler(path+"/", 301).ServeHTTP)
+		r.Get(path, http.RedirectHandler(path+"/", http.StatusMovedPermanently).ServeHTTP)
 		path += "/"
 	}
 	path += "*"
@@ -115,6 +107,6 @@ func fileServer(r chi.Router, path string, root http.FileSystem) {
 
 func checkErr(err error) {
 	if err != nil {
-		log.Fatal(err) //respond with error page or message
+		log.Fatal(err)
 	}
 }
