@@ -4,12 +4,15 @@ import (
 	"context"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/thedevsaddam/renderer"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
 )
+
+var rnd = renderer.New(renderer.Options{ParseGlobPattern: "web/template/*.gohtml"})
 
 const addr = ":3001"
 
@@ -20,7 +23,8 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("welcome"))
+		err := rnd.HTML(w, http.StatusOK, "indexPage", nil)
+		checkErr(err)
 	})
 	srv := &http.Server{Addr: addr, Handler: r}
 
@@ -37,4 +41,10 @@ func main() {
 	srv.Shutdown(ctx)
 	defer cancel()
 	log.Println("Server gracefully stopped!")
+}
+
+func checkErr(err error) {
+	if err != nil {
+		log.Fatal(err) //respond with error page or message
+	}
 }
