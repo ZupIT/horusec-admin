@@ -23,7 +23,7 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		err := rnd.HTML(w, http.StatusOK, "indexPage", nil)
+		err := rnd.HTML(w, http.StatusOK, "index", nil)
 		checkErr(err)
 	})
 	srv := &http.Server{Addr: addr, Handler: r}
