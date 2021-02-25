@@ -9,6 +9,8 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -22,12 +24,19 @@ func main() {
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
+
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		err := rnd.HTML(w, http.StatusOK, "index", nil)
 		checkErr(err)
 	})
-	srv := &http.Server{Addr: addr, Handler: r}
 
+	dir, _ := os.Getwd()
+	fileServer(r, "/icons", http.Dir(filepath.Join(dir, "web/static/icons")))
+	fileServer(r, "/images", http.Dir(filepath.Join(dir, "web/static/images")))
+	fileServer(r, "/scripts", http.Dir(filepath.Join(dir, "web/static/scripts")))
+	fileServer(r, "/styles", http.Dir(filepath.Join(dir, "web/static/styles")))
+
+	srv := &http.Server{Addr: addr, Handler: r}
 	go func() {
 		log.Println("Listening on ", addr)
 		if err := srv.ListenAndServe(); err != nil {
@@ -41,6 +50,25 @@ func main() {
 	srv.Shutdown(ctx)
 	defer cancel()
 	log.Println("Server gracefully stopped!")
+}
+
+func fileServer(r chi.Router, path string, root http.FileSystem) {
+	if strings.ContainsAny(path, "{}*") {
+		panic("FileServer does not permit any URL parameters.")
+	}
+
+	if path != "/" && path[len(path)-1] != '/' {
+		r.Get(path, http.RedirectHandler(path+"/", 301).ServeHTTP)
+		path += "/"
+	}
+	path += "*"
+
+	r.Get(path, func(w http.ResponseWriter, r *http.Request) {
+		ctx := chi.RouteContext(r.Context())
+		prefix := strings.TrimSuffix(ctx.RoutePattern(), "/*")
+		fs := http.StripPrefix(prefix, http.FileServer(root))
+		fs.ServeHTTP(w, r)
+	})
 }
 
 func checkErr(err error) {

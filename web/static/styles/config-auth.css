@@ -1,0 +1,32 @@
+@import './config.css';
+
+.select-auth {
+    width: 755px;
+}
+
+div.radio-group {
+    margin: 20px 0;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+
+label.radio-item {
+    display: flex;
+    align-items: center;
+}
+
+label.radio-item  input {
+    width: 20px;
+    margin: 0;
+    margin-right: 10px;
+}
+
+label.radio-item img {
+    width: 120px;
+}
+
+div.form-group {
+    display: none;
+}
