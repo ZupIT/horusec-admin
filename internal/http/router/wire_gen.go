@@ -19,10 +19,6 @@ func newRouter() (*router, error) {
 	mux := chi.NewRouter()
 	authorizer := middleware.NewAuthorizer()
 	rendererRender := render.New()
-	v, err := scanPages(rendererRender)
-	if err != nil {
-		return nil, err
-	}
 	auth := handler.NewAuth()
 	configEditing := handler.NewConfigEditing(rendererRender)
 	configReading := handler.NewConfigReading(rendererRender)
@@ -33,13 +29,22 @@ func newRouter() (*router, error) {
 		ConfigReading: configReading,
 		Health:        health,
 	}
-	v2 := newAPIs(routerHandlers)
+	v := newAPIs(routerHandlers)
+	v2, err := scanAssets()
+	if err != nil {
+		return nil, err
+	}
+	v3, err := scanPages(rendererRender)
+	if err != nil {
+		return nil, err
+	}
 	routerRouter := &router{
 		Mux:    mux,
 		authz:  authorizer,
 		render: rendererRender,
-		Pages:  v,
-		APIs:   v2,
+		APIs:   v,
+		Assets: v2,
+		Pages:  v3,
 	}
 	return routerRouter, nil
 }
@@ -47,5 +52,6 @@ func newRouter() (*router, error) {
 // wire.go:
 
 var providers = wire.NewSet(chi.NewRouter, handler.NewAuth, handler.NewConfigEditing, handler.NewConfigReading, handler.NewHealth, middleware.NewAuthorizer, render.New, newAPIs,
+	scanAssets,
 	scanPages, wire.Struct(new(handlers), "*"), wire.Struct(new(router), "*"),
 )

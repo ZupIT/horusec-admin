@@ -19,6 +19,7 @@ var providers = wire.NewSet(
 	middleware.NewAuthorizer,
 	render.New,
 	newAPIs,
+	scanAssets,
 	scanPages,
 	wire.Struct(new(handlers), "*"),
 	wire.Struct(new(router), "*"),

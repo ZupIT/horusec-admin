@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-const relativePath = "/web/template/pages"
+const pagesPath = "/web/template/pages"
 
 type Page struct {
 	render *renderer.Render
@@ -40,9 +40,9 @@ func newPage(render *renderer.Render, file string, dir string) *Page {
 func scanPages(render *renderer.Render) ([]*Page, error) {
 	wd, err := os.Getwd()
 	if err != nil {
-		log.Fatal(fmt.Errorf("failed to find the views path: %w", err))
+		return nil, fmt.Errorf("failed to find the views path: %w", err)
 	}
-	dir := path.Join(wd, relativePath)
+	dir := path.Join(wd, pagesPath)
 
 	var pg []*Page
 	err = filepath.Walk(dir, func(file string, info os.FileInfo, err error) error {

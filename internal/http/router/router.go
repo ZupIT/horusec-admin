@@ -14,8 +14,9 @@ type router struct {
 	authz  *internal.Authorizer
 	render *renderer.Render
 
-	Pages []*Page
-	APIs  []*API
+	APIs   []*API
+	Assets []*Asset
+	Pages  []*Page
 }
 
 // New creates the router with all API routes and the static files handler.
@@ -27,6 +28,7 @@ func New() (*chi.Mux, error) {
 	r.Use(middleware.Logger)
 	r.routeAPIs()
 	r.routePages()
+	r.serveAssets()
 	r.routeErrors()
 
 	return r.Mux, nil
@@ -53,6 +55,12 @@ func (r *router) routePages() {
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/view", http.StatusMovedPermanently)
 	})
+}
+
+func (r *router) serveAssets() {
+	for _, a := range r.Assets {
+		a.serve(r.Mux)
+	}
 }
 
 func (r *router) routeErrors() {
