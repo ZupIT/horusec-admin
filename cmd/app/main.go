@@ -13,7 +13,9 @@ import (
 
 func main() {
 	r, err := router.New()
-	checkErr(err)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	srv := server.New(r).Start()
 
@@ -23,12 +25,6 @@ func main() {
 	}
 
 	log.Println("server exiting")
-}
-
-func checkErr(err error) {
-	if err != nil {
-		log.Fatal(err)
-	}
 }
 
 func waitForInterruptSignal() {
