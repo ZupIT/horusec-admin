@@ -1,0 +1,309 @@
+{{ define "config-auth" }}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{ template "head" }}
+    <link href="/styles/config-auth.css" rel="stylesheet" />
+</head>
+
+<body>
+    {{ template "snackbar" }}
+    {{ template "logo" }}
+
+    <section class="container">
+        <form onsubmit="event.preventDefault();submitAuthForm()">
+            <h1>
+                <img src="/icons/unlocked.svg">
+                Authentication
+            </h1>
+
+            <div class="divider select-auth">
+                <label class="key" for="">HORUSEC_AUTH_TYPE</label>
+
+                <span class="description">
+                    See the authentication section of the <a href="https://docs.horusec.io/v/v1-eng/tutorials/horusec-usage-options/authentication-types" target="_blank" rel="noopener noreferrer">documentation</a> for more details.
+                    <br>Selected the provider of authentication:
+                </span>
+
+                <div class="radio-group">
+                    <input id="horusec_auth_type" hidden>
+
+                    <label class="radio-item">
+                        <input id="auth-horusec" name="horusec_auth_type" value="horusec" type="radio" onchange="setAuthType('horusec')">
+                        <img src="/images/horusec.svg">
+                    </label>
+
+                    <label class="radio-item">
+                        <input id="auth-keycloak" name="horusec_auth_type" value="ldap" type="radio" onchange="setAuthType('keycloak')">
+                        <img src="/images/keycloak.svg">
+                    </label>
+
+                    <label class="radio-item">
+                        <input id="auth-ldap" name="horusec_auth_type" value="keycloak" type="radio" onchange="setAuthType('ldap')">
+                        <img src="/images/ldap.svg">
+                    </label>
+                </div>
+            </div>
+
+            <div id="keycloak-form" class="form-group">
+                <div class="divider">
+                    <label class="key" for="">HORUSEC_KEYCLOAK_BASE_PATH</label>
+
+                    <span class="description">What is the keycloak connection base.</span>
+
+                    <input id="horusec_keycloak_base_path" placeholder="Example: http://127.0.0.1:8080" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key" for="">HORUSEC_KEYCLOAK_CLIENT_ID</label>
+
+                    <span class="description">What is the client_id that you use.</span>
+
+                    <input id="horusec_keycloak_client_id" placeholder="Example: account" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key" for="">HORUSEC_KEYCLOAK_CLIENT_SECRET</label>
+
+                    <span class="description">What is secret  used to client_id.</span>
+
+                    <input id="horusec_keycloak_client_secret" placeholder="00000000-0000-0000-0000-000000000000" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key" for="">HORUSEC_KEYCLOAK_REALM</label>
+
+                    <span class="description">What is the realm used.</span>
+
+                    <input id="horusec_keycloak_realm" placeholder="Example: master" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key" for="">HORUSEC_KEYCLOAK_OTP</label>
+
+                    <span class="description">If you are using otp (one-time password).</span>
+
+                    <label class="switch">
+                        <input type="checkbox" id="horusec_keycloak_otp" value="false" onchange="setCheckboxValue('horusec_keycloak_otp')">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div class="divider">
+                    <label class="key" for="">REACT_APP_KEYCLOAK_CLIENT_ID</label>
+
+                    <span class="description">What is the Keycloak connection base for the horusec manager.</span>
+
+                    <input id="react_app_keycloak_client_id" placeholder="Example: http://127.0.0.1:8080" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key" for="">REACT_APP_KEYCLOAK_REALM</label>
+
+                    <span class="description">What is the client_id that you use for the horusec manager.</span>
+
+                    <input id="react_app_keycloak_realm" placeholder="Example: account" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key" for="">REACT_APP_KEYCLOAK_BASE_PATH</label>
+
+                    <span class="description">What is the realm used for the horusec manager.</span>
+
+                    <input id="react_app_keycloak_base_path" placeholder="Example: master" type="text">
+                </div>
+            </div>
+
+            <div id="ldap-form" class="form-group">
+                <div class="divider">
+                    <label class="key" for="">HORUSEC_LDAP_BASE</label>
+
+                    <span class="description">LDAP connection base</span>
+
+                    <input id="horusec_ldap_base" placeholder="dc=example,dc=org" value="dc=example,dc=org" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key" for="">HORUSEC_LDAP_HOST</label>
+
+                    <span class="description">LDAP connection host</span>
+
+                    <input id="horusec_ldap_host" placeholder="127.0.0.1" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key" for="">HORUSEC_LDAP_PORT</label>
+
+                    <span class="description">LDAP connection host</span>
+
+                    <input id="horusec_ldap_port" placeholder="389" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key" for="">HORUSEC_LDAP_USESSL</label>
+
+                    <span class="description">Checks whether to use SSL</span>
+
+                    <label class="switch">
+                        <input type="checkbox" id="horusec_ldap_usessl" value="false" onchange="setCheckboxValue('horusec_ldap_usessl')">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div class="divider">
+                    <label class="key" for="">HORUSEC_LDAP_SKIP_TLS</label>
+
+                    <span class="description">Checks whether to skip TLS</span>
+
+                    <label class="switch">
+                        <input type="checkbox" id="horusec_ldap_skip_tls" value="true" onchange="setCheckboxValue('horusec_ldap_skip_tls')">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div class="divider">
+                    <label class="key" for="">HORUSEC_LDAP_INSECURE_SKIP_VERIFY</label>
+
+                    <span class="description">Checks whether to skip insecurity check</span>
+
+                    <label class="switch">
+                        <input type="checkbox" id="horusec_ldap_insecure_skip_verify" value="true" onchange="setCheckboxValue('horusec_ldap_insecure_skip_verify')">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div class="divider">
+                    <label class="key" for="">HORUSEC_LDAP_BINDDN</label>
+
+                    <span class="description">Definition for Idap admin entity</span>
+
+                    <input id="horusec_ldap_binddn" placeholder="cn=admin,dc=example,dc=org" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key" for="">HORUSEC_LDAP_BINDPASSWORD</label>
+
+                    <span class="description">Definition for Idap admin entity</span>
+
+                    <input id="horusec_ldap_bindpassword" placeholder="admin" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key" for="">HORUSEC_LDAP_USERFILTER</label>
+
+                    <span class="description">What is the way of filter for users</span>
+
+                    <input id="horusec_ldap_userfilter" placeholder="(uid=%s)" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key" for="">HORUSEC_LDAP_GROUPFILTER</label>
+
+                    <span class="description">What is the group administrators name</span>
+
+                    <input id="horusec_ldap_groupfilter" placeholder="(memberUid=%s)" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key" for="">HORUSEC_LDAP_ADMIN_GROUP</label>
+
+                    <span class="description">What is the group administrators name</span>
+
+                    <input id="horusec_ldap_admin_group" placeholder="admin" type="text">
+                </div>
+            </div>
+
+            <div class="btns-wrapper">
+                <button type="submit">SAVE</button>
+
+                <button class="outline">
+                    <a href="/view/home">BACK</a>
+                </button>
+            </div>
+        </form>
+    </section>
+</body>
+
+<script type="text/javascript">
+window.onload = () => {
+    setCurrentValues()
+};
+function submitAuthForm() {
+    try {
+            const horusec_auth_type = document.getElementById('horusec_auth_type').value
+
+            const horusec_keycloak_base_path = document.getElementById('horusec_keycloak_base_path').value
+            const horusec_keycloak_client_id = document.getElementById('horusec_keycloak_client_id').value
+            const horusec_keycloak_client_secret = document.getElementById('horusec_keycloak_client_secret').value
+            const horusec_keycloak_realm = document.getElementById('horusec_keycloak_realm').value
+            const horusec_keycloak_otp = document.getElementById('horusec_keycloak_otp').value
+            const react_app_keycloak_client_id = document.getElementById('react_app_keycloak_client_id').value
+            const react_app_keycloak_realm = document.getElementById('react_app_keycloak_realm').value
+            const react_app_keycloak_base_path = document.getElementById('react_app_keycloak_base_path').value
+
+            const horusec_ldap_base = document.getElementById('horusec_ldap_base').value
+            const horusec_ldap_host = document.getElementById('horusec_ldap_host').value
+            const horusec_ldap_port = document.getElementById('horusec_ldap_port').value
+            const horusec_ldap_usessl = document.getElementById('horusec_ldap_usessl').value
+            const horusec_ldap_skip_tls = document.getElementById('horusec_ldap_skip_tls').value
+            const horusec_ldap_insecure_skip_verify = document.getElementById('horusec_ldap_insecure_skip_verify').value
+            const horusec_ldap_binddn = document.getElementById('horusec_ldap_binddn').value
+            const horusec_ldap_bindpassword = document.getElementById('horusec_ldap_bindpassword').value
+            const horusec_ldap_userfilter = document.getElementById('horusec_ldap_userfilter').value
+            const horusec_ldap_groupfilter = document.getElementById('horusec_ldap_groupfilter').value
+            const horusec_ldap_admin_group = document.getElementById('horusec_ldap_admin_group').value
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('PATCH', '/api/config', true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.setRequestHeader('authorization', getCookie('horusec::access_token'))
+
+            xhr.send(JSON.stringify({
+                horusec_auth_type,
+                horusec_keycloak_base_path,
+                horusec_keycloak_client_id,
+                horusec_keycloak_client_secret,
+                horusec_keycloak_realm,
+                horusec_keycloak_otp,
+                react_app_keycloak_client_id,
+                react_app_keycloak_realm,
+                react_app_keycloak_base_path,
+                horusec_ldap_base,
+                horusec_ldap_host,
+                horusec_ldap_port,
+                horusec_ldap_usessl,
+                horusec_ldap_skip_tls,
+                horusec_ldap_insecure_skip_verify,
+                horusec_ldap_binddn,
+                horusec_ldap_bindpassword,
+                horusec_ldap_userfilter,
+                horusec_ldap_groupfilter,
+                horusec_ldap_admin_group
+            }))
+
+            xhr.onreadystatechange = function (ev) {
+                if (ev.currentTarget.status === 204) {
+                    showSnackBar('success')
+                } else {
+                    showSnackBar('error')
+                }
+            }
+
+        } catch (error) {
+            showSnackBar('error')
+        }
+}
+function setCheckboxValue(id) {
+    const value = document.getElementById(id).value
+
+    if (value === 'true') {
+        document.getElementById(id).value = false
+    } else {
+        document.getElementById(id).value = true
+    }
+}
+</script>
+
+</html>
+{{end}}
