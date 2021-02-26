@@ -2,7 +2,6 @@ package router
 
 import (
 	"fmt"
-	"github.com/go-chi/chi"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -10,6 +9,8 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
+
+	"github.com/go-chi/chi"
 )
 
 const assetsPath = "/web/static"

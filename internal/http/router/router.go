@@ -1,12 +1,13 @@
 package router
 
 import (
+	"log"
+	"net/http"
+
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/thedevsaddam/renderer"
 	internal "github.com/tiagoangelozup/horusec-admin/internal/http/middleware"
-	"log"
-	"net/http"
 )
 
 type router struct {

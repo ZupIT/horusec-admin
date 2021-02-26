@@ -2,13 +2,14 @@ package router
 
 import (
 	"fmt"
-	"github.com/thedevsaddam/renderer"
 	"log"
 	"net/http"
 	"os"
 	"path"
 	"path/filepath"
 	"strings"
+
+	"github.com/thedevsaddam/renderer"
 )
 
 const pagesPath = "/web/template/pages"
