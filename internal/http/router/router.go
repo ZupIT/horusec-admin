@@ -3,13 +3,17 @@ package router
 import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/thedevsaddam/renderer"
 	internal "github.com/tiagoangelozup/horusec-admin/internal/http/middleware"
+	"log"
 	"net/http"
 )
 
 type router struct {
 	*chi.Mux
 	authz  *internal.Authorizer
+	render *renderer.Render
+
 	Pages  []*Page
 	Routes []*Route
 }
@@ -21,8 +25,14 @@ func New() (*chi.Mux, error) {
 		return nil, err
 	}
 	r.Use(middleware.Logger)
+	r.routeAPIs()
+	r.routeViews()
+	r.routeErrors()
 
-	// routing apis
+	return r.Mux, nil
+}
+
+func (r *router) routeAPIs() {
 	api := chi.NewRouter()
 	for _, route := range r.Routes {
 		handlerFunc := route.Handler
@@ -32,8 +42,9 @@ func New() (*chi.Mux, error) {
 		api.Method(route.Method, route.Pattern, handlerFunc)
 	}
 	r.Mount("/api", api)
+}
 
-	// routing views
+func (r *router) routeViews() {
 	view := chi.NewRouter()
 	for _, pg := range r.Pages {
 		view.Get(pg.Pattern, pg.Render)
@@ -42,6 +53,13 @@ func New() (*chi.Mux, error) {
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/view", http.StatusMovedPermanently)
 	})
+}
 
-	return r.Mux, nil
+func (r *router) routeErrors() {
+	r.NotFound(func(w http.ResponseWriter, _ *http.Request) {
+		err := r.render.HTML(w, http.StatusNotFound, "not-found", nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+	})
 }

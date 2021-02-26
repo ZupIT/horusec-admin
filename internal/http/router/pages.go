@@ -31,9 +31,8 @@ func newPage(render *renderer.Render, file string, dir string) *Page {
 		Pattern: func() string {
 			if pattern == "/index" {
 				return "/"
-			} else {
-				return pattern
 			}
+			return pattern
 		}(),
 	}
 }

@@ -37,6 +37,7 @@ func newRouter() (*router, error) {
 	routerRouter := &router{
 		Mux:    mux,
 		authz:  authorizer,
+		render: rendererRender,
 		Pages:  v,
 		Routes: v2,
 	}
