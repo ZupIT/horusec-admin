@@ -1,28 +1,24 @@
 package main
 
 import (
-	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"path/filepath"
 	"strings"
-	"time"
+	"syscall"
 
 	"github.com/go-chi/chi"
 	"github.com/thedevsaddam/renderer"
 	"github.com/tiagoangelozup/horusec-admin/internal/http/router"
+	"github.com/tiagoangelozup/horusec-admin/internal/server"
 )
 
 var rnd = renderer.New(renderer.Options{ParseGlobPattern: "web/template/*.gohtml"})
 
-const addr = ":3001"
-
 func main() {
-	stopChan := make(chan os.Signal)
-	signal.Notify(stopChan, os.Interrupt)
-
 	r := router.New()
 
 	// views
@@ -70,20 +66,15 @@ func main() {
 		checkErr(err)
 	})
 
-	srv := &http.Server{Addr: addr, Handler: r}
-	go func() {
-		log.Println("Listening on ", addr)
-		if err := srv.ListenAndServe(); err != nil {
-			log.Printf("listen: %s\n", err)
-		}
-	}()
+	srv := server.New(r).Start()
 
-	<-stopChan
-	log.Println("Shutting down server...")
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	srv.Shutdown(ctx)
-	defer cancel()
-	log.Println("Server gracefully stopped!")
+	waitForInterruptSignal()
+	err := srv.GracefullyShutdown()
+	if err != nil {
+		log.Fatal(fmt.Errorf("server forced to shutdown: %w", err))
+	}
+
+	log.Println("server exiting")
 }
 
 func fileServer(r chi.Router, path string, root http.FileSystem) {
@@ -109,4 +100,10 @@ func checkErr(err error) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func waitForInterruptSignal() {
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
 }
