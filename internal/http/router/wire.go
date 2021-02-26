@@ -18,7 +18,7 @@ var providers = wire.NewSet(
 	handler.NewHealth,
 	middleware.NewAuthorizer,
 	render.New,
-	newRoutes,
+	newAPIs,
 	scanPages,
 	wire.Struct(new(handlers), "*"),
 	wire.Struct(new(router), "*"),

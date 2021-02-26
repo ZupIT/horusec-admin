@@ -33,19 +33,19 @@ func newRouter() (*router, error) {
 		ConfigReading: configReading,
 		Health:        health,
 	}
-	v2 := newRoutes(routerHandlers)
+	v2 := newAPIs(routerHandlers)
 	routerRouter := &router{
 		Mux:    mux,
 		authz:  authorizer,
 		render: rendererRender,
 		Pages:  v,
-		Routes: v2,
+		APIs:   v2,
 	}
 	return routerRouter, nil
 }
 
 // wire.go:
 
-var providers = wire.NewSet(chi.NewRouter, handler.NewAuth, handler.NewConfigEditing, handler.NewConfigReading, handler.NewHealth, middleware.NewAuthorizer, render.New, newRoutes,
+var providers = wire.NewSet(chi.NewRouter, handler.NewAuth, handler.NewConfigEditing, handler.NewConfigReading, handler.NewHealth, middleware.NewAuthorizer, render.New, newAPIs,
 	scanPages, wire.Struct(new(handlers), "*"), wire.Struct(new(router), "*"),
 )

@@ -14,8 +14,8 @@ type router struct {
 	authz  *internal.Authorizer
 	render *renderer.Render
 
-	Pages  []*Page
-	Routes []*Route
+	Pages []*Page
+	APIs  []*API
 }
 
 // New creates the router with all API routes and the static files handler.
@@ -26,7 +26,7 @@ func New() (*chi.Mux, error) {
 	}
 	r.Use(middleware.Logger)
 	r.routeAPIs()
-	r.routeViews()
+	r.routePages()
 	r.routeErrors()
 
 	return r.Mux, nil
@@ -34,7 +34,7 @@ func New() (*chi.Mux, error) {
 
 func (r *router) routeAPIs() {
 	api := chi.NewRouter()
-	for _, route := range r.Routes {
+	for _, route := range r.APIs {
 		handlerFunc := route.Handler
 		if route.Authenticated {
 			handlerFunc = r.authz.Authorize(handlerFunc)
@@ -44,7 +44,7 @@ func (r *router) routeAPIs() {
 	r.Mount("/api", api)
 }
 
-func (r *router) routeViews() {
+func (r *router) routePages() {
 	view := chi.NewRouter()
 	for _, pg := range r.Pages {
 		view.Get(pg.Pattern, pg.Render)

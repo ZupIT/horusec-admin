@@ -4,8 +4,8 @@ import (
 	"net/http"
 )
 
-// Route describes a single route.
-type Route struct {
+// API describes a single Rest API route.
+type API struct {
 	Name          string
 	Method        string
 	Pattern       string
@@ -13,9 +13,9 @@ type Route struct {
 	Authenticated bool
 }
 
-// newRoutes creates and returns all the API routes.
-func newRoutes(h *handlers) []*Route {
-	return []*Route{
+// newAPIs creates and returns all Rest API routes.
+func newAPIs(h *handlers) []*API {
+	return []*API{
 		{
 			Name:          "Configurations",
 			Method:        "GET",
