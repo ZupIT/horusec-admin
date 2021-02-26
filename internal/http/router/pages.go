@@ -25,6 +25,7 @@ type Page struct {
 func newPage(render *renderer.Render, file string, dir string) *Page {
 	pattern := strings.TrimPrefix(file, dir)
 	pattern = strings.TrimSuffix(pattern, filepath.Ext(file))
+
 	return &Page{
 		render: render,
 		file:   file,
@@ -33,6 +34,7 @@ func newPage(render *renderer.Render, file string, dir string) *Page {
 			if pattern == "/index" {
 				return "/"
 			}
+
 			return pattern
 		}(),
 	}
@@ -53,11 +55,13 @@ func scanPages(render *renderer.Render) ([]*Page, error) {
 		if filepath.Ext(file) == ".gohtml" {
 			pg = append(pg, newPage(render, file, dir))
 		}
+
 		return nil
 	})
 	if err != nil {
 		return nil, fmt.Errorf("failed to scan pages: %w", err)
 	}
+
 	return pg, nil
 }
 

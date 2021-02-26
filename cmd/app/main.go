@@ -18,8 +18,7 @@ func main() {
 	srv := server.New(r).Start()
 
 	waitForInterruptSignal()
-	err = srv.GracefullyShutdown()
-	if err != nil {
+	if err = srv.GracefullyShutdown(); err != nil {
 		log.Fatal(fmt.Errorf("server forced to shutdown: %w", err))
 	}
 

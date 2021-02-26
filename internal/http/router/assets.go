@@ -36,6 +36,7 @@ func scanAssets() ([]*Asset, error) {
 			assets = append(assets, &Asset{Pattern: "/" + f.Name(), Directory: http.Dir(filepath.Join(dir, f.Name()))})
 		}
 	}
+
 	return assets, nil
 }
 

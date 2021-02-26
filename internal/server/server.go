@@ -35,6 +35,7 @@ func (s *server) Start() Interface {
 			log.Printf("listen error: %s\n", err)
 		}
 	}()
+
 	return s
 }
 
@@ -45,5 +46,6 @@ func (s *server) GracefullyShutdown() error {
 	if err := s.Shutdown(ctx); err != nil {
 		return fmt.Errorf("failed to gracefully shuts down the server: %w", err)
 	}
+
 	return nil
 }
