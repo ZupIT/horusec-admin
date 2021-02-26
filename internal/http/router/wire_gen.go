@@ -15,11 +15,15 @@ import (
 
 // Injectors from wire.go:
 
-func newRouter() *router {
+func newRouter() (*router, error) {
 	mux := chi.NewRouter()
 	authorizer := middleware.NewAuthorizer()
-	auth := handler.NewAuth()
 	rendererRender := render.New()
+	v, err := scanPages(rendererRender)
+	if err != nil {
+		return nil, err
+	}
+	auth := handler.NewAuth()
 	configEditing := handler.NewConfigEditing(rendererRender)
 	configReading := handler.NewConfigReading(rendererRender)
 	health := handler.NewHealth()
@@ -29,15 +33,18 @@ func newRouter() *router {
 		ConfigReading: configReading,
 		Health:        health,
 	}
-	v := newRoutes(routerHandlers)
+	v2 := newRoutes(routerHandlers)
 	routerRouter := &router{
 		Mux:    mux,
 		authz:  authorizer,
-		Routes: v,
+		Pages:  v,
+		Routes: v2,
 	}
-	return routerRouter
+	return routerRouter, nil
 }
 
 // wire.go:
 
-var providers = wire.NewSet(chi.NewRouter, handler.NewAuth, handler.NewConfigEditing, handler.NewConfigReading, handler.NewHealth, middleware.NewAuthorizer, newRoutes, render.New, wire.Struct(new(handlers), "*"), wire.Struct(new(router), "*"))
+var providers = wire.NewSet(chi.NewRouter, handler.NewAuth, handler.NewConfigEditing, handler.NewConfigReading, handler.NewHealth, middleware.NewAuthorizer, render.New, newRoutes,
+	scanPages, wire.Struct(new(handlers), "*"), wire.Struct(new(router), "*"),
+)

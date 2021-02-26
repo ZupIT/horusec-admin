@@ -17,13 +17,14 @@ var providers = wire.NewSet(
 	handler.NewConfigReading,
 	handler.NewHealth,
 	middleware.NewAuthorizer,
-	newRoutes,
 	render.New,
+	newRoutes,
+	scanPages,
 	wire.Struct(new(handlers), "*"),
 	wire.Struct(new(router), "*"),
 )
 
-func newRouter() *router {
+func newRouter() (*router, error) {
 	wire.Build(providers)
-	return nil
+	return nil, nil
 }

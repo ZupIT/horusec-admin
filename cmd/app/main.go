@@ -19,39 +19,8 @@ import (
 var rnd = renderer.New(renderer.Options{ParseGlobPattern: "web/template/*.gohtml"})
 
 func main() {
-	r := router.New()
-
-	// views
-	view := chi.NewRouter()
-	view.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		err := rnd.HTML(w, http.StatusOK, "index", nil)
-		checkErr(err)
-	})
-	view.Get("/not-authorized", func(w http.ResponseWriter, r *http.Request) {
-		err := rnd.HTML(w, http.StatusOK, "not-authorized", nil)
-		checkErr(err)
-	})
-	view.Get("/home", func(w http.ResponseWriter, r *http.Request) {
-		err := rnd.HTML(w, http.StatusOK, "home", nil)
-		checkErr(err)
-	})
-	view.Get("/config-general", func(w http.ResponseWriter, r *http.Request) {
-		err := rnd.HTML(w, http.StatusOK, "config-general", nil)
-		checkErr(err)
-	})
-	view.Get("/config-auth", func(w http.ResponseWriter, r *http.Request) {
-		err := rnd.HTML(w, http.StatusOK, "config-auth", nil)
-		checkErr(err)
-	})
-	view.Get("/config-manager", func(w http.ResponseWriter, r *http.Request) {
-		err := rnd.HTML(w, http.StatusOK, "config-manager", nil)
-		checkErr(err)
-	})
-
-	r.Mount("/view", view)
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "/view", http.StatusMovedPermanently)
-	})
+	r, err := router.New()
+	checkErr(err)
 
 	// static files
 	dir, _ := os.Getwd()
@@ -69,7 +38,7 @@ func main() {
 	srv := server.New(r).Start()
 
 	waitForInterruptSignal()
-	err := srv.GracefullyShutdown()
+	err = srv.GracefullyShutdown()
 	if err != nil {
 		log.Fatal(fmt.Errorf("server forced to shutdown: %w", err))
 	}
