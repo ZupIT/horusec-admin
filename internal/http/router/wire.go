@@ -15,13 +15,14 @@ var providers = wire.NewSet(
 	handler.NewAuth,
 	handler.NewConfigEditing,
 	handler.NewConfigReading,
+	handler.NewDefaultRender,
 	handler.NewHealth,
 	middleware.NewAuthorizer,
 	render.New,
 	newAPIs,
+	newPages,
 	scanAssets,
-	scanPages,
-	wire.Struct(new(handlers), "*"),
+	wire.Struct(new(apiHandlers), "*"),
 	wire.Struct(new(router), "*"),
 )
 

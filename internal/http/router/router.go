@@ -49,8 +49,8 @@ func (r *router) routeAPIs() {
 
 func (r *router) routePages() {
 	view := chi.NewRouter()
-	for _, pg := range r.Pages {
-		view.Get(pg.Pattern, pg.Render)
+	for _, route := range r.Pages {
+		view.Method(http.MethodGet, route.Pattern, route.Handler)
 	}
 	r.Mount("/view", view)
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
