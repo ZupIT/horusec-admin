@@ -1,9 +1,10 @@
 package handler
 
 import (
-	"github.com/thedevsaddam/renderer"
 	"log"
 	"net/http"
+
+	"github.com/thedevsaddam/renderer"
 )
 
 type DefaultRender struct {

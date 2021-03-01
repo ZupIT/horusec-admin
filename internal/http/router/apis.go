@@ -1,8 +1,9 @@
 package router
 
 import (
-	"github.com/tiagoangelozup/horusec-admin/internal/http/handler"
 	"net/http"
+
+	"github.com/tiagoangelozup/horusec-admin/internal/http/handler"
 )
 
 type (
