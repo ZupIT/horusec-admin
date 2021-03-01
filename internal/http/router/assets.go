@@ -15,12 +15,12 @@ import (
 
 const assetsPath = "/web/static"
 
-type Asset struct {
+type LocalFileSystem struct {
 	Pattern   string
 	Directory http.FileSystem
 }
 
-func scanAssets() ([]*Asset, error) {
+func scanAssets() ([]*LocalFileSystem, error) {
 	wd, err := os.Getwd()
 	if err != nil {
 		return nil, fmt.Errorf("failed to find the assets path: %w", err)
@@ -30,17 +30,17 @@ func scanAssets() ([]*Asset, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	var assets []*Asset
+	var assets []*LocalFileSystem
 	for _, f := range files {
 		if f.IsDir() {
-			assets = append(assets, &Asset{Pattern: "/" + f.Name(), Directory: http.Dir(filepath.Join(dir, f.Name()))})
+			assets = append(assets, &LocalFileSystem{Pattern: "/" + f.Name(), Directory: http.Dir(filepath.Join(dir, f.Name()))})
 		}
 	}
 
 	return assets, nil
 }
 
-func (a *Asset) serve(r *chi.Mux) {
+func (a *LocalFileSystem) serve(r *chi.Mux) {
 	if strings.ContainsAny(a.Pattern, "{}*") {
 		panic("FileServer does not permit any URL parameters.")
 	}

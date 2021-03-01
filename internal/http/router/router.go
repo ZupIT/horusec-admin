@@ -16,7 +16,7 @@ type router struct {
 	render *renderer.Render
 
 	APIs   []*API
-	Assets []*Asset
+	Assets []*LocalFileSystem
 	Pages  []*Page
 }
 
@@ -29,7 +29,7 @@ func New() (*chi.Mux, error) {
 	r.Use(middleware.Logger)
 	r.routeAPIs()
 	r.routePages()
-	r.serveAssets()
+	r.servesStaticFiles()
 	r.routeErrors()
 
 	return r.Mux, nil
@@ -58,7 +58,7 @@ func (r *router) routePages() {
 	})
 }
 
-func (r *router) serveAssets() {
+func (r *router) servesStaticFiles() {
 	for _, a := range r.Assets {
 		a.serve(r.Mux)
 	}
