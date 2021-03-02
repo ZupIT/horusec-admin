@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"fmt"
-	"log"
 	"net/http"
+
+	"github.com/tiagoangelozup/horusec-admin/internal/logger"
 
 	"github.com/thedevsaddam/renderer"
 )
@@ -17,8 +17,12 @@ func NewConfigEditing(render *renderer.Render) *ConfigEditing {
 }
 
 func (h *ConfigEditing) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	log := logger.WithPrefix("handler")
+
 	err := h.render.JSON(w, http.StatusOK, "{}")
 	if err != nil {
-		log.Fatal(fmt.Errorf("failed to render JSON: %w", err))
+		panic(err)
 	}
+
+	log.Debug("the configuration has been successfully edited")
 }
