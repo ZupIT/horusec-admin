@@ -1,7 +1,6 @@
 package router
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/go-chi/chi"
@@ -26,6 +25,7 @@ func New() (*chi.Mux, error) {
 	if err != nil {
 		return nil, err
 	}
+	r.Use(middleware.Recoverer)
 	r.Use(middleware.Logger)
 	r.routeAPIs()
 	r.routePages()
@@ -68,7 +68,7 @@ func (r *router) routeErrors() {
 	r.NotFound(func(w http.ResponseWriter, _ *http.Request) {
 		err := r.render.HTML(w, http.StatusNotFound, "not-found", nil)
 		if err != nil {
-			log.Fatal(err)
+			panic(err)
 		}
 	})
 }

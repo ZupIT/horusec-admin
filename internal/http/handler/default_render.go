@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/thedevsaddam/renderer"
@@ -19,7 +18,7 @@ func (h *DefaultRender) HandlerFunc(template string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		err := h.render.HTML(w, http.StatusOK, template, nil)
 		if err != nil {
-			log.Fatal(err)
+			panic(err)
 		}
 	}
 }
