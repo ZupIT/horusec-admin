@@ -1,5 +1,5 @@
 /*
-Copyright The Kubernetes Authors.
+Copyright 2020 ZUP IT SERVICOS EM TECNOLOGIA E INOVACAO SA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ package externalversions
 import (
 	"fmt"
 
-	v1alpha1 "github.com/tiagoangelozup/horusec-admin/pkg/api/install/v1alpha1"
+	v1alpha1 "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	cache "k8s.io/client-go/tools/cache"
 )
@@ -55,8 +55,6 @@ func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource
 	// Group=install.horusec.io, Version=v1alpha1
 	case v1alpha1.SchemeGroupVersion.WithResource("horusecmanagers"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Install().V1alpha1().HorusecManagers().Informer()}, nil
-	case v1alpha1.SchemeGroupVersion.WithResource("horusecmanagerspecs"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Install().V1alpha1().HorusecManagerSpecs().Informer()}, nil
 
 	}
 

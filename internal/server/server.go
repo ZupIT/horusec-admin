@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/tiagoangelozup/horusec-admin/internal/logger"
+	"github.com/ZupIT/horusec-admin/internal/logger"
 )
 
 const (

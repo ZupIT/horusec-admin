@@ -3,10 +3,10 @@ package router
 import (
 	"net/http"
 
+	internal "github.com/ZupIT/horusec-admin/internal/http/middleware"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/thedevsaddam/renderer"
-	internal "github.com/tiagoangelozup/horusec-admin/internal/http/middleware"
 )
 
 type router struct {

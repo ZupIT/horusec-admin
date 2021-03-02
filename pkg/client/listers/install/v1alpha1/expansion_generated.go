@@ -1,5 +1,5 @@
 /*
-Copyright The Kubernetes Authors.
+Copyright 2020 ZUP IT SERVICOS EM TECNOLOGIA E INOVACAO SA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,11 +25,3 @@ type HorusecManagerListerExpansion interface{}
 // HorusecManagerNamespaceListerExpansion allows custom methods to be added to
 // HorusecManagerNamespaceLister.
 type HorusecManagerNamespaceListerExpansion interface{}
-
-// HorusecManagerSpecListerExpansion allows custom methods to be added to
-// HorusecManagerSpecLister.
-type HorusecManagerSpecListerExpansion interface{}
-
-// HorusecManagerSpecNamespaceListerExpansion allows custom methods to be added to
-// HorusecManagerSpecNamespaceLister.
-type HorusecManagerSpecNamespaceListerExpansion interface{}

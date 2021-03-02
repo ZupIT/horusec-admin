@@ -5,10 +5,10 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/tiagoangelozup/horusec-admin/internal/logger"
+	"github.com/ZupIT/horusec-admin/internal/logger"
 
-	"github.com/tiagoangelozup/horusec-admin/internal/http/router"
-	"github.com/tiagoangelozup/horusec-admin/internal/server"
+	"github.com/ZupIT/horusec-admin/internal/http/router"
+	"github.com/ZupIT/horusec-admin/internal/server"
 )
 
 func main() {

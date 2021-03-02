@@ -3,7 +3,7 @@ package router
 import (
 	"net/http"
 
-	"github.com/tiagoangelozup/horusec-admin/internal/http/handler"
+	"github.com/ZupIT/horusec-admin/internal/http/handler"
 )
 
 type (

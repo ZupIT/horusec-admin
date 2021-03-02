@@ -3,7 +3,7 @@ package handler
 import (
 	"net/http"
 
-	"github.com/tiagoangelozup/horusec-admin/internal/logger"
+	"github.com/ZupIT/horusec-admin/internal/logger"
 
 	"github.com/thedevsaddam/renderer"
 )

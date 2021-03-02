@@ -1,4 +1,4 @@
-module github.com/tiagoangelozup/horusec-admin
+module github.com/ZupIT/horusec-admin
 
 go 1.15
 
