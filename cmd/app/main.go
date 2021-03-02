@@ -1,30 +1,32 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/tiagoangelozup/horusec-admin/internal/logger"
 
 	"github.com/tiagoangelozup/horusec-admin/internal/http/router"
 	"github.com/tiagoangelozup/horusec-admin/internal/server"
 )
 
 func main() {
+	log := logger.WithPrefix("main")
+
 	r, err := router.New()
 	if err != nil {
-		log.Fatal(err)
+		log.WithError(err).Fatal("failed to create HTTP request router")
 	}
 
 	srv := server.New(r).Start()
 
 	waitForInterruptSignal()
 	if err = srv.GracefullyShutdown(); err != nil {
-		log.Fatal(fmt.Errorf("server forced to shutdown: %w", err))
+		log.WithError(err).Fatal("server forced to shutdown")
 	}
 
-	log.Println("server exiting")
+	log.Info("server exiting")
 }
 
 func waitForInterruptSignal() {
