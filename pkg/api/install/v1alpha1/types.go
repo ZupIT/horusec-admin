@@ -41,7 +41,6 @@ type Status struct {
 // HorusecManagerSpec defines the installation properties that will be applied.
 //
 // <!-- go code generation tags
-// +genclient
 // +k8s:deepcopy-gen=true
 // -->
 type HorusecManagerSpec struct {
