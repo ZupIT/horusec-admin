@@ -3,8 +3,8 @@ package core
 type (
 	Auth struct {
 		Type     string    `json:"horusec_auth_type,omitempty"`
-		Keycloak *Keycloak `json:",inline"`
-		LDAP     *LDAP     `json:",inline"`
+		Keycloak *Keycloak `json:",inline,omitempty"`
+		LDAP     *LDAP     `json:",inline,omitempty"`
 	}
 	Keycloak struct {
 		BasePath     string            `json:"horusec_keycloak_base_path,omitempty"`
@@ -12,7 +12,7 @@ type (
 		ClientSecret string            `json:"horusec_keycloak_client_secret,omitempty"`
 		Realm        string            `json:"horusec_keycloak_realm,omitempty"`
 		OTP          string            `json:"horusec_keycloak_otp,omitempty"`
-		ReactApp     *KeycloakReactApp `json:",inline"`
+		ReactApp     *KeycloakReactApp `json:",inline,omitempty"`
 	}
 	KeycloakReactApp struct {
 		ClientID string `json:"react_app_keycloak_client_id,omitempty"`
