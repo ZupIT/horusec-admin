@@ -34,7 +34,7 @@ func (s *server) Start() Interface {
 		log := logger.WithPrefix("server")
 		log.WithField("addr", Addr).Info("listening")
 		if err := s.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-			log.WithError(err).Warn("listen error")
+			log.WithError(err).Fatal("listen error")
 		}
 	}()
 
