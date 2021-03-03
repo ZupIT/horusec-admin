@@ -1,5 +1,5 @@
 /*
-Copyright The Kubernetes Authors.
+Copyright 2020 ZUP IT SERVICOS EM TECNOLOGIA E INOVACAO SA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,9 +23,9 @@ import (
 	sync "sync"
 	time "time"
 
-	versioned "github.com/tiagoangelozup/horusec-admin/pkg/client/clientset/versioned"
-	install "github.com/tiagoangelozup/horusec-admin/pkg/client/informers/externalversions/install"
-	internalinterfaces "github.com/tiagoangelozup/horusec-admin/pkg/client/informers/externalversions/internalinterfaces"
+	versioned "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned"
+	install "github.com/ZupIT/horusec-admin/pkg/client/informers/externalversions/install"
+	internalinterfaces "github.com/ZupIT/horusec-admin/pkg/client/informers/externalversions/internalinterfaces"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"

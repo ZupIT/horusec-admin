@@ -1,5 +1,5 @@
 /*
-Copyright The Kubernetes Authors.
+Copyright 2020 ZUP IT SERVICOS EM TECNOLOGIA E INOVACAO SA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,8 +19,8 @@ limitations under the License.
 package install
 
 import (
-	v1alpha1 "github.com/tiagoangelozup/horusec-admin/pkg/client/informers/externalversions/install/v1alpha1"
-	internalinterfaces "github.com/tiagoangelozup/horusec-admin/pkg/client/informers/externalversions/internalinterfaces"
+	v1alpha1 "github.com/ZupIT/horusec-admin/pkg/client/informers/externalversions/install/v1alpha1"
+	internalinterfaces "github.com/ZupIT/horusec-admin/pkg/client/informers/externalversions/internalinterfaces"
 )
 
 // Interface provides access to each of this group's versions.

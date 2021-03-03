@@ -3,10 +3,12 @@ package router
 import (
 	"net/http"
 
+	"github.com/ZupIT/horusec-admin/internal/logger"
+
+	internal "github.com/ZupIT/horusec-admin/internal/http/middleware"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/thedevsaddam/renderer"
-	internal "github.com/tiagoangelozup/horusec-admin/internal/http/middleware"
 )
 
 type router struct {
@@ -26,7 +28,7 @@ func New() (*chi.Mux, error) {
 		return nil, err
 	}
 	r.Use(middleware.Recoverer)
-	r.Use(middleware.Logger)
+	r.Use(middleware.RequestLogger(&middleware.DefaultLogFormatter{Logger: logger.WithPrefix("request")}))
 	r.routeAPIs()
 	r.routePages()
 	r.servesStaticFiles()

@@ -1,5 +1,5 @@
 /*
-Copyright The Kubernetes Authors.
+Copyright 2020 ZUP IT SERVICOS EM TECNOLOGIA E INOVACAO SA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,15 +19,13 @@ limitations under the License.
 package v1alpha1
 
 import (
-	internalinterfaces "github.com/tiagoangelozup/horusec-admin/pkg/client/informers/externalversions/internalinterfaces"
+	internalinterfaces "github.com/ZupIT/horusec-admin/pkg/client/informers/externalversions/internalinterfaces"
 )
 
 // Interface provides access to all the informers in this group version.
 type Interface interface {
 	// HorusecManagers returns a HorusecManagerInformer.
 	HorusecManagers() HorusecManagerInformer
-	// HorusecManagerSpecs returns a HorusecManagerSpecInformer.
-	HorusecManagerSpecs() HorusecManagerSpecInformer
 }
 
 type version struct {
@@ -44,9 +42,4 @@ func New(f internalinterfaces.SharedInformerFactory, namespace string, tweakList
 // HorusecManagers returns a HorusecManagerInformer.
 func (v *version) HorusecManagers() HorusecManagerInformer {
 	return &horusecManagerInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
-}
-
-// HorusecManagerSpecs returns a HorusecManagerSpecInformer.
-func (v *version) HorusecManagerSpecs() HorusecManagerSpecInformer {
-	return &horusecManagerSpecInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
 }

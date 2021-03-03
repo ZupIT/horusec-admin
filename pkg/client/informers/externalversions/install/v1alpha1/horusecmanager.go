@@ -1,5 +1,5 @@
 /*
-Copyright The Kubernetes Authors.
+Copyright 2020 ZUP IT SERVICOS EM TECNOLOGIA E INOVACAO SA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,10 +22,10 @@ import (
 	"context"
 	time "time"
 
-	installv1alpha1 "github.com/tiagoangelozup/horusec-admin/pkg/api/install/v1alpha1"
-	versioned "github.com/tiagoangelozup/horusec-admin/pkg/client/clientset/versioned"
-	internalinterfaces "github.com/tiagoangelozup/horusec-admin/pkg/client/informers/externalversions/internalinterfaces"
-	v1alpha1 "github.com/tiagoangelozup/horusec-admin/pkg/client/listers/install/v1alpha1"
+	installv1alpha1 "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
+	versioned "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned"
+	internalinterfaces "github.com/ZupIT/horusec-admin/pkg/client/informers/externalversions/internalinterfaces"
+	v1alpha1 "github.com/ZupIT/horusec-admin/pkg/client/listers/install/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	watch "k8s.io/apimachinery/pkg/watch"
