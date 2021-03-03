@@ -3,9 +3,8 @@ package router
 import (
 	"net/http"
 
-	"github.com/ZupIT/horusec-admin/internal/logger"
-
 	internal "github.com/ZupIT/horusec-admin/internal/http/middleware"
+	"github.com/ZupIT/horusec-admin/internal/logger"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/thedevsaddam/renderer"
@@ -27,8 +26,10 @@ func New() (*chi.Mux, error) {
 	if err != nil {
 		return nil, err
 	}
+	if logger.IsTrace() {
+		r.Use(middleware.RequestLogger(logger.NewRequestFormatter()))
+	}
 	r.Use(middleware.Recoverer)
-	r.Use(middleware.RequestLogger(&middleware.DefaultLogFormatter{Logger: logger.WithPrefix("request")}))
 	r.routeAPIs()
 	r.routePages()
 	r.servesStaticFiles()
