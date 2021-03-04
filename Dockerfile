@@ -14,7 +14,7 @@ COPY internal/ internal/
 COPY pkg/ pkg/
 
 # Generating the dependency injection containers
-RUN go generate internal/http/router
+RUN go generate internal/router
 
 # Build
 RUN go build -o /go/bin/app ./cmd/app

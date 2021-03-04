@@ -4,6 +4,7 @@ go 1.15
 
 require (
 	github.com/go-chi/chi v1.5.3
+	github.com/google/go-cmp v0.5.4
 	github.com/google/wire v0.5.0
 	github.com/mattn/go-colorable v0.1.8 // indirect
 	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d // indirect
