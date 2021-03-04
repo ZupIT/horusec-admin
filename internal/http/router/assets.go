@@ -20,6 +20,7 @@ type LocalFileSystem struct {
 	Directory http.FileSystem
 }
 
+// nolint
 func scanAssets() ([]*LocalFileSystem, error) {
 	wd, err := os.Getwd()
 	if err != nil {
@@ -40,6 +41,7 @@ func scanAssets() ([]*LocalFileSystem, error) {
 	return assets, nil
 }
 
+// nolint
 func (a *LocalFileSystem) serve(r *chi.Mux) {
 	if strings.ContainsAny(a.Pattern, "{}*") {
 		panic("FileServer does not permit any URL parameters.")
