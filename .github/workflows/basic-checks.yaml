@@ -1,4 +1,4 @@
-name: HorusecadminPipeline
+name: install-build-test-fmt-lint
 
 on:
   pull_request:
