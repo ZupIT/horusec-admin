@@ -1,13 +1,7 @@
 package core
 
-import api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
-
 type General struct {
 	EnableApplicationAdmin bool   `json:"horusec_enable_application_admin,omitempty"`
 	JwtSecretKey           string `json:"horusec_jwt_secret_key,omitempty"`
 	ApplicationAdminData   string `json:"horusec_application_admin_data,omitempty"`
-}
-
-func newGeneral(cr *api.HorusecManager) *General {
-	return &General{}
 }

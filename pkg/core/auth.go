@@ -1,7 +1,5 @@
 package core
 
-import api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
-
 type (
 	Auth struct {
 		Type      string `json:"horusec_auth_type,omitempty"`
@@ -35,7 +33,3 @@ type (
 		AdminGroup         string `json:"horusec_ldap_admin_group,omitempty"`
 	}
 )
-
-func newAuth(cr *api.HorusecManager) *Auth {
-	return &Auth{}
-}

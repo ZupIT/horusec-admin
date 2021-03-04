@@ -1,4 +1,4 @@
-package core
+package adapter
 
 import (
 	"fmt"
@@ -7,9 +7,9 @@ import (
 	api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
 )
 
-type customResource api.HorusecManager
+type CustomResource api.HorusecManager
 
-func (c *customResource) SetAPIEndpoint(endpoint string) error {
+func (c *CustomResource) SetAPIEndpoint(endpoint string) error {
 	u, err := url.Parse(endpoint)
 	if err != nil {
 		return fmt.Errorf("fail to update the API endpoint: %w", err)
@@ -22,7 +22,7 @@ func (c *customResource) SetAPIEndpoint(endpoint string) error {
 	return nil
 }
 
-func (c *customResource) SetAnalyticEndpoint(endpoint string) error {
+func (c *CustomResource) SetAnalyticEndpoint(endpoint string) error {
 	u, err := url.Parse(endpoint)
 	if err != nil {
 		return fmt.Errorf("fail to update the Analytic endpoint: %w", err)
@@ -35,7 +35,7 @@ func (c *customResource) SetAnalyticEndpoint(endpoint string) error {
 	return nil
 }
 
-func (c *customResource) SetAccountEndpoint(endpoint string) error {
+func (c *CustomResource) SetAccountEndpoint(endpoint string) error {
 	u, err := url.Parse(endpoint)
 	if err != nil {
 		return fmt.Errorf("fail to update the Account endpoint: %w", err)
@@ -48,7 +48,7 @@ func (c *customResource) SetAccountEndpoint(endpoint string) error {
 	return nil
 }
 
-func (c *customResource) SetAuthEndpoint(endpoint string) error {
+func (c *CustomResource) SetAuthEndpoint(endpoint string) error {
 	u, err := url.Parse(endpoint)
 	if err != nil {
 		return fmt.Errorf("fail to update the Auth endpoint: %w", err)
@@ -61,8 +61,8 @@ func (c *customResource) SetAuthEndpoint(endpoint string) error {
 	return nil
 }
 
-func newCR(cfg *Configuration) (*customResource, error) {
-	cr := new(customResource)
+func newCR(cfg *Configuration) (*CustomResource, error) {
+	cr := new(CustomResource)
 
 	if mng := cfg.Manager; mng != nil {
 		err := cr.SetAPIEndpoint(mng.APIEndpoint)

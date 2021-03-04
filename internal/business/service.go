@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/ZupIT/horusec-admin/internal/business/adapter"
 	"github.com/ZupIT/horusec-admin/internal/logger"
 	api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
 	client "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v1alpha1"
@@ -48,11 +49,12 @@ func (s *ConfigService) GetConfig() (*core.Configuration, error) {
 		return new(core.Configuration), nil
 	}
 
-	return core.NewConfiguration(cr), nil
+	cfg := adapter.NewConfiguration(cr)
+	return (*core.Configuration)(cfg), nil
 }
 
 func (s *ConfigService) Update(cfg *core.Configuration) error {
-	r2, err := cfg.CR()
+	r2, err := (*adapter.Configuration)(cfg).CR()
 	if err != nil {
 		return err
 	}
