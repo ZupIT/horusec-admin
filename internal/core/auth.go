@@ -1,18 +1,20 @@
 package core
 
+import "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
+
 type (
 	Auth struct {
-		Type     string    `json:"horusec_auth_type,omitempty"`
-		Keycloak *Keycloak `json:",inline,omitempty"`
-		LDAP     *LDAP     `json:",inline,omitempty"`
+		Type      string `json:"horusec_auth_type,omitempty"`
+		*Keycloak `json:",inline,omitempty"`
+		*LDAP     `json:",inline,omitempty"`
 	}
 	Keycloak struct {
-		BasePath     string            `json:"horusec_keycloak_base_path,omitempty"`
-		ClientID     string            `json:"horusec_keycloak_client_id,omitempty"`
-		ClientSecret string            `json:"horusec_keycloak_client_secret,omitempty"`
-		Realm        string            `json:"horusec_keycloak_realm,omitempty"`
-		OTP          string            `json:"horusec_keycloak_otp,omitempty"`
-		ReactApp     *KeycloakReactApp `json:",inline,omitempty"`
+		BasePath          string `json:"horusec_keycloak_base_path,omitempty"`
+		ClientID          string `json:"horusec_keycloak_client_id,omitempty"`
+		ClientSecret      string `json:"horusec_keycloak_client_secret,omitempty"`
+		Realm             string `json:"horusec_keycloak_realm,omitempty"`
+		OTP               string `json:"horusec_keycloak_otp,omitempty"`
+		*KeycloakReactApp `json:",inline,omitempty"`
 	}
 	KeycloakReactApp struct {
 		ClientID string `json:"react_app_keycloak_client_id,omitempty"`
@@ -33,3 +35,7 @@ type (
 		AdminGroup         string `json:"horusec_ldap_admin_group,omitempty"`
 	}
 )
+
+func newAuth(cr *v1alpha1.HorusecManager) *Auth {
+	return &Auth{}
+}
