@@ -3,7 +3,7 @@ package handler
 import (
 	"net/http"
 
-	"github.com/ZupIT/horusec-admin/internal/core"
+	"github.com/ZupIT/horusec-admin/pkg/core"
 
 	"github.com/thedevsaddam/renderer"
 )
@@ -11,14 +11,11 @@ import (
 type (
 	ConfigReading struct {
 		render *renderer.Render
-		reader ConfigReader
-	}
-	ConfigReader interface {
-		GetConfig() (*core.Configuration, error)
+		reader core.ConfigurationReader
 	}
 )
 
-func NewConfigReading(render *renderer.Render, reader ConfigReader) *ConfigReading {
+func NewConfigReading(render *renderer.Render, reader core.ConfigurationReader) *ConfigReading {
 	return &ConfigReading{render: render, reader: reader}
 }
 

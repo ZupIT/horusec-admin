@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/ZupIT/horusec-admin/internal/core"
+	"github.com/ZupIT/horusec-admin/pkg/core"
 
 	"github.com/thedevsaddam/renderer"
 )
@@ -12,14 +12,11 @@ import (
 type (
 	ConfigEditing struct {
 		render *renderer.Render
-		writer ConfigWriter
-	}
-	ConfigWriter interface {
-		Update(*core.Configuration) error
+		writer core.ConfigurationWriter
 	}
 )
 
-func NewConfigEditing(render *renderer.Render, writer ConfigWriter) *ConfigEditing {
+func NewConfigEditing(render *renderer.Render, writer core.ConfigurationWriter) *ConfigEditing {
 	return &ConfigEditing{render: render, writer: writer}
 }
 

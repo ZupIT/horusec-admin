@@ -10,7 +10,7 @@ type Configuration struct {
 	*Manager `json:",inline,omitempty"`
 }
 
-func newConfiguration(cr *v1alpha1.HorusecManager) *Configuration {
+func NewConfiguration(cr *v1alpha1.HorusecManager) *Configuration {
 	return &Configuration{
 		General: newGeneral(cr),
 		Auth:    newAuth(cr),
@@ -18,7 +18,7 @@ func newConfiguration(cr *v1alpha1.HorusecManager) *Configuration {
 	}
 }
 
-func (c *Configuration) toCR() (*v1alpha1.HorusecManager, error) {
+func (c *Configuration) CR() (*v1alpha1.HorusecManager, error) {
 	cr, err := newCR(c)
 	if err != nil {
 		return nil, err

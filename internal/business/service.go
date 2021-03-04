@@ -1,4 +1,4 @@
-package core
+package business
 
 import (
 	"context"
@@ -6,19 +6,20 @@ import (
 	"fmt"
 
 	"github.com/ZupIT/horusec-admin/internal/logger"
-	v1alpha12 "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
-	"github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v1alpha1"
+	api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
+	clientset "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v1alpha1"
+	"github.com/ZupIT/horusec-admin/pkg/core"
 	"github.com/google/go-cmp/cmp"
 	kerrors "k8s.io/apimachinery/pkg/api/errors"
 	k8s "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 type ConfigService struct {
-	client      v1alpha1.HorusecManagerInterface
+	client      clientset.HorusecManagerInterface
 	compareOpts cmp.Option
 }
 
-func NewConfigService(client v1alpha1.HorusecManagerInterface) *ConfigService {
+func NewConfigService(client clientset.HorusecManagerInterface) *ConfigService {
 	ignore := [...]string{
 		"ObjectMeta.CreationTimestamp", "ObjectMeta.Finalizers", "ObjectMeta.Generation",
 		"ObjectMeta.ManagedFields", "ObjectMeta.Namespace", "ObjectMeta.ResourceVersion", "ObjectMeta.SelfLink",
@@ -37,21 +38,21 @@ func NewConfigService(client v1alpha1.HorusecManagerInterface) *ConfigService {
 	}
 }
 
-func (s *ConfigService) GetConfig() (*Configuration, error) {
+func (s *ConfigService) GetConfig() (*core.Configuration, error) {
 	cr, err := s.getOne()
 	if err != nil {
 		return nil, err
 	}
 
 	if cr == nil {
-		return new(Configuration), nil
+		return new(core.Configuration), nil
 	}
 
-	return newConfiguration(cr), nil
+	return core.NewConfiguration(cr), nil
 }
 
-func (s *ConfigService) Update(cfg *Configuration) error {
-	r2, err := cfg.toCR()
+func (s *ConfigService) Update(cfg *core.Configuration) error {
+	r2, err := cfg.CR()
 	if err != nil {
 		return err
 	}
@@ -75,7 +76,7 @@ func (s *ConfigService) Update(cfg *Configuration) error {
 	return nil
 }
 
-func (s *ConfigService) getOne() (*v1alpha12.HorusecManager, error) {
+func (s *ConfigService) getOne() (*api.HorusecManager, error) {
 	cfg, err := s.client.List(context.TODO(), k8s.ListOptions{})
 	if err != nil {
 		return nil, fmt.Errorf("failed to get configuration: %w", err)
@@ -93,7 +94,7 @@ func (s *ConfigService) getOne() (*v1alpha12.HorusecManager, error) {
 	return &cfg.Items[0], nil
 }
 
-func (s *ConfigService) apply(r *v1alpha12.HorusecManager) error {
+func (s *ConfigService) apply(r *api.HorusecManager) error {
 	log := logger.WithPrefix("service")
 
 	o, err := s.client.Get(context.TODO(), r.Name, k8s.GetOptions{})

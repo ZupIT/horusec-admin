@@ -1,9 +1,11 @@
 package router
 
 import (
+	"net/http"
+
 	"github.com/ZupIT/horusec-admin/internal/router/page"
 	"github.com/ZupIT/horusec-admin/internal/router/static"
-	"net/http"
+	"github.com/ZupIT/horusec-admin/pkg/core"
 
 	"github.com/ZupIT/horusec-admin/internal/router/api"
 
@@ -25,8 +27,8 @@ type router struct {
 }
 
 // New creates the router with all API routes and the static files handler.
-func New() (*chi.Mux, error) {
-	r, err := newRouter()
+func New(reader core.ConfigurationReader, writer core.ConfigurationWriter) (*chi.Mux, error) {
+	r, err := newRouter(reader, writer)
 	if err != nil {
 		return nil, err
 	}
