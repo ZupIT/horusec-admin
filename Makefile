@@ -1,5 +1,9 @@
 APP_NAME=horusec-admin
 DOCKER_REPO=docker.io/horuszup
+GO ?= go
+GOFMT ?= gofmt
+GOFMT_FILES?=$$(find . -name '*.go' | grep -v vendor)
+GOCILINT ?= ./bin/golangci-lint
 
 .PHONY: help
 
