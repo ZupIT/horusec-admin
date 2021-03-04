@@ -93,6 +93,8 @@ run:
     - examples/
     - tmp
     - e2e/
+    - pkg/client
+    - pkg/api
   skip-files:
     - .*_test.go
     - .*_mock.go
