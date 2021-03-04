@@ -13,7 +13,7 @@ type (
 		Handler       http.Handler
 		Authenticated bool
 	}
-	// Set describes all Rest API routes
+	// Set describes all Rest API routes.
 	Set []*api
 )
 

@@ -12,7 +12,7 @@ type (
 		Pattern string
 		Handler http.Handler
 	}
-	// Set describes all HTML pages routes
+	// Set describes all HTML pages routes.
 	Set []*page
 )
 
