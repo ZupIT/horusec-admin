@@ -25,6 +25,15 @@ publish: ## Publish the `v2` container to Docker Hub
 	@echo 'publish v2 to $(DOCKER_REPO)'
 	docker push $(DOCKER_REPO)/$(APP_NAME):v2
 
+
+fmt: # Format all Go files
+	$(GOFMT) -w $(GOFMT_FILES)
+
+# Run converage with threshold
+coverage:
+	chmod +x deployments/scripts/coverage.sh
+	deployments/scripts/coverage.sh 99 "./..."
+
 lint: ## Run lint checks
     ifeq ($(wildcard $(GOCILINT)), $(GOCILINT))
 		$(GOCILINT) run -v --timeout=5m -c .golangci.yml ./...
