@@ -16,7 +16,7 @@ func NewConfiguration(cr *api.HorusecManager) *Configuration {
 }
 
 func (c *Configuration) CR() (*api.HorusecManager, error) {
-	cr, err := newCR(c)
+	cr, err := NewCustomResource(c)
 	if err != nil {
 		return nil, err
 	}

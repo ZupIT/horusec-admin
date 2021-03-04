@@ -44,8 +44,8 @@ type Status struct {
 // +k8s:deepcopy-gen=true
 // -->
 type HorusecManagerSpec struct {
-	Global     Global     `json:"global,omitempty"`
-	Components Components `json:"components,omitempty"`
+	Global     *Global     `json:"global,omitempty"`
+	Components *Components `json:"components,omitempty"`
 }
 
 type JWT struct {
@@ -69,10 +69,10 @@ type Database struct {
 }
 
 type Global struct {
-	EnableAdmin bool     `json:"enableAdmin,omitempty"`
-	JWT         JWT      `json:"jwt,omitempty"`
-	Broker      Broker   `json:"broker,omitempty"`
-	Database    Database `json:"database,omitempty"`
+	EnableAdmin bool      `json:"enableAdmin,omitempty"`
+	JWT         *JWT      `json:"jwt,omitempty"`
+	Broker      *Broker   `json:"broker,omitempty"`
+	Database    *Database `json:"database,omitempty"`
 }
 
 type Ingress struct {
@@ -83,24 +83,24 @@ type Ingress struct {
 }
 
 type Account struct {
-	Name    string  `json:"name,omitempty"`
-	Enabled bool    `json:"enabled,omitempty"`
-	Port    Port    `json:"port,omitempty"`
-	Ingress Ingress `json:"ingress,omitempty"`
+	Name    string   `json:"name,omitempty"`
+	Enabled bool     `json:"enabled,omitempty"`
+	Port    *Port    `json:"port,omitempty"`
+	Ingress *Ingress `json:"ingress,omitempty"`
 }
 
 type Analytic struct {
-	Name    string  `json:"name,omitempty"`
-	Enabled bool    `json:"enabled,omitempty"`
-	Port    Port    `json:"port,omitempty"`
-	Ingress Ingress `json:"ingress,omitempty"`
+	Name    string   `json:"name,omitempty"`
+	Enabled bool     `json:"enabled,omitempty"`
+	Port    *Port    `json:"port,omitempty"`
+	Ingress *Ingress `json:"ingress,omitempty"`
 }
 
 type API struct {
-	Name    string  `json:"name,omitempty"`
-	Enabled bool    `json:"enabled,omitempty"`
-	Port    Port    `json:"port,omitempty"`
-	Ingress Ingress `json:"ingress,omitempty"`
+	Name    string   `json:"name,omitempty"`
+	Enabled bool     `json:"enabled,omitempty"`
+	Port    *Port    `json:"port,omitempty"`
+	Ingress *Ingress `json:"ingress,omitempty"`
 }
 
 type Port struct {
@@ -109,23 +109,23 @@ type Port struct {
 }
 
 type Auth struct {
-	Name    string  `json:"name,omitempty"`
-	Enabled bool    `json:"enabled,omitempty"`
-	Port    Port    `json:"port,omitempty"`
-	Ingress Ingress `json:"ingress,omitempty"`
+	Name    string   `json:"name,omitempty"`
+	Enabled bool     `json:"enabled,omitempty"`
+	Port    *Port    `json:"port,omitempty"`
+	Ingress *Ingress `json:"ingress,omitempty"`
 }
 
 type Manager struct {
-	Name    string  `json:"name,omitempty"`
-	Enabled bool    `json:"enabled,omitempty"`
-	Port    Port    `json:"port,omitempty"`
-	Ingress Ingress `json:"ingress,omitempty"`
+	Name    string   `json:"name,omitempty"`
+	Enabled bool     `json:"enabled,omitempty"`
+	Port    *Port    `json:"port,omitempty"`
+	Ingress *Ingress `json:"ingress,omitempty"`
 }
 
 type Components struct {
-	Account  Account  `json:"account,omitempty"`
-	Analytic Analytic `json:"analytic,omitempty"`
-	API      API      `json:"api,omitempty"`
-	Auth     Auth     `json:"auth,omitempty"`
-	Manager  Manager  `json:"manager,omitempty"`
+	Account  *Account  `json:"account,omitempty"`
+	Analytic *Analytic `json:"analytic,omitempty"`
+	API      *API      `json:"api,omitempty"`
+	Auth     *Auth     `json:"auth,omitempty"`
+	Manager  *Manager  `json:"manager,omitempty"`
 }
