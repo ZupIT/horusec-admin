@@ -40,5 +40,5 @@ jobs:
       - name: coverage
         run: make coverage
       - name: build
-        run: go build -o "./tmp/bin/horusec-admin" ./horusec-admin/cmd/app/main.go
+        run: go build -o "./tmp/bin/horusec-admin" ./cmd/app/main.go
 
