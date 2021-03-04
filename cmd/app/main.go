@@ -6,8 +6,7 @@ import (
 	"syscall"
 
 	"github.com/ZupIT/horusec-admin/internal/logger"
-
-	"github.com/ZupIT/horusec-admin/internal/http/router"
+	"github.com/ZupIT/horusec-admin/internal/router"
 	"github.com/ZupIT/horusec-admin/internal/server"
 )
 

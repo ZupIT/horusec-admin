@@ -1,10 +1,14 @@
 package router
 
 import (
+	"github.com/ZupIT/horusec-admin/internal/router/page"
+	"github.com/ZupIT/horusec-admin/internal/router/static"
 	"net/http"
 
-	internal "github.com/ZupIT/horusec-admin/internal/http/middleware"
+	"github.com/ZupIT/horusec-admin/internal/router/api"
+
 	"github.com/ZupIT/horusec-admin/internal/logger"
+	internal "github.com/ZupIT/horusec-admin/internal/router/middleware"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/thedevsaddam/renderer"
@@ -15,9 +19,9 @@ type router struct {
 	authz  *internal.Authorizer
 	render *renderer.Render
 
-	APIs   []*API
-	Assets []*LocalFileSystem
-	Pages  []*Page
+	APIs   api.Set
+	Assets static.Assets
+	Pages  page.Set
 }
 
 // New creates the router with all API routes and the static files handler.
@@ -32,38 +36,38 @@ func New() (*chi.Mux, error) {
 	r.Use(middleware.Recoverer)
 	r.routeAPIs()
 	r.routePages()
-	r.servesStaticFiles()
+	r.serveStaticAssets()
 	r.routeErrors()
 
 	return r.Mux, nil
 }
 
 func (r *router) routeAPIs() {
-	api := chi.NewRouter()
+	router := chi.NewRouter()
 	for _, route := range r.APIs {
 		handlerFunc := route.Handler
 		if route.Authenticated {
 			handlerFunc = r.authz.Authorize(handlerFunc)
 		}
-		api.Method(route.Method, route.Pattern, handlerFunc)
+		router.Method(route.Method, route.Pattern, handlerFunc)
 	}
-	r.Mount("/api", api)
+	r.Mount("/api", router)
 }
 
 func (r *router) routePages() {
-	view := chi.NewRouter()
+	router := chi.NewRouter()
 	for _, route := range r.Pages {
-		view.Method(http.MethodGet, route.Pattern, route.Handler)
+		router.Method(http.MethodGet, route.Pattern, route.Handler)
 	}
-	r.Mount("/view", view)
+	r.Mount("/view", router)
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/view", http.StatusMovedPermanently)
 	})
 }
 
-func (r *router) servesStaticFiles() {
+func (r *router) serveStaticAssets() {
 	for _, a := range r.Assets {
-		a.serve(r.Mux)
+		a.Serve(r.Mux)
 	}
 }
 

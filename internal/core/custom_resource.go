@@ -2,8 +2,9 @@ package core
 
 import (
 	"fmt"
-	"github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
 	"net/url"
+
+	"github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
 )
 
 type customResource v1alpha1.HorusecManager

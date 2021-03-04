@@ -13,35 +13,28 @@ import (
 	k8s "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-var (
-	ignoredFields = [...]string{
-		"ObjectMeta.CreationTimestamp",
-		"ObjectMeta.Finalizers",
-		"ObjectMeta.Generation",
-		"ObjectMeta.ManagedFields",
-		"ObjectMeta.Namespace",
-		"ObjectMeta.ResourceVersion",
-		"ObjectMeta.SelfLink",
-		"ObjectMeta.UID",
-		"TypeMeta.APIVersion",
-	}
-	options = cmp.FilterPath(func(path cmp.Path) bool {
-		for _, p := range ignoredFields {
-			if p == path.String() {
-				return true
-			}
-		}
-		return false
-	}, cmp.Ignore())
-)
-
 type ConfigService struct {
-	client v1alpha1.HorusecManagerInterface
+	client      v1alpha1.HorusecManagerInterface
+	compareOpts cmp.Option
 }
 
 func NewConfigService(client v1alpha1.HorusecManagerInterface) *ConfigService {
-	logger.WithPrefix("core").Debug("creating new instance of `ConfigService`")
-	return &ConfigService{client: client}
+	ignore := [...]string{
+		"ObjectMeta.CreationTimestamp", "ObjectMeta.Finalizers", "ObjectMeta.Generation",
+		"ObjectMeta.ManagedFields", "ObjectMeta.Namespace", "ObjectMeta.ResourceVersion", "ObjectMeta.SelfLink",
+		"ObjectMeta.UID", "TypeMeta.APIVersion",
+	}
+	return &ConfigService{
+		client: client,
+		compareOpts: cmp.FilterPath(func(path cmp.Path) bool {
+			for _, p := range ignore {
+				if p == path.String() {
+					return true
+				}
+			}
+			return false
+		}, cmp.Ignore()),
+	}
 }
 
 func (s *ConfigService) GetConfig() (*Configuration, error) {
@@ -116,7 +109,7 @@ func (s *ConfigService) apply(r *v1alpha12.HorusecManager) error {
 	}
 
 	r.SetResourceVersion(o.GetResourceVersion())
-	diff := cmp.Diff(o, r, options)
+	diff := cmp.Diff(o, r, s.compareOpts)
 	if diff != "" {
 		log.Debug("resource changes:\n" + diff)
 		_, err = s.client.Update(context.TODO(), r, k8s.UpdateOptions{})

@@ -4,15 +4,19 @@ package router
 
 import (
 	"github.com/ZupIT/horusec-admin/internal/core"
-	"github.com/ZupIT/horusec-admin/internal/http/handler"
-	"github.com/ZupIT/horusec-admin/internal/http/middleware"
-	"github.com/ZupIT/horusec-admin/internal/http/render"
 	"github.com/ZupIT/horusec-admin/internal/kubernetes"
+	"github.com/ZupIT/horusec-admin/internal/router/api"
+	"github.com/ZupIT/horusec-admin/internal/router/handler"
+	"github.com/ZupIT/horusec-admin/internal/router/middleware"
+	"github.com/ZupIT/horusec-admin/internal/router/page"
+	"github.com/ZupIT/horusec-admin/internal/router/render"
+	"github.com/ZupIT/horusec-admin/internal/router/static"
 	"github.com/go-chi/chi"
 	"github.com/google/wire"
 )
 
 var providers = wire.NewSet(
+	api.NewSet,
 	chi.NewRouter,
 	core.NewConfigService,
 	handler.NewAuth,
@@ -23,17 +27,16 @@ var providers = wire.NewSet(
 	kubernetes.NewHorusecManagerClient,
 	kubernetes.NewRestConfig,
 	middleware.NewAuthorizer,
+	page.NewSet,
 	render.New,
-	newAPIs,
-	newPages,
-	scanAssets,
+	static.ListAssets,
 	wire.Bind(new(handler.ConfigReader), new(*core.ConfigService)),
 	wire.Bind(new(handler.ConfigWriter), new(*core.ConfigService)),
-	wire.Struct(new(apiHandlers), "*"),
+	wire.Struct(new(api.Handlers), "*"),
 	wire.Struct(new(router), "*"),
 )
 
-func newRouter(handler.ConfigReader, handler.ConfigWriter) (*router, error) {
+func newRouter() (*router, error) {
 	wire.Build(providers)
 	return nil, nil
 }
