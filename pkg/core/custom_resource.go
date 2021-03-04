@@ -64,8 +64,7 @@ func (c *customResource) SetAuthEndpoint(endpoint string) error {
 func newCR(cfg *Configuration) (*customResource, error) {
 	cr := new(customResource)
 
-	mng := cfg.Manager
-	if mng != nil {
+	if mng := cfg.Manager; mng != nil {
 		err := cr.SetAPIEndpoint(mng.APIEndpoint)
 		if err != nil {
 			return nil, err
