@@ -6,9 +6,11 @@
 package router
 
 import (
+	"github.com/ZupIT/horusec-admin/internal/core"
 	"github.com/ZupIT/horusec-admin/internal/http/handler"
 	"github.com/ZupIT/horusec-admin/internal/http/middleware"
 	"github.com/ZupIT/horusec-admin/internal/http/render"
+	"github.com/ZupIT/horusec-admin/internal/kubernetes"
 	"github.com/go-chi/chi"
 	"github.com/google/wire"
 )
@@ -20,8 +22,17 @@ func newRouter() (*router, error) {
 	authorizer := middleware.NewAuthorizer()
 	rendererRender := render.New()
 	auth := handler.NewAuth()
-	configEditing := handler.NewConfigEditing(rendererRender)
-	configReading := handler.NewConfigReading(rendererRender)
+	config, err := kubernetes.NewRestConfig()
+	if err != nil {
+		return nil, err
+	}
+	horusecManagerInterface, err := kubernetes.NewHorusecManagerClient(config)
+	if err != nil {
+		return nil, err
+	}
+	configService := core.NewConfigService(horusecManagerInterface)
+	configEditing := handler.NewConfigEditing(rendererRender, configService)
+	configReading := handler.NewConfigReading(rendererRender, configService)
 	health := handler.NewHealth()
 	routerApiHandlers := &apiHandlers{
 		Auth:          auth,
@@ -49,7 +60,7 @@ func newRouter() (*router, error) {
 
 // wire.go:
 
-var providers = wire.NewSet(chi.NewRouter, handler.NewAuth, handler.NewConfigEditing, handler.NewConfigReading, handler.NewDefaultRender, handler.NewHealth, middleware.NewAuthorizer, render.New, newAPIs,
+var providers = wire.NewSet(chi.NewRouter, core.NewConfigService, handler.NewAuth, handler.NewConfigEditing, handler.NewConfigReading, handler.NewDefaultRender, handler.NewHealth, kubernetes.NewHorusecManagerClient, kubernetes.NewRestConfig, middleware.NewAuthorizer, render.New, newAPIs,
 	newPages,
-	scanAssets, wire.Struct(new(apiHandlers), "*"), wire.Struct(new(router), "*"),
+	scanAssets, wire.Bind(new(handler.ConfigReader), new(*core.ConfigService)), wire.Bind(new(handler.ConfigWriter), new(*core.ConfigService)), wire.Struct(new(apiHandlers), "*"), wire.Struct(new(router), "*"),
 )

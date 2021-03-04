@@ -3,26 +3,33 @@ package handler
 import (
 	"net/http"
 
-	"github.com/ZupIT/horusec-admin/internal/logger"
+	"github.com/ZupIT/horusec-admin/internal/core"
 
 	"github.com/thedevsaddam/renderer"
 )
 
-type ConfigReading struct {
-	render *renderer.Render
-}
+type (
+	ConfigReading struct {
+		render *renderer.Render
+		reader ConfigReader
+	}
+	ConfigReader interface {
+		GetConfig() (*core.Configuration, error)
+	}
+)
 
-func NewConfigReading(render *renderer.Render) *ConfigReading {
-	return &ConfigReading{render: render}
+func NewConfigReading(render *renderer.Render, reader ConfigReader) *ConfigReading {
+	return &ConfigReading{render: render, reader: reader}
 }
 
 func (h *ConfigReading) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	log := logger.WithPrefix("handler")
-
-	err := h.render.JSON(w, http.StatusOK, "{}")
+	cfg, err := h.reader.GetConfig()
 	if err != nil {
 		panic(err)
 	}
 
-	log.Debug("the configuration was found")
+	// Answer
+	if err = h.render.JSON(w, http.StatusOK, cfg); err != nil {
+		panic(err)
+	}
 }
