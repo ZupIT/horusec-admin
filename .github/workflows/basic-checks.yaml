@@ -25,7 +25,7 @@ jobs:
           if [ ! -z $gofmt_files ]; then
               echo 'gofmt needs running on the following files:'
               echo "$gofmt_files"
-              echo "You can use the command: \`gofmt -w \$(gofmt -l \'find ./horusec-admin -name \'*.go\' | grep -v vendor)\` to reformat code."
+              echo "You can use the command: \`gofmt -w \$(gofmt -l \'find ./ -name \'*.go\' | grep -v vendor)\` to reformat code."
               exit 1
           fi
           echo "=) The project horusec-admin it's OK!"
