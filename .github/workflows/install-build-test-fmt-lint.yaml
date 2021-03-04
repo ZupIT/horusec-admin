@@ -37,8 +37,8 @@ jobs:
         run: |
           go clean -testcache
           go test ./... -timeout=2m -parallel=1 -failfast -short
-      - name: coverage
-        run: make coverage
+      # - name: coverage
+      #   run: make coverage
       - name: build
         run: go build -o "./tmp/bin/horusec-admin" ./cmd/app/main.go
 
