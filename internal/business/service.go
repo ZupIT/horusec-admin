@@ -7,7 +7,7 @@ import (
 
 	"github.com/ZupIT/horusec-admin/internal/logger"
 	api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
-	clientset "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v1alpha1"
+	client "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v1alpha1"
 	"github.com/ZupIT/horusec-admin/pkg/core"
 	"github.com/google/go-cmp/cmp"
 	kerrors "k8s.io/apimachinery/pkg/api/errors"
@@ -15,11 +15,11 @@ import (
 )
 
 type ConfigService struct {
-	client      clientset.HorusecManagerInterface
+	client      client.HorusecManagerInterface
 	compareOpts cmp.Option
 }
 
-func NewConfigService(client clientset.HorusecManagerInterface) *ConfigService {
+func NewConfigService(client client.HorusecManagerInterface) *ConfigService {
 	ignore := [...]string{
 		"ObjectMeta.CreationTimestamp", "ObjectMeta.Finalizers", "ObjectMeta.Generation",
 		"ObjectMeta.ManagedFields", "ObjectMeta.Namespace", "ObjectMeta.ResourceVersion", "ObjectMeta.SelfLink",

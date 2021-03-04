@@ -1,8 +1,6 @@
 package core
 
-import (
-	"github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
-)
+import api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
 
 type Configuration struct {
 	*General `json:",inline,omitempty"`
@@ -10,7 +8,7 @@ type Configuration struct {
 	*Manager `json:",inline,omitempty"`
 }
 
-func NewConfiguration(cr *v1alpha1.HorusecManager) *Configuration {
+func NewConfiguration(cr *api.HorusecManager) *Configuration {
 	return &Configuration{
 		General: newGeneral(cr),
 		Auth:    newAuth(cr),
@@ -18,11 +16,11 @@ func NewConfiguration(cr *v1alpha1.HorusecManager) *Configuration {
 	}
 }
 
-func (c *Configuration) CR() (*v1alpha1.HorusecManager, error) {
+func (c *Configuration) CR() (*api.HorusecManager, error) {
 	cr, err := newCR(c)
 	if err != nil {
 		return nil, err
 	}
 
-	return (*v1alpha1.HorusecManager)(cr), nil
+	return (*api.HorusecManager)(cr), nil
 }

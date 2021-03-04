@@ -6,7 +6,7 @@ import (
 	"os"
 
 	clientset "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned"
-	"github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v1alpha1"
+	client "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v1alpha1"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 )
@@ -26,7 +26,7 @@ func NewRestConfig() (*rest.Config, error) {
 	return restcfg, nil
 }
 
-func NewHorusecManagerClient(restConfig *rest.Config) (v1alpha1.HorusecManagerInterface, error) {
+func NewHorusecManagerClient(restConfig *rest.Config) (client.HorusecManagerInterface, error) {
 	namespace := os.Getenv("NAMESPACE")
 
 	if len(namespace) == 0 {

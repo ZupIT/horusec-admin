@@ -3,7 +3,7 @@ package core
 import (
 	"net/url"
 
-	"github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
+	api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
 )
 
 type Manager struct {
@@ -14,7 +14,7 @@ type Manager struct {
 	ManagerPath      string `json:"react_app_horusec_manager_path"`
 }
 
-func newManager(cr *v1alpha1.HorusecManager) *Manager {
+func newManager(cr *api.HorusecManager) *Manager {
 	components := cr.Spec.Components
 	api := (&url.URL{Scheme: components.API.Ingress.Scheme, Host: components.API.Ingress.Host}).String()
 	analytic := (&url.URL{Scheme: components.Analytic.Ingress.Scheme, Host: components.Analytic.Ingress.Host}).String()

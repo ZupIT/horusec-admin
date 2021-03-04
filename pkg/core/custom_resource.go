@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
+	api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
 )
 
-type customResource v1alpha1.HorusecManager
+type customResource api.HorusecManager
 
 func (c *customResource) SetAPIEndpoint(endpoint string) error {
 	u, err := url.Parse(endpoint)

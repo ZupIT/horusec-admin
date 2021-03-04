@@ -1,6 +1,6 @@
 package core
 
-import "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
+import api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
 
 type (
 	Auth struct {
@@ -36,6 +36,6 @@ type (
 	}
 )
 
-func newAuth(cr *v1alpha1.HorusecManager) *Auth {
+func newAuth(cr *api.HorusecManager) *Auth {
 	return &Auth{}
 }
