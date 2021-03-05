@@ -11,7 +11,6 @@ import (
 	client "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v1alpha1"
 	"github.com/ZupIT/horusec-admin/pkg/core"
 	"github.com/google/go-cmp/cmp"
-	kerrors "k8s.io/apimachinery/pkg/api/errors"
 	k8s "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -53,24 +52,13 @@ func (s *ConfigService) GetConfig() (*core.Configuration, error) {
 	return (*core.Configuration)(cfg), nil
 }
 
-func (s *ConfigService) Update(cfg *core.Configuration) error {
-	r2, err := (*adapter.Configuration)(cfg).CR()
+func (s *ConfigService) CreateOrUpdate(cfg *core.Configuration) error {
+	r, err := (*adapter.Configuration)(cfg).CR()
 	if err != nil {
 		return err
 	}
 
-	r1, err := s.getOne()
-	if err != nil {
-		return err
-	}
-
-	if r1 != nil {
-		r2.Name = r1.Name
-	} else {
-		r2.Name = "horusec"
-	}
-
-	err = s.apply(r2)
+	err = s.apply(r)
 	if err != nil {
 		return err
 	}
@@ -99,18 +87,21 @@ func (s *ConfigService) getOne() (*api.HorusecManager, error) {
 func (s *ConfigService) apply(r *api.HorusecManager) error {
 	log := logger.WithPrefix("service")
 
-	o, err := s.client.Get(context.TODO(), r.Name, k8s.GetOptions{})
-	if kerrors.IsNotFound(err) {
+	o, err := s.getOne()
+	if err != nil {
+		return err
+	}
+	if o == nil {
+		r.SetName("horusec")
 		_, err = s.client.Create(context.TODO(), r, k8s.CreateOptions{})
 		if err != nil {
 			return err
 		}
 		log.Debug("resource created")
 		return nil
-	} else if err != nil {
-		return err
 	}
 
+	r.SetName(o.GetName())
 	r.SetResourceVersion(o.GetResourceVersion())
 	diff := cmp.Diff(o, r, s.compareOpts)
 	if diff != "" {

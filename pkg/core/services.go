@@ -2,7 +2,7 @@ package core
 
 type (
 	ConfigurationWriter interface {
-		Update(*Configuration) error
+		CreateOrUpdate(*Configuration) error
 	}
 	ConfigurationReader interface {
 		GetConfig() (*Configuration, error)

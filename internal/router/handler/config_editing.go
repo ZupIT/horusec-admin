@@ -29,7 +29,7 @@ func (h *ConfigEditing) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Update configurations
-	if err := h.writer.Update(cfg); err != nil {
+	if err := h.writer.CreateOrUpdate(cfg); err != nil {
 		panic(err)
 	}
 
