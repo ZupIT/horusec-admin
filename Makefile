@@ -1,5 +1,9 @@
 APP_NAME=horusec-admin
 DOCKER_REPO=docker.io/horuszup
+GO ?= go
+GOFMT ?= gofmt
+GOFMT_FILES?=$$(find . -name '*.go' | grep -v vendor)
+GOCILINT ?= ./bin/golangci-lint
 
 .PHONY: help
 
@@ -20,3 +24,20 @@ stop: ## Stop and remove a running container
 publish: ## Publish the `v2` container to Docker Hub
 	@echo 'publish v2 to $(DOCKER_REPO)'
 	docker push $(DOCKER_REPO)/$(APP_NAME):v2
+
+
+fmt: # Format all Go files
+	$(GOFMT) -w $(GOFMT_FILES)
+
+# Run converage with threshold
+coverage:
+	chmod +x deployments/scripts/coverage.sh
+	deployments/scripts/coverage.sh 99 "./..."
+
+lint: ## Run lint checks
+    ifeq ($(wildcard $(GOCILINT)), $(GOCILINT))
+		$(GOCILINT) run -v --timeout=5m -c .golangci.yml ./...
+    else
+		curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.25.0
+		$(GOCILINT) run -v --timeout=5m -c .golangci.yml ./...
+    endif

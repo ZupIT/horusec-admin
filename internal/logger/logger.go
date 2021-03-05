@@ -4,10 +4,12 @@ import (
 	"os"
 	"strings"
 
+	// nolint
 	log "github.com/sirupsen/logrus"
 	prefixed "github.com/x-cray/logrus-prefixed-formatter"
 )
 
+// nolint
 func init() {
 	log.SetFormatter(&prefixed.TextFormatter{
 		TimestampFormat: "2006-01-02 15:04:05 -0700",

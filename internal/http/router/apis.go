@@ -24,6 +24,7 @@ type (
 )
 
 // newAPIs creates and returns all Rest API routes.
+// nolint
 func newAPIs(h *apiHandlers) []*API {
 	return []*API{
 		{
