@@ -1,32 +1,25 @@
-package router
+package api
 
 import (
 	"net/http"
-
-	"github.com/ZupIT/horusec-admin/internal/http/handler"
 )
 
 type (
-	// API describes a single Rest API route.
-	API struct {
+	// api describes a single Rest API route.
+	api struct {
 		Name          string
 		Method        string
 		Pattern       string
 		Handler       http.Handler
 		Authenticated bool
 	}
-	apiHandlers struct {
-		Auth          *handler.Auth
-		ConfigEditing *handler.ConfigEditing
-		ConfigReading *handler.ConfigReading
-		Health        *handler.Health
-	}
+	// Set describes all Rest API routes.
+	Set []*api
 )
 
-// newAPIs creates and returns all Rest API routes.
-// nolint
-func newAPIs(h *apiHandlers) []*API {
-	return []*API{
+// NewSet creates and returns all Rest API routes.
+func NewSet(h *Handlers) Set {
+	return []*api{
 		{
 			Name:          "Configurations",
 			Method:        "GET",

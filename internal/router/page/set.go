@@ -1,22 +1,24 @@
-package router
+package page
 
 import (
 	"net/http"
 
-	"github.com/ZupIT/horusec-admin/internal/http/handler"
+	"github.com/ZupIT/horusec-admin/internal/router/handler"
 )
 
 type (
-	// Page describes a single HTML page route.
-	Page struct {
+	// page describes a single HTML page route.
+	page struct {
 		Pattern string
 		Handler http.Handler
 	}
+	// Set describes all HTML pages routes.
+	Set []*page
 )
 
-// newPages creates and returns all HTML pages routes.
-func newPages(defaultRender *handler.DefaultRender) []*Page {
-	return []*Page{
+// NewSet creates and returns all HTML pages routes.
+func NewSet(defaultRender *handler.DefaultRender) Set {
+	return []*page{
 		{Pattern: "/", Handler: defaultRender.HandlerFunc("index")},
 		{Pattern: "/config-auth", Handler: defaultRender.HandlerFunc("config-auth")},
 		{Pattern: "/config-general", Handler: defaultRender.HandlerFunc("config-general")},

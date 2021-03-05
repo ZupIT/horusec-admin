@@ -6,15 +6,13 @@ import (
 	"syscall"
 
 	"github.com/ZupIT/horusec-admin/internal/logger"
-
-	"github.com/ZupIT/horusec-admin/internal/http/router"
 	"github.com/ZupIT/horusec-admin/internal/server"
 )
 
 func main() {
 	log := logger.WithPrefix("main")
 
-	r, err := router.New()
+	r, err := newRouter()
 	if err != nil {
 		log.WithError(err).Fatal("failed to create HTTP request router")
 	}

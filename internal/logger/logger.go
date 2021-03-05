@@ -23,6 +23,10 @@ func WithPrefix(prefix string) *log.Entry {
 	return log.WithField("prefix", prefix)
 }
 
+func IsTrace() bool {
+	return log.GetLevel() == log.TraceLevel
+}
+
 func resolveLogLevelFromEnv() log.Level {
 	level, ok := os.LookupEnv("LOG_LEVEL")
 	if !ok {
