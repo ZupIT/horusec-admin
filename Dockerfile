@@ -17,12 +17,13 @@ COPY pkg/ pkg/
 RUN go generate ./...
 
 # Build
-RUN go build -o /go/bin/app ./cmd/app
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 GO111MODULE=on go build -a -o /go/bin/app ./cmd/app
 
 # Using distroless as minimal base image
-FROM gcr.io/distroless/base-debian10
+FROM gcr.io/distroless/static:nonroot
 WORKDIR /
 COPY web/ web/
 COPY --from=build /go/bin/app /app
+USER 65532:65532
 
 ENTRYPOINT ["/app"]
