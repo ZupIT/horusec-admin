@@ -45,9 +45,7 @@ func New(reader core.ConfigurationReader, writer core.ConfigurationWriter) (*chi
 	if err != nil {
 		return nil, err
 	}
-	if logger.IsTrace() {
-		r.Use(middleware.RequestLogger(logger.NewRequestFormatter()))
-	}
+
 	r.Use(middleware.Recoverer)
 	r.routeHealthcheckEndpoints()
 	r.routeAPIs()
@@ -66,6 +64,9 @@ func (r *router) routeHealthcheckEndpoints() {
 
 func (r *router) routeAPIs() {
 	router := chi.NewRouter()
+	if logger.IsTrace() {
+		router.Use(middleware.RequestLogger(logger.NewRequestFormatter()))
+	}
 	for _, route := range r.APIs {
 		handlerFunc := route.Handler
 		if route.Authenticated {
