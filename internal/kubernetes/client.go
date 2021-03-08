@@ -27,23 +27,26 @@ import (
 
 func NewRestConfig() (*rest.Config, error) {
 	kubecfg := os.Getenv("KUBECONFIG")
-
-	if len(kubecfg) == 0 {
-		return nil, errors.New("environment variable KUBECONFIG need to be set")
+	if kubecfg != "" {
+		cfg, err := clientcmd.BuildConfigFromFlags("", kubecfg)
+		if err != nil {
+			return nil, fmt.Errorf("failed to configure the rest client from kubeconfig filepath: %w", err)
+		}
+		return cfg, nil
 	}
 
-	restcfg, err := clientcmd.BuildConfigFromFlags("", kubecfg)
+	cfg, err := rest.InClusterConfig()
 	if err != nil {
-		return nil, fmt.Errorf("failed to create k8s rest client: %w", err)
+		return nil, fmt.Errorf("failed to configure in cluster rest client: %w", err)
 	}
 
-	return restcfg, nil
+	return cfg, nil
 }
 
 func NewHorusecManagerClient(restConfig *rest.Config) (client.HorusecManagerInterface, error) {
 	namespace := os.Getenv("NAMESPACE")
 
-	if len(namespace) == 0 {
+	if namespace == "" {
 		return nil, errors.New("environment variable NAMESPACE need to be set")
 	}
 
