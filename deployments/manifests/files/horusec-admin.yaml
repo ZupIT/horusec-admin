@@ -1,0 +1,35 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: horusec-admin
+  labels:
+    app: horusec-admin
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: horusec-admin
+      labels:
+        app: horusec-admin
+    spec:
+      containers:
+        - name: horusec-admin
+          image: horuszup/horusec-admin:latest
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: horusec-admin
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: horusec-admin
+  labels:
+    app: horusec-admin
+spec:
+  selector:
+    app: horusec-admin
+  ports:
+    - port: 3000
