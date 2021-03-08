@@ -17,16 +17,15 @@ package router
 import (
 	"net/http"
 
+	"github.com/ZupIT/horusec-admin/internal/logger"
+	"github.com/ZupIT/horusec-admin/internal/router/api"
+	internal "github.com/ZupIT/horusec-admin/internal/router/middleware"
 	"github.com/ZupIT/horusec-admin/internal/router/page"
 	"github.com/ZupIT/horusec-admin/internal/router/static"
 	"github.com/ZupIT/horusec-admin/pkg/core"
-
-	"github.com/ZupIT/horusec-admin/internal/router/api"
-
-	"github.com/ZupIT/horusec-admin/internal/logger"
-	internal "github.com/ZupIT/horusec-admin/internal/router/middleware"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/heptiolabs/healthcheck"
 	"github.com/thedevsaddam/renderer"
 )
 
@@ -50,12 +49,19 @@ func New(reader core.ConfigurationReader, writer core.ConfigurationWriter) (*chi
 		r.Use(middleware.RequestLogger(logger.NewRequestFormatter()))
 	}
 	r.Use(middleware.Recoverer)
+	r.routeHealthcheckEndpoints()
 	r.routeAPIs()
 	r.routePages()
 	r.serveStaticAssets()
 	r.routeErrors()
 
 	return r.Mux, nil
+}
+
+func (r *router) routeHealthcheckEndpoints() {
+	h := healthcheck.NewHandler()
+	r.Handle("/live", http.HandlerFunc(h.LiveEndpoint))
+	r.Handle("/ready", http.HandlerFunc(h.ReadyEndpoint))
 }
 
 func (r *router) routeAPIs() {
