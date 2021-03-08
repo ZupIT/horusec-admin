@@ -25,6 +25,9 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
       restartPolicy: Always
   selector:
     matchLabels:
