@@ -1,0 +1,11 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: horusec-admin
+subjects:
+  - kind: ServiceAccount
+    name: horusec-admin
+roleRef:
+  kind: Role
+  name: horusec-admin
+  apiGroup: rbac.authorization.k8s.io

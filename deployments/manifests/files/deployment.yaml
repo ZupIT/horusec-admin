@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -13,6 +12,7 @@ spec:
       labels:
         app: horusec-admin
     spec:
+      serviceAccountName: horusec-admin
       containers:
         - name: horusec-admin
           image: horuszup/horusec-admin:latest
