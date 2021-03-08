@@ -29,15 +29,3 @@ spec:
   selector:
     matchLabels:
       app: horusec-admin
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: horusec-admin
-  labels:
-    app: horusec-admin
-spec:
-  selector:
-    app: horusec-admin
-  ports:
-    - port: 3000
