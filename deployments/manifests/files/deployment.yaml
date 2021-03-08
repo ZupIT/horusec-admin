@@ -25,6 +25,14 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+          livenessProbe:
+            httpGet:
+              path: /live
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
           securityContext:
             allowPrivilegeEscalation: false
             runAsNonRoot: true
