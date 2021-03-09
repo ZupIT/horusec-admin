@@ -21,12 +21,19 @@ import (
 
 	"github.com/ZupIT/horusec-admin/internal/logger"
 	"github.com/ZupIT/horusec-admin/internal/server"
+	"github.com/ZupIT/horusec-admin/internal/tracer"
 )
 
 func main() {
 	log := logger.WithPrefix("main")
 
-	r, err := newRouter()
+	t, closer, err := tracer.New("horusec-admin")
+	if err != nil {
+		log.WithError(err).Fatal("failed to initialize tracer")
+	}
+	defer closer.Close()
+
+	r, err := newRouter(t)
 	if err != nil {
 		log.WithError(err).Fatal("failed to create HTTP request router")
 	}

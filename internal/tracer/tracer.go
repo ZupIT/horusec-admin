@@ -12,22 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package logger
+package tracer
 
-import log "github.com/sirupsen/logrus"
+import (
+	"fmt"
+	"io"
 
-type Jaeger struct {
-	*log.Entry
-}
+	"github.com/ZupIT/horusec-admin/internal/logger"
+	"github.com/opentracing/opentracing-go"
+	"github.com/uber/jaeger-client-go/config"
+)
 
-func NewJaeger() *Jaeger {
-	return &Jaeger{Entry: WithPrefix("jaeger")}
-}
+// New returns an instance of Jaeger Tracer.
+func New(service string) (opentracing.Tracer, io.Closer, error) {
+	cfg, err := (&config.Configuration{ServiceName: service}).FromEnv()
+	if err != nil {
+		return nil, nil, fmt.Errorf("cannot init Jaeger: %w", err)
+	}
 
-func (j *Jaeger) Error(msg string) {
-	j.Entry.Error(msg)
-}
+	tracer, closer, err := cfg.NewTracer(config.Logger(logger.NewJaeger()))
+	if err != nil {
+		return nil, nil, fmt.Errorf("cannot init Jaeger: %w", err)
+	}
 
-func (j *Jaeger) Infof(msg string, args ...interface{}) {
-	j.Entry.Debugf(msg, args...)
+	return tracer, closer, nil
 }
