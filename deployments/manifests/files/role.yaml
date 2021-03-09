@@ -1,0 +1,8 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: horusec-admin
+rules:
+  - apiGroups: [ "install.horusec.io" ]
+    resources: [ "horusecmanagers" ]
+    verbs: [ "create", "delete", "deletecollection", "get", "list", "patch" ,"update", "watch" ]
