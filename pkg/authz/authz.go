@@ -1,6 +1,12 @@
 package authz
 
-import "time"
+import (
+	"crypto/rand"
+	"encoding/hex"
+	"time"
+)
+
+const TokenLength = 20
 
 type Authz struct {
 	token     string
@@ -9,12 +15,19 @@ type Authz struct {
 
 func NewAuthz() *Authz {
 	authz := &Authz{}
-	authz.generateToken()
+	_ = authz.generateToken()
 
 	return authz
 }
 
-func (a *Authz) generateToken() {
-	a.token = "somthing"
+func (a *Authz) generateToken() error {
+	b := make([]byte, TokenLength)
+	if _, err := rand.Read(b); err != nil {
+		return err
+	}
+
+	a.token = hex.EncodeToString(b)
 	a.createdAt = time.Now()
+
+	return nil
 }
