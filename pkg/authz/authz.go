@@ -31,3 +31,7 @@ func (a *Authz) generateToken() error {
 
 	return nil
 }
+
+func (a *Authz) GetToken() string {
+	return a.token
+}
