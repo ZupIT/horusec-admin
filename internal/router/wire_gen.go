@@ -15,14 +15,16 @@ import (
 	"github.com/ZupIT/horusec-admin/pkg/core"
 	"github.com/go-chi/chi"
 	"github.com/google/wire"
+	"github.com/opentracing/opentracing-go"
 )
 
 // Injectors from wire.go:
 
-func newRouter(reader core.ConfigurationReader, writer core.ConfigurationWriter) (*router, error) {
+func newRouter(tracer opentracing.Tracer, reader core.ConfigurationReader, writer core.ConfigurationWriter) (*router, error) {
 	mux := chi.NewRouter()
 	authorizer := middleware.NewAuthorizer()
 	rendererRender := render.New()
+	middlewareTracer := middleware.NewTracer(tracer)
 	auth := handler.NewAuth()
 	configEditing := handler.NewConfigEditing(rendererRender, writer)
 	configReading := handler.NewConfigReading(rendererRender, reader)
@@ -44,6 +46,7 @@ func newRouter(reader core.ConfigurationReader, writer core.ConfigurationWriter)
 		Mux:    mux,
 		authz:  authorizer,
 		render: rendererRender,
+		tracer: middlewareTracer,
 		APIs:   set,
 		Assets: assets,
 		Pages:  pageSet,
@@ -53,4 +56,4 @@ func newRouter(reader core.ConfigurationReader, writer core.ConfigurationWriter)
 
 // wire.go:
 
-var providers = wire.NewSet(api.NewSet, chi.NewRouter, handler.NewAuth, handler.NewConfigEditing, handler.NewConfigReading, handler.NewDefaultRender, handler.NewHealth, middleware.NewAuthorizer, page.NewSet, render.New, static.ListAssets, wire.Struct(new(api.Handlers), "*"), wire.Struct(new(router), "*"))
+var providers = wire.NewSet(api.NewSet, chi.NewRouter, handler.NewAuth, handler.NewConfigEditing, handler.NewConfigReading, handler.NewDefaultRender, handler.NewHealth, middleware.NewAuthorizer, middleware.NewTracer, page.NewSet, render.New, static.ListAssets, wire.Struct(new(api.Handlers), "*"), wire.Struct(new(router), "*"))

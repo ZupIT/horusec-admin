@@ -26,6 +26,7 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/heptiolabs/healthcheck"
+	"github.com/opentracing/opentracing-go"
 	"github.com/thedevsaddam/renderer"
 )
 
@@ -33,6 +34,7 @@ type router struct {
 	*chi.Mux
 	authz  *internal.Authorizer
 	render *renderer.Render
+	tracer *internal.Tracer
 
 	APIs   api.Set
 	Assets static.Assets
@@ -40,8 +42,8 @@ type router struct {
 }
 
 // New creates the router with all API routes and the static files handler.
-func New(reader core.ConfigurationReader, writer core.ConfigurationWriter) (*chi.Mux, error) {
-	r, err := newRouter(reader, writer)
+func New(tracer opentracing.Tracer, reader core.ConfigurationReader, writer core.ConfigurationWriter) (*chi.Mux, error) {
+	r, err := newRouter(tracer, reader, writer)
 	if err != nil {
 		return nil, err
 	}
@@ -67,6 +69,7 @@ func (r *router) routeAPIs() {
 	if logger.IsTrace() {
 		router.Use(middleware.RequestLogger(logger.NewRequestFormatter()))
 	}
+	router.Use(r.tracer.Trace)
 	for _, route := range r.APIs {
 		handlerFunc := route.Handler
 		if route.Authenticated {
