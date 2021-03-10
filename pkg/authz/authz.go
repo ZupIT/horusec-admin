@@ -33,6 +33,7 @@ func (a *Authz) startRefreshTokenCycle() {
 			select {
 			case <-ticker.C:
 				a.generateToken()
+				a.PrintToken()
 			case <-a.quitRefreshTokenCycleCn:
 				ticker.Stop()
 				return
@@ -57,10 +58,19 @@ func (a *Authz) getRandTokenString() (string, error) {
 	return hex.EncodeToString(b), nil
 }
 
+func (a *Authz) PrintToken() {
+	print("AccessToken:", a.token)
+	print("Valid until:", a.GetTokenExpiresTime())
+}
+
 func (a *Authz) Stop() {
 	close(a.quitRefreshTokenCycleCn)
 }
 
 func (a *Authz) GetToken() string {
 	return a.token
+}
+
+func (a *Authz) GetTokenExpiresTime() time.Time {
+	return a.createdAt.Add(RefreshTokenInterval)
 }
