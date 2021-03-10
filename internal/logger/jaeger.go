@@ -14,14 +14,18 @@
 
 package logger
 
-import log "github.com/sirupsen/logrus"
+import (
+	"context"
+
+	log "github.com/sirupsen/logrus"
+)
 
 type Jaeger struct {
 	*log.Entry
 }
 
 func NewJaeger() *Jaeger {
-	return &Jaeger{Entry: WithPrefix("jaeger")}
+	return &Jaeger{Entry: WithPrefix(context.Background(), "jaeger")}
 }
 
 func (j *Jaeger) Error(msg string) {

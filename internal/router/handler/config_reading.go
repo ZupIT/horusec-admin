@@ -34,7 +34,7 @@ func NewConfigReading(render *renderer.Render, reader core.ConfigurationReader) 
 }
 
 func (h *ConfigReading) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	cfg, err := h.reader.GetConfig()
+	cfg, err := h.reader.GetConfig(r.Context())
 	if err != nil {
 		panic(err)
 	}

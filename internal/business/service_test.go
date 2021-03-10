@@ -15,7 +15,10 @@
 package business
 
 import (
+	"context"
 	"testing"
+
+	"github.com/ZupIT/horusec-admin/internal/tracer"
 
 	"github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
 	"github.com/ZupIT/horusec-admin/pkg/core"
@@ -32,7 +35,7 @@ func TestConfigService_CreateOrUpdate_When_HorusecManagerExistsButHasNoChanges_E
 	client.On("List", mock.Anything, mock.Anything).Return(singleResult, nil).Once()
 
 	// state under test
-	_ = svc.CreateOrUpdate(new(core.Configuration))
+	_ = svc.CreateOrUpdate(context.TODO(), new(core.Configuration))
 
 	// assertions
 	client.AssertNotCalled(t, "Update", mock.Anything, mock.Anything, mock.Anything)
@@ -47,7 +50,7 @@ func TestConfigService_CreateOrUpdate_When_HorusecManagerNotExists_Expect_Create
 	client.On("Create", mock.Anything, mock.Anything, mock.Anything).Return(nil, nil).Once()
 
 	// state under test
-	_ = svc.CreateOrUpdate(new(core.Configuration))
+	_ = svc.CreateOrUpdate(context.TODO(), new(core.Configuration))
 
 	// assertions
 	client.AssertCalled(t, "Create", mock.Anything, mock.AnythingOfType("*v1alpha1.HorusecManager"), mock.Anything)
@@ -64,7 +67,7 @@ func TestConfigService_CreateOrUpdate_When_HorusecManagerExists_Expect_UpdateCal
 	client.On("Update", mock.Anything, mock.Anything, mock.Anything).Return(nil, nil).Once()
 
 	// state under test
-	_ = svc.CreateOrUpdate(new(core.Configuration))
+	_ = svc.CreateOrUpdate(context.TODO(), new(core.Configuration))
 
 	// assertions
 	client.AssertCalled(t, "Update", mock.Anything, mock.AnythingOfType("*v1alpha1.HorusecManager"), mock.Anything)
@@ -81,7 +84,7 @@ func TestConfigService_GetConfig_When_SingleResult_Expect_NoError(t *testing.T) 
 	client.On("Update", mock.Anything, mock.Anything, mock.Anything).Return(nil, nil).Once()
 
 	// state under test
-	_, err := svc.GetConfig()
+	_, err := svc.GetConfig(context.TODO())
 
 	// assertions
 	assert.NoError(t, err)
@@ -98,7 +101,7 @@ func TestConfigService_GetConfig_When_MultipleResults_Expect_Error(t *testing.T)
 	client.On("Update", mock.Anything, mock.Anything, mock.Anything).Return(nil, nil).Once()
 
 	// state under test
-	_, err := svc.GetConfig()
+	_, err := svc.GetConfig(context.TODO())
 
 	// assertions
 	assert.Error(t, err)
@@ -106,5 +109,6 @@ func TestConfigService_GetConfig_When_MultipleResults_Expect_Error(t *testing.T)
 
 func setup() (*ConfigService, *mocks.HorusecManagerInterface) {
 	client := new(mocks.HorusecManagerInterface)
-	return NewConfigService(client), client
+	t, _, _ := tracer.New("horusec-admin-test")
+	return NewConfigService(client, t), client
 }

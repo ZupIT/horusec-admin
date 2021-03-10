@@ -15,6 +15,7 @@
 package main
 
 import (
+	"context"
 	"os"
 	"os/signal"
 	"syscall"
@@ -25,7 +26,7 @@ import (
 )
 
 func main() {
-	log := logger.WithPrefix("main")
+	log := logger.WithPrefix(context.TODO(), "main")
 
 	t, closer, err := tracer.New("horusec-admin")
 	if err != nil {
