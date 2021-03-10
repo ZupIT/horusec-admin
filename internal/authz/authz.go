@@ -15,7 +15,7 @@ type Authz struct {
 	quitRefreshTokenCycleCn chan struct{}
 }
 
-func NewAuthz() *Authz {
+func New() *Authz {
 	authz := &Authz{}
 
 	authz.generateToken()
