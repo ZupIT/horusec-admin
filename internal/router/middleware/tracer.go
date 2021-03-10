@@ -51,8 +51,13 @@ func (t *Tracer) Trace(next http.Handler) http.Handler {
 				panic(err)
 			}
 		}()
+
+		scheme := "http"
+		if r.TLS != nil {
+			scheme = "https"
+		}
+		ext.HTTPUrl.Set(span, fmt.Sprintf("%s://%s%s", scheme, r.Host, r.RequestURI))
 		ext.HTTPMethod.Set(span, r.Method)
-		ext.HTTPUrl.Set(span, r.URL.RequestURI())
 		span.SetTag("http.protocol", r.Proto)
 
 		ww := middleware.NewWrapResponseWriter(w, r.ProtoMajor)
