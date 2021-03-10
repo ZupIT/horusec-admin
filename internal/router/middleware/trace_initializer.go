@@ -25,15 +25,15 @@ import (
 	"github.com/opentracing/opentracing-go/ext"
 )
 
-type Tracer struct {
+type TraceInitializer struct {
 	opentracing.Tracer
 }
 
-func NewTracer(tracer opentracing.Tracer) *Tracer {
-	return &Tracer{Tracer: tracer}
+func NewTracer(tracer opentracing.Tracer) *TraceInitializer {
+	return &TraceInitializer{Tracer: tracer}
 }
 
-func (t *Tracer) Trace(next http.Handler) http.Handler {
+func (t *TraceInitializer) Initialize(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		span, ctx := t.startSpanFromRequest(r)
 		ctx = context.WithValue(ctx, middleware.RequestIDKey, fmt.Sprintf("%+v", span))
@@ -77,7 +77,7 @@ func (t *Tracer) Trace(next http.Handler) http.Handler {
 	})
 }
 
-func (t *Tracer) startSpanFromRequest(r *http.Request) (opentracing.Span, context.Context) {
+func (t *TraceInitializer) startSpanFromRequest(r *http.Request) (opentracing.Span, context.Context) {
 	ctx, _ := t.Extract(opentracing.HTTPHeaders, opentracing.HTTPHeadersCarrier(r.Header))
 	operation := r.URL.Path
 	operation = r.Method + " " + operation
