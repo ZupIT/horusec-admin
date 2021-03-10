@@ -21,14 +21,11 @@ import (
 
 	"github.com/ZupIT/horusec-admin/internal/business/adapter"
 	"github.com/ZupIT/horusec-admin/internal/logger"
+	"github.com/ZupIT/horusec-admin/internal/tracing"
 	api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
 	client "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v1alpha1"
 	"github.com/ZupIT/horusec-admin/pkg/core"
 	"github.com/google/go-cmp/cmp"
-	"github.com/opentracing/opentracing-go"
-	"github.com/opentracing/opentracing-go/ext"
-	tlog "github.com/opentracing/opentracing-go/log"
-	kerrors "k8s.io/apimachinery/pkg/api/errors"
 	k8s "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -145,57 +142,36 @@ func (s *ConfigService) apply(ctx context.Context, r *api.HorusecManager) error 
 }
 
 func (s *ConfigService) list(ctx context.Context) ([]api.HorusecManager, error) {
-	span, ctx := opentracing.StartSpanFromContext(ctx, "internal/business.(*ConfigService).list")
+	span, ctx := tracing.StartSpanFromContext(ctx, "internal/business.(*ConfigService).list")
 	defer span.Finish()
 
 	cfg, err := s.client.List(ctx, k8s.ListOptions{})
 	if err != nil {
-		ext.Error.Set(span, true)
-		fields := make([]tlog.Field, 0)
-		fields = append(fields, tlog.String("event", "error"), tlog.String("message", err.Error()))
-		if serr, ok := err.(*kerrors.StatusError); ok {
-			status := serr.Status()
-			fields = append(fields, tlog.Int32("code", status.Code), tlog.String("reason", string(status.Reason)))
-		}
-		span.LogFields(fields...)
+		span.SetError(err)
 		return nil, fmt.Errorf("failed to list HorusecManager: %w", err)
 	}
 	return cfg.Items, nil
 }
 
 func (s *ConfigService) create(ctx context.Context, r *api.HorusecManager) error {
-	span, ctx := opentracing.StartSpanFromContext(ctx, "internal/business.(*ConfigService).create")
+	span, ctx := tracing.StartSpanFromContext(ctx, "internal/business.(*ConfigService).create")
 	defer span.Finish()
 
 	_, err := s.client.Create(ctx, r, k8s.CreateOptions{})
 	if err != nil {
-		ext.Error.Set(span, true)
-		fields := make([]tlog.Field, 0)
-		fields = append(fields, tlog.String("event", "error"), tlog.String("message", err.Error()))
-		if serr, ok := err.(*kerrors.StatusError); ok {
-			status := serr.Status()
-			fields = append(fields, tlog.Int32("code", status.Code), tlog.String("reason", string(status.Reason)))
-		}
-		span.LogFields(fields...)
+		span.SetError(err)
 		return fmt.Errorf("failed to create HorusecManager: %w", err)
 	}
 	return nil
 }
 
 func (s *ConfigService) update(ctx context.Context, r *api.HorusecManager) error {
-	span, ctx := opentracing.StartSpanFromContext(ctx, "internal/business.(*ConfigService).update")
+	span, ctx := tracing.StartSpanFromContext(ctx, "internal/business.(*ConfigService).update")
 	defer span.Finish()
 
 	_, err := s.client.Update(ctx, r, k8s.UpdateOptions{})
 	if err != nil {
-		ext.Error.Set(span, true)
-		fields := make([]tlog.Field, 0)
-		fields = append(fields, tlog.String("event", "error"), tlog.String("message", err.Error()))
-		if serr, ok := err.(*kerrors.StatusError); ok {
-			status := serr.Status()
-			fields = append(fields, tlog.Int32("code", status.Code), tlog.String("reason", string(status.Reason)))
-		}
-		span.LogFields(fields...)
+		span.SetError(err)
 		return fmt.Errorf("failed to update HorusecManager: %w", err)
 	}
 	return nil

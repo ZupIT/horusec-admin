@@ -12,26 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package logger
+package tracing
 
-import (
-	"context"
-
-	log "github.com/sirupsen/logrus"
-)
-
-type Jaeger struct {
-	*log.Entry
+type defaultLogger struct {
+	Logger
 }
 
-func NewJaeger() *Jaeger {
-	return &Jaeger{Entry: WithPrefix(context.Background(), "jaeger")}
+type Logger interface {
+	Error(args ...interface{})
+	Debugf(format string, args ...interface{})
 }
 
-func (j *Jaeger) Error(msg string) {
-	j.Entry.Error(msg)
+func (l *defaultLogger) Error(msg string) {
+	l.Logger.Error(msg)
 }
 
-func (j *Jaeger) Infof(msg string, args ...interface{}) {
-	j.Entry.Debugf(msg, args...)
+func (l *defaultLogger) Infof(msg string, args ...interface{}) {
+	l.Logger.Debugf(msg, args...)
 }

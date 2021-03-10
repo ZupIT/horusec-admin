@@ -28,7 +28,7 @@ import (
 func main() {
 	log := logger.WithPrefix(context.TODO(), "main")
 
-	closer, err := tracing.Initialize("horusec-admin")
+	closer, err := tracing.Initialize("horusec-admin", logger.WithPrefix(context.TODO(), "tracing"))
 	if err != nil {
 		log.WithError(err).Fatal("failed to initialize tracer")
 	}
