@@ -26,7 +26,7 @@ func newRouter(tracer opentracing.Tracer) (*chi.Mux, error) {
 	if err != nil {
 		return nil, err
 	}
-	configService := business.NewConfigService(horusecManagerInterface)
+	configService := business.NewConfigService(horusecManagerInterface, tracer)
 	mux, err := router.New(tracer, configService, configService)
 	if err != nil {
 		return nil, err
