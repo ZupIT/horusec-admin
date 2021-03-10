@@ -60,7 +60,7 @@ func (a *Authz) getRandTokenString() (string, error) {
 
 func (a *Authz) PrintToken() {
 	print("Token:", a.token)
-	print("Valid until:", a.GetTokenExpiresTime())
+	print("Valid until:", a.GetTokenExpiresTime().String())
 }
 
 func (a *Authz) Stop() {
