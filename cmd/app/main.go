@@ -22,13 +22,13 @@ import (
 
 	"github.com/ZupIT/horusec-admin/internal/logger"
 	"github.com/ZupIT/horusec-admin/internal/server"
-	"github.com/ZupIT/horusec-admin/internal/tracer"
+	"github.com/ZupIT/horusec-admin/internal/tracing"
 )
 
 func main() {
 	log := logger.WithPrefix(context.TODO(), "main")
 
-	closer, err := tracer.Initialize("horusec-admin")
+	closer, err := tracing.Initialize("horusec-admin")
 	if err != nil {
 		log.WithError(err).Fatal("failed to initialize tracer")
 	}
