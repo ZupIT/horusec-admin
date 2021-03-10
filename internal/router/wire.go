@@ -26,7 +26,6 @@ import (
 	"github.com/ZupIT/horusec-admin/pkg/core"
 	"github.com/go-chi/chi"
 	"github.com/google/wire"
-	"github.com/opentracing/opentracing-go"
 )
 
 var providers = wire.NewSet(
@@ -46,7 +45,7 @@ var providers = wire.NewSet(
 	wire.Struct(new(router), "*"),
 )
 
-func newRouter(tracer opentracing.Tracer, reader core.ConfigurationReader, writer core.ConfigurationWriter) (*router, error) {
+func newRouter(reader core.ConfigurationReader, writer core.ConfigurationWriter) (*router, error) {
 	wire.Build(providers)
 	return nil, nil
 }

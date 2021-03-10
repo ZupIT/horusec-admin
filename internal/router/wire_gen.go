@@ -15,16 +15,15 @@ import (
 	"github.com/ZupIT/horusec-admin/pkg/core"
 	"github.com/go-chi/chi"
 	"github.com/google/wire"
-	"github.com/opentracing/opentracing-go"
 )
 
 // Injectors from wire.go:
 
-func newRouter(tracer opentracing.Tracer, reader core.ConfigurationReader, writer core.ConfigurationWriter) (*router, error) {
+func newRouter(reader core.ConfigurationReader, writer core.ConfigurationWriter) (*router, error) {
 	mux := chi.NewRouter()
 	authorizer := middleware.NewAuthorizer()
 	rendererRender := render.New()
-	middlewareTracer := middleware.NewTracer(tracer)
+	traceInitializer := middleware.NewTracer()
 	auth := handler.NewAuth()
 	configEditing := handler.NewConfigEditing(rendererRender, writer)
 	configReading := handler.NewConfigReading(rendererRender, reader)
@@ -46,7 +45,7 @@ func newRouter(tracer opentracing.Tracer, reader core.ConfigurationReader, write
 		Mux:    mux,
 		authz:  authorizer,
 		render: rendererRender,
-		tracer: middlewareTracer,
+		tracer: traceInitializer,
 		APIs:   set,
 		Assets: assets,
 		Pages:  pageSet,

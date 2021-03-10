@@ -35,10 +35,9 @@ import (
 type ConfigService struct {
 	client      client.HorusecManagerInterface
 	compareOpts cmp.Option
-	tracer      opentracing.Tracer
 }
 
-func NewConfigService(client client.HorusecManagerInterface, tracer opentracing.Tracer) *ConfigService {
+func NewConfigService(client client.HorusecManagerInterface) *ConfigService {
 	ignore := [...]string{
 		"TypeMeta.APIVersion",
 		"TypeMeta.Kind",
@@ -61,7 +60,6 @@ func NewConfigService(client client.HorusecManagerInterface, tracer opentracing.
 			}
 			return false
 		}, cmp.Ignore()),
-		tracer: tracer,
 	}
 }
 
@@ -147,7 +145,7 @@ func (s *ConfigService) apply(ctx context.Context, r *api.HorusecManager) error 
 }
 
 func (s *ConfigService) list(ctx context.Context) ([]api.HorusecManager, error) {
-	span, ctx := opentracing.StartSpanFromContextWithTracer(ctx, s.tracer, "internal/business.(*ConfigService).list")
+	span, ctx := opentracing.StartSpanFromContext(ctx, "internal/business.(*ConfigService).list")
 	defer span.Finish()
 
 	cfg, err := s.client.List(ctx, k8s.ListOptions{})
@@ -166,7 +164,7 @@ func (s *ConfigService) list(ctx context.Context) ([]api.HorusecManager, error) 
 }
 
 func (s *ConfigService) create(ctx context.Context, r *api.HorusecManager) error {
-	span, ctx := opentracing.StartSpanFromContextWithTracer(ctx, s.tracer, "internal/business.(*ConfigService).create")
+	span, ctx := opentracing.StartSpanFromContext(ctx, "internal/business.(*ConfigService).create")
 	defer span.Finish()
 
 	_, err := s.client.Create(ctx, r, k8s.CreateOptions{})
@@ -185,7 +183,7 @@ func (s *ConfigService) create(ctx context.Context, r *api.HorusecManager) error
 }
 
 func (s *ConfigService) update(ctx context.Context, r *api.HorusecManager) error {
-	span, ctx := opentracing.StartSpanFromContextWithTracer(ctx, s.tracer, "internal/business.(*ConfigService).update")
+	span, ctx := opentracing.StartSpanFromContext(ctx, "internal/business.(*ConfigService).update")
 	defer span.Finish()
 
 	_, err := s.client.Update(ctx, r, k8s.UpdateOptions{})

@@ -23,17 +23,18 @@ import (
 	"github.com/uber/jaeger-client-go/config"
 )
 
-// New returns an instance of Jaeger Tracer.
-func New(service string) (opentracing.Tracer, io.Closer, error) {
+// Initialize create an instance of Jaeger Tracer and sets it as GlobalTracer.
+func Initialize(service string) (io.Closer, error) {
 	cfg, err := (&config.Configuration{ServiceName: service}).FromEnv()
 	if err != nil {
-		return nil, nil, fmt.Errorf("cannot init Jaeger: %w", err)
+		return nil, fmt.Errorf("cannot init Jaeger: %w", err)
 	}
 
 	tracer, closer, err := cfg.NewTracer(config.Logger(logger.NewJaeger()))
 	if err != nil {
-		return nil, nil, fmt.Errorf("cannot init Jaeger: %w", err)
+		return nil, fmt.Errorf("cannot init Jaeger: %w", err)
 	}
 
-	return tracer, closer, nil
+	opentracing.SetGlobalTracer(tracer)
+	return closer, nil
 }

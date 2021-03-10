@@ -26,7 +26,6 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/heptiolabs/healthcheck"
-	"github.com/opentracing/opentracing-go"
 	"github.com/thedevsaddam/renderer"
 )
 
@@ -42,8 +41,8 @@ type router struct {
 }
 
 // New creates the router with all API routes and the static files handler.
-func New(tracer opentracing.Tracer, reader core.ConfigurationReader, writer core.ConfigurationWriter) (*chi.Mux, error) {
-	r, err := newRouter(tracer, reader, writer)
+func New(reader core.ConfigurationReader, writer core.ConfigurationWriter) (*chi.Mux, error) {
+	r, err := newRouter(reader, writer)
 	if err != nil {
 		return nil, err
 	}

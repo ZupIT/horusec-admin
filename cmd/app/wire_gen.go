@@ -12,12 +12,11 @@ import (
 	"github.com/ZupIT/horusec-admin/pkg/core"
 	"github.com/go-chi/chi"
 	"github.com/google/wire"
-	"github.com/opentracing/opentracing-go"
 )
 
 // Injectors from wire.go:
 
-func newRouter(tracer opentracing.Tracer) (*chi.Mux, error) {
+func newRouter() (*chi.Mux, error) {
 	config, err := kubernetes.NewRestConfig()
 	if err != nil {
 		return nil, err
@@ -26,8 +25,8 @@ func newRouter(tracer opentracing.Tracer) (*chi.Mux, error) {
 	if err != nil {
 		return nil, err
 	}
-	configService := business.NewConfigService(horusecManagerInterface, tracer)
-	mux, err := router.New(tracer, configService, configService)
+	configService := business.NewConfigService(horusecManagerInterface)
+	mux, err := router.New(configService, configService)
 	if err != nil {
 		return nil, err
 	}

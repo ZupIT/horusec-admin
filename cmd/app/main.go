@@ -28,13 +28,13 @@ import (
 func main() {
 	log := logger.WithPrefix(context.TODO(), "main")
 
-	t, closer, err := tracer.New("horusec-admin")
+	closer, err := tracer.Initialize("horusec-admin")
 	if err != nil {
 		log.WithError(err).Fatal("failed to initialize tracer")
 	}
 	defer closer.Close()
 
-	r, err := newRouter(t)
+	r, err := newRouter()
 	if err != nil {
 		log.WithError(err).Fatal("failed to create HTTP request router")
 	}

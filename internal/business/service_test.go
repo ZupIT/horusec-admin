@@ -18,8 +18,6 @@ import (
 	"context"
 	"testing"
 
-	"github.com/ZupIT/horusec-admin/internal/tracer"
-
 	"github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
 	"github.com/ZupIT/horusec-admin/pkg/core"
 	"github.com/ZupIT/horusec-admin/test/mocks"
@@ -109,6 +107,5 @@ func TestConfigService_GetConfig_When_MultipleResults_Expect_Error(t *testing.T)
 
 func setup() (*ConfigService, *mocks.HorusecManagerInterface) {
 	client := new(mocks.HorusecManagerInterface)
-	t, _, _ := tracer.New("horusec-admin-test")
-	return NewConfigService(client, t), client
+	return NewConfigService(client), client
 }
