@@ -89,8 +89,6 @@ func (s *ConfigService) CreateOrUpdate(ctx context.Context, cfg *core.Configurat
 }
 
 func (s *ConfigService) getOne(ctx context.Context) (*api.HorusecManager, error) {
-	log := logger.WithPrefix(ctx, "service")
-
 	hm, err := s.list(ctx)
 	if err != nil {
 		return nil, err
@@ -98,15 +96,17 @@ func (s *ConfigService) getOne(ctx context.Context) (*api.HorusecManager, error)
 
 	if len(hm) > 1 {
 		return nil, errors.New("more than one HorusecManager CR were found")
-	}
-
-	if len(hm) == 0 {
-		log.Debug("no HorusecManager was found")
+	} else if len(hm) == 0 {
+		logger.WithPrefix(ctx, "service").Debug("no HorusecManager was found")
 		return nil, nil
 	}
 
 	res := &hm[0]
-	log.WithField("name", res.Name).WithField("namespace", res.Namespace).Debug("a HorusecManager was found")
+	logger.WithPrefix(ctx, "service").
+		WithField("name", res.Name).
+		WithField("namespace", res.Namespace).
+		Debug("a HorusecManager was found")
+
 	return res, nil
 }
 
@@ -119,7 +119,7 @@ func (s *ConfigService) apply(ctx context.Context, r *api.HorusecManager) error 
 	log := logger.WithPrefix(ctx, "service")
 	if o == nil {
 		r.SetName("horusec")
-		if err = s.create(ctx, r); err != nil {
+		if err := s.create(ctx, r); err != nil {
 			return err
 		}
 		log.Debug("resource created")
@@ -131,7 +131,7 @@ func (s *ConfigService) apply(ctx context.Context, r *api.HorusecManager) error 
 	diff := cmp.Diff(o, r, s.compareOpts)
 	if diff != "" {
 		log.Debug("resource changes:\n" + diff)
-		if err = s.update(ctx, r); err != nil {
+		if err := s.update(ctx, r); err != nil {
 			return err
 		}
 		log.Debug("resource updated")

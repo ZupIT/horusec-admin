@@ -25,8 +25,6 @@ import (
 	"github.com/uber/jaeger-client-go/config"
 )
 
-const module = "github.com/ZupIT/horusec-admin/"
-
 // Initialize create an instance of Jaeger Tracer and sets it as GlobalTracer.
 func Initialize(service string, logger Logger) (io.Closer, error) {
 	cfg, err := (&config.Configuration{ServiceName: service}).FromEnv()
@@ -49,12 +47,8 @@ func StartSpanFromContext(ctx context.Context, operationName string) (*Span, con
 }
 
 func StartSpanFromRequest(r *http.Request) (*Span, context.Context) {
-	tracer := opentracing.GlobalTracer()
-	ctx, _ := tracer.Extract(opentracing.HTTPHeaders, opentracing.HTTPHeadersCarrier(r.Header))
-
-	operation := r.Method + " " + r.URL.Path
-	options := ext.RPCServerOption(ctx)
-	span, ctxWithSpan := opentracing.StartSpanFromContextWithTracer(r.Context(), tracer, operation, options)
+	ctx := ExtractSpanContextFromRequest(r)
+	span, ctxWithSpan := opentracing.StartSpanFromContext(r.Context(), r.Method+" "+r.URL.Path, ext.RPCServerOption(ctx))
 
 	scheme := "http"
 	if r.TLS != nil {
@@ -74,4 +68,10 @@ func SpanFromContext(ctx context.Context) *Span {
 	}
 
 	return &Span{Span: span}
+}
+
+func ExtractSpanContextFromRequest(r *http.Request) opentracing.SpanContext {
+	tracer := opentracing.GlobalTracer()
+	ctx, _ := tracer.Extract(opentracing.HTTPHeaders, opentracing.HTTPHeadersCarrier(r.Header))
+	return ctx
 }

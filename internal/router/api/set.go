@@ -32,6 +32,7 @@ type (
 )
 
 // NewSet creates and returns all Rest API routes.
+// nolint:funlen // it contains all definitions of all APIs and for that reason this list can be as long as needed
 func NewSet(h *Handlers) Set {
 	return []*api{
 		{

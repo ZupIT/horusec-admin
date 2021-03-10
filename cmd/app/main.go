@@ -26,27 +26,25 @@ import (
 )
 
 func main() {
-	log := logger.WithPrefix(context.TODO(), "main")
-
 	closer, err := tracing.Initialize("horusec-admin", logger.WithPrefix(context.TODO(), "tracing"))
 	if err != nil {
-		log.WithError(err).Fatal("failed to initialize tracer")
+		logger.WithPrefix(context.TODO(), "main").WithError(err).Fatal("failed to initialize tracer")
 	}
 	defer closer.Close()
 
 	r, err := newRouter()
 	if err != nil {
-		log.WithError(err).Fatal("failed to create HTTP request router")
+		logger.WithPrefix(context.TODO(), "main").WithError(err).Fatal("failed to create HTTP request router")
 	}
 
 	srv := server.New(r).Start()
 
 	waitForInterruptSignal()
 	if err = srv.GracefullyShutdown(); err != nil {
-		log.WithError(err).Fatal("server forced to shutdown")
+		logger.WithPrefix(context.TODO(), "main").WithError(err).Fatal("server forced to shutdown")
 	}
 
-	log.Info("server exiting")
+	logger.WithPrefix(context.TODO(), "main").Info("server exiting")
 }
 
 func waitForInterruptSignal() {
