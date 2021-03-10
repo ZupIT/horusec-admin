@@ -15,9 +15,12 @@
 package logger
 
 import (
+	"context"
 	"os"
 	"strings"
 
+	"github.com/opentracing/opentracing-go"
+	"github.com/uber/jaeger-client-go"
 	// nolint
 	log "github.com/sirupsen/logrus"
 	prefixed "github.com/x-cray/logrus-prefixed-formatter"
@@ -33,8 +36,20 @@ func init() {
 	log.SetLevel(level)
 }
 
-func WithPrefix(prefix string) *log.Entry {
-	return log.WithField("prefix", prefix)
+func WithPrefix(ctx context.Context, prefix string) *log.Entry {
+	entry := log.WithField("prefix", prefix).WithContext(ctx)
+	span := opentracing.SpanFromContext(ctx)
+	if span != nil {
+		if sc, ok := span.Context().(jaeger.SpanContext); ok {
+			entry = entry.WithFields(log.Fields{
+				"trace":   sc.TraceID(),
+				"span":    sc.SpanID(),
+				"parent":  sc.ParentID(),
+				"sampled": sc.IsSampled(),
+			})
+		}
+	}
+	return entry
 }
 
 func IsTrace() bool {
