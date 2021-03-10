@@ -21,11 +21,13 @@ import (
 )
 
 type Authorizer struct {
-	authz authz.Authz
+	authz *authz.Authz
 }
 
-func NewAuthorizer() *Authorizer {
-	return new(Authorizer)
+func NewAuthorizer(a *authz.Authz) *Authorizer {
+	return &Authorizer{
+		authz: a,
+	}
 }
 
 func (a *Authorizer) Authorize(next http.Handler) http.Handler {
