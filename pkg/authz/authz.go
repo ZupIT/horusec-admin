@@ -59,7 +59,7 @@ func (a *Authz) getRandTokenString() (string, error) {
 }
 
 func (a *Authz) PrintToken() {
-	print("AccessToken:", a.token)
+	print("Token:", a.token)
 	print("Valid until:", a.GetTokenExpiresTime())
 }
 
