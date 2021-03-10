@@ -36,9 +36,10 @@ func NewTracer(tracer opentracing.Tracer) *Tracer {
 func (t *Tracer) Trace(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		span, ctx := t.startSpanFromRequest(r)
-		defer span.Finish()
+		ctx = context.WithValue(ctx, middleware.RequestIDKey, fmt.Sprintf("%+v", span))
 
 		defer func() {
+			defer span.Finish()
 			if err := recover(); err != nil {
 				ext.HTTPStatusCode.Set(span, uint16(500))
 				ext.Error.Set(span, true)
@@ -47,13 +48,12 @@ func (t *Tracer) Trace(next http.Handler) http.Handler {
 					"error.kind", "panic",
 					"message", err,
 					"stack", string(debug.Stack()))
-				span.Finish()
-
 				panic(err)
 			}
 		}()
 		ext.HTTPMethod.Set(span, r.Method)
-		ext.HTTPUrl.Set(span, r.URL.Path)
+		ext.HTTPUrl.Set(span, r.URL.RequestURI())
+		span.SetTag("http.protocol", r.Proto)
 
 		ww := middleware.NewWrapResponseWriter(w, r.ProtoMajor)
 		next.ServeHTTP(ww, r.WithContext(ctx))

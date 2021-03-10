@@ -66,10 +66,10 @@ func (r *router) routeHealthcheckEndpoints() {
 
 func (r *router) routeAPIs() {
 	router := chi.NewRouter()
+	router.Use(r.tracer.Trace)
 	if logger.IsTrace() {
 		router.Use(middleware.RequestLogger(logger.NewRequestFormatter()))
 	}
-	router.Use(r.tracer.Trace)
 	for _, route := range r.APIs {
 		handlerFunc := route.Handler
 		if route.Authenticated {
