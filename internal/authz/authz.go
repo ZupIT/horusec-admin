@@ -74,3 +74,7 @@ func (a *Authz) GetToken() string {
 func (a *Authz) GetTokenExpiresTime() time.Time {
 	return a.createdAt.Add(RefreshTokenInterval)
 }
+
+func (a *Authz) IsValid(token string) bool {
+	return token == a.token
+}
