@@ -32,11 +32,11 @@ publish: ## Publish the container to Docker Hub
 	docker push $(IMG)
 
 deploy: kustomize ## Deploy horusec-admin in the configured Kubernetes cluster in ~/.kube/config
-	cd $(PROJECT_DIR)/deployments/manifests; $(KUSTOMIZE) edit set image $(IMG)
-	$(KUSTOMIZE) build deployments/manifests | kubectl apply -f -
+	cd $(PROJECT_DIR)/deployments/k8s/overlays/staging; $(KUSTOMIZE) edit set image $(IMG)
+	$(KUSTOMIZE) build deployments/k8s/overlays/staging | kubectl apply -f -
 
 undeploy: ## UnDeploy horusec-admin from the configured Kubernetes cluster in ~/.kube/config
-	$(KUSTOMIZE) build deployments/manifests | kubectl delete -f -
+	$(KUSTOMIZE) build deployments/k8s/overlays/staging | kubectl delete -f -
 
 fmt: ## Format all Go files
 	$(GOFMT) -w $(GOFMT_FILES)
