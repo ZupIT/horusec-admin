@@ -6,6 +6,7 @@
 package router
 
 import (
+	"github.com/ZupIT/horusec-admin/internal/authz"
 	"github.com/ZupIT/horusec-admin/internal/router/api"
 	"github.com/ZupIT/horusec-admin/internal/router/handler"
 	"github.com/ZupIT/horusec-admin/internal/router/middleware"
@@ -21,7 +22,8 @@ import (
 
 func newRouter(reader core.ConfigurationReader, writer core.ConfigurationWriter) (*router, error) {
 	mux := chi.NewRouter()
-	authorizer := middleware.NewAuthorizer()
+	authzAuthz := authz.New()
+	authorizer := middleware.NewAuthorizer(authzAuthz)
 	rendererRender := render.New()
 	traceInitializer := middleware.NewTracer()
 	auth := handler.NewAuth()
@@ -55,4 +57,4 @@ func newRouter(reader core.ConfigurationReader, writer core.ConfigurationWriter)
 
 // wire.go:
 
-var providers = wire.NewSet(api.NewSet, chi.NewRouter, handler.NewAuth, handler.NewConfigEditing, handler.NewConfigReading, handler.NewDefaultRender, handler.NewHealth, middleware.NewAuthorizer, middleware.NewTracer, page.NewSet, render.New, static.ListAssets, wire.Struct(new(api.Handlers), "*"), wire.Struct(new(router), "*"))
+var providers = wire.NewSet(api.NewSet, chi.NewRouter, handler.NewAuth, handler.NewConfigEditing, handler.NewConfigReading, handler.NewDefaultRender, handler.NewHealth, middleware.NewAuthorizer, middleware.NewTracer, authz.New, page.NewSet, render.New, static.ListAssets, wire.Struct(new(api.Handlers), "*"), wire.Struct(new(router), "*"))
