@@ -21,6 +21,7 @@ import (
 
 	"github.com/ZupIT/horusec-admin/internal/business/adapter"
 	"github.com/ZupIT/horusec-admin/internal/logger"
+	"github.com/ZupIT/horusec-admin/internal/tracing"
 	api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
 	client "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v1alpha1"
 	"github.com/ZupIT/horusec-admin/pkg/core"
@@ -35,9 +36,16 @@ type ConfigService struct {
 
 func NewConfigService(client client.HorusecManagerInterface) *ConfigService {
 	ignore := [...]string{
-		"ObjectMeta.CreationTimestamp", "ObjectMeta.Finalizers", "ObjectMeta.Generation",
-		"ObjectMeta.ManagedFields", "ObjectMeta.Namespace", "ObjectMeta.ResourceVersion", "ObjectMeta.SelfLink",
-		"ObjectMeta.UID", "TypeMeta.APIVersion",
+		"TypeMeta.APIVersion",
+		"TypeMeta.Kind",
+		"ObjectMeta.CreationTimestamp",
+		"ObjectMeta.Finalizers",
+		"ObjectMeta.Generation",
+		"ObjectMeta.ManagedFields",
+		"ObjectMeta.Namespace",
+		"ObjectMeta.ResourceVersion",
+		"ObjectMeta.SelfLink",
+		"ObjectMeta.UID",
 	}
 	return &ConfigService{
 		client: client,
@@ -52,8 +60,8 @@ func NewConfigService(client client.HorusecManagerInterface) *ConfigService {
 	}
 }
 
-func (s *ConfigService) GetConfig() (*core.Configuration, error) {
-	cr, err := s.getOne()
+func (s *ConfigService) GetConfig(ctx context.Context) (*core.Configuration, error) {
+	cr, err := s.getOne(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -66,13 +74,13 @@ func (s *ConfigService) GetConfig() (*core.Configuration, error) {
 	return (*core.Configuration)(cfg), nil
 }
 
-func (s *ConfigService) CreateOrUpdate(cfg *core.Configuration) error {
+func (s *ConfigService) CreateOrUpdate(ctx context.Context, cfg *core.Configuration) error {
 	r, err := (*adapter.Configuration)(cfg).CR()
 	if err != nil {
 		return err
 	}
 
-	err = s.apply(r)
+	err = s.apply(ctx, r)
 	if err != nil {
 		return err
 	}
@@ -80,35 +88,38 @@ func (s *ConfigService) CreateOrUpdate(cfg *core.Configuration) error {
 	return nil
 }
 
-func (s *ConfigService) getOne() (*api.HorusecManager, error) {
-	cfg, err := s.client.List(context.TODO(), k8s.ListOptions{})
+func (s *ConfigService) getOne(ctx context.Context) (*api.HorusecManager, error) {
+	hm, err := s.list(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get configuration: %w", err)
+		return nil, err
 	}
 
-	size := len(cfg.Items)
-	if size > 1 {
+	if len(hm) > 1 {
 		return nil, errors.New("more than one HorusecManager CR were found")
-	}
-
-	if size == 0 {
+	} else if len(hm) == 0 {
+		logger.WithPrefix(ctx, "service").Debug("no HorusecManager was found")
 		return nil, nil
 	}
 
-	return &cfg.Items[0], nil
+	res := &hm[0]
+	logger.WithPrefix(ctx, "service").
+		WithField("name", res.Name).
+		WithField("namespace", res.Namespace).
+		Debug("a HorusecManager was found")
+
+	return res, nil
 }
 
-func (s *ConfigService) apply(r *api.HorusecManager) error {
-	log := logger.WithPrefix("service")
-
-	o, err := s.getOne()
+func (s *ConfigService) apply(ctx context.Context, r *api.HorusecManager) error {
+	o, err := s.getOne(ctx)
 	if err != nil {
 		return err
 	}
+
+	log := logger.WithPrefix(ctx, "service")
 	if o == nil {
 		r.SetName("horusec")
-		_, err = s.client.Create(context.TODO(), r, k8s.CreateOptions{})
-		if err != nil {
+		if err := s.create(ctx, r); err != nil {
 			return err
 		}
 		log.Debug("resource created")
@@ -120,13 +131,48 @@ func (s *ConfigService) apply(r *api.HorusecManager) error {
 	diff := cmp.Diff(o, r, s.compareOpts)
 	if diff != "" {
 		log.Debug("resource changes:\n" + diff)
-		_, err = s.client.Update(context.TODO(), r, k8s.UpdateOptions{})
-		if err != nil {
+		if err := s.update(ctx, r); err != nil {
 			return err
 		}
 		log.Debug("resource updated")
 	} else {
 		log.Debug("resource unchanged")
+	}
+	return nil
+}
+
+func (s *ConfigService) list(ctx context.Context) ([]api.HorusecManager, error) {
+	span, ctx := tracing.StartSpanFromContext(ctx, "internal/business.(*ConfigService).list")
+	defer span.Finish()
+
+	cfg, err := s.client.List(ctx, k8s.ListOptions{})
+	if err != nil {
+		span.SetError(err)
+		return nil, fmt.Errorf("failed to list HorusecManager: %w", err)
+	}
+	return cfg.Items, nil
+}
+
+func (s *ConfigService) create(ctx context.Context, r *api.HorusecManager) error {
+	span, ctx := tracing.StartSpanFromContext(ctx, "internal/business.(*ConfigService).create")
+	defer span.Finish()
+
+	_, err := s.client.Create(ctx, r, k8s.CreateOptions{})
+	if err != nil {
+		span.SetError(err)
+		return fmt.Errorf("failed to create HorusecManager: %w", err)
+	}
+	return nil
+}
+
+func (s *ConfigService) update(ctx context.Context, r *api.HorusecManager) error {
+	span, ctx := tracing.StartSpanFromContext(ctx, "internal/business.(*ConfigService).update")
+	defer span.Finish()
+
+	_, err := s.client.Update(ctx, r, k8s.UpdateOptions{})
+	if err != nil {
+		span.SetError(err)
+		return fmt.Errorf("failed to update HorusecManager: %w", err)
 	}
 	return nil
 }

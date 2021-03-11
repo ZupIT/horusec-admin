@@ -39,6 +39,7 @@ var providers = wire.NewSet(
 	handler.NewHealth,
 	middleware.NewAuthorizer,
 	authz.NewAuthz,
+	middleware.NewTracer,
 	page.NewSet,
 	render.New,
 	static.ListAssets,

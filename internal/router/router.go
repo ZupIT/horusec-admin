@@ -33,6 +33,7 @@ type router struct {
 	*chi.Mux
 	authz  *internal.Authorizer
 	render *renderer.Render
+	tracer *internal.TraceInitializer
 
 	APIs   api.Set
 	Assets static.Assets
@@ -64,6 +65,7 @@ func (r *router) routeHealthcheckEndpoints() {
 
 func (r *router) routeAPIs() {
 	router := chi.NewRouter()
+	router.Use(r.tracer.Initialize)
 	if logger.IsTrace() {
 		router.Use(middleware.RequestLogger(logger.NewRequestFormatter()))
 	}

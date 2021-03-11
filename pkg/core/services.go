@@ -14,11 +14,13 @@
 
 package core
 
+import "context"
+
 type (
 	ConfigurationWriter interface {
-		CreateOrUpdate(*Configuration) error
+		CreateOrUpdate(context.Context, *Configuration) error
 	}
 	ConfigurationReader interface {
-		GetConfig() (*Configuration, error)
+		GetConfig(context.Context) (*Configuration, error)
 	}
 )

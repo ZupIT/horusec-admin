@@ -15,30 +15,36 @@
 package main
 
 import (
+	"context"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/ZupIT/horusec-admin/internal/logger"
 	"github.com/ZupIT/horusec-admin/internal/server"
+	"github.com/ZupIT/horusec-admin/internal/tracing"
 )
 
 func main() {
-	log := logger.WithPrefix("main")
+	closer, err := tracing.Initialize("horusec-admin", logger.WithPrefix(context.TODO(), "tracing"))
+	if err != nil {
+		logger.WithPrefix(context.TODO(), "main").WithError(err).Fatal("failed to initialize tracer")
+	}
+	defer closer.Close()
 
 	r, err := newRouter()
 	if err != nil {
-		log.WithError(err).Fatal("failed to create HTTP request router")
+		logger.WithPrefix(context.TODO(), "main").WithError(err).Fatal("failed to create HTTP request router")
 	}
 
 	srv := server.New(r).Start()
 
 	waitForInterruptSignal()
 	if err = srv.GracefullyShutdown(); err != nil {
-		log.WithError(err).Fatal("server forced to shutdown")
+		logger.WithPrefix(context.TODO(), "main").WithError(err).Fatal("server forced to shutdown")
 	}
 
-	log.Info("server exiting")
+	logger.WithPrefix(context.TODO(), "main").Info("server exiting")
 }
 
 func waitForInterruptSignal() {

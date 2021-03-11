@@ -15,8 +15,10 @@
 package logger
 
 import (
+	"context"
+
 	"github.com/go-chi/chi/middleware"
-	log "github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus" //nolint:depguard // logger package is responsible to deal with project logging
 )
 
 type (
@@ -34,7 +36,7 @@ func NewRequestFormatter() *RequestFormatter {
 }
 
 func newRequest() *request {
-	return &request{Entry: WithPrefix("request")}
+	return &request{Entry: WithPrefix(context.Background(), "request")}
 }
 
 func (r *request) Print(v ...interface{}) {

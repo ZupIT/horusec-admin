@@ -45,7 +45,7 @@ func New(handler http.Handler) Interface {
 
 func (s *server) Start() Interface {
 	go func() {
-		log := logger.WithPrefix("server")
+		log := logger.WithPrefix(context.Background(), "server")
 		log.WithField("addr", Addr).Info("listening")
 		if err := s.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.WithError(err).Fatal("listen error")
@@ -56,9 +56,9 @@ func (s *server) Start() Interface {
 }
 
 func (s *server) GracefullyShutdown() error {
-	logger.WithPrefix("server").Warn("shutting down server")
 	ctx, cancel := context.WithTimeout(context.Background(), ShutdownTimeout)
 	defer cancel()
+	logger.WithPrefix(ctx, "server").Warn("shutting down server")
 	if err := s.Shutdown(ctx); err != nil {
 		return fmt.Errorf("failed to gracefully shuts down the server: %w", err)
 	}
