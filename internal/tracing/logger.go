@@ -12,35 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package handler
+package tracing
 
-import (
-	"net/http"
-
-	"github.com/ZupIT/horusec-admin/pkg/core"
-
-	"github.com/thedevsaddam/renderer"
-)
-
-type (
-	ConfigReading struct {
-		render *renderer.Render
-		reader core.ConfigurationReader
-	}
-)
-
-func NewConfigReading(render *renderer.Render, reader core.ConfigurationReader) *ConfigReading {
-	return &ConfigReading{render: render, reader: reader}
+type defaultLogger struct {
+	Logger
 }
 
-func (h *ConfigReading) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	cfg, err := h.reader.GetConfig(r.Context())
-	if err != nil {
-		panic(err)
-	}
+type Logger interface {
+	Error(args ...interface{})
+	Debugf(format string, args ...interface{})
+}
 
-	// Answer
-	if err = h.render.JSON(w, http.StatusOK, cfg); err != nil {
-		panic(err)
-	}
+func (l *defaultLogger) Error(msg string) {
+	l.Logger.Error(msg)
+}
+
+func (l *defaultLogger) Infof(msg string, args ...interface{}) {
+	l.Logger.Debugf(msg, args...)
 }

@@ -23,6 +23,7 @@ func newRouter(reader core.ConfigurationReader, writer core.ConfigurationWriter)
 	mux := chi.NewRouter()
 	authorizer := middleware.NewAuthorizer()
 	rendererRender := render.New()
+	traceInitializer := middleware.NewTracer()
 	auth := handler.NewAuth()
 	configEditing := handler.NewConfigEditing(rendererRender, writer)
 	configReading := handler.NewConfigReading(rendererRender, reader)
@@ -44,6 +45,7 @@ func newRouter(reader core.ConfigurationReader, writer core.ConfigurationWriter)
 		Mux:    mux,
 		authz:  authorizer,
 		render: rendererRender,
+		tracer: traceInitializer,
 		APIs:   set,
 		Assets: assets,
 		Pages:  pageSet,
@@ -53,4 +55,4 @@ func newRouter(reader core.ConfigurationReader, writer core.ConfigurationWriter)
 
 // wire.go:
 
-var providers = wire.NewSet(api.NewSet, chi.NewRouter, handler.NewAuth, handler.NewConfigEditing, handler.NewConfigReading, handler.NewDefaultRender, handler.NewHealth, middleware.NewAuthorizer, page.NewSet, render.New, static.ListAssets, wire.Struct(new(api.Handlers), "*"), wire.Struct(new(router), "*"))
+var providers = wire.NewSet(api.NewSet, chi.NewRouter, handler.NewAuth, handler.NewConfigEditing, handler.NewConfigReading, handler.NewDefaultRender, handler.NewHealth, middleware.NewAuthorizer, middleware.NewTracer, page.NewSet, render.New, static.ListAssets, wire.Struct(new(api.Handlers), "*"), wire.Struct(new(router), "*"))

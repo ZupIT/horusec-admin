@@ -20,13 +20,13 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 
+// Package-wide consts from generator "register".
 const (
-	// Package-wide consts from generator "register".
 	GroupName = "install.horusec.io"
 )
 
+// Package-wide variables from generator "register".
 var (
-	// Package-wide variables from generator "register".
 	SchemeGroupVersion = schema.GroupVersion{Group: GroupName, Version: "v1alpha1"}
 	SchemeBuilder      = runtime.NewSchemeBuilder(addKnownTypes)
 	localSchemeBuilder = &SchemeBuilder

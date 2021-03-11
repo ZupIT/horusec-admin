@@ -15,8 +15,11 @@
 package logger
 
 import (
+	"context"
 	"os"
 	"strings"
+
+	"github.com/ZupIT/horusec-admin/internal/tracing"
 
 	// nolint
 	log "github.com/sirupsen/logrus"
@@ -33,8 +36,19 @@ func init() {
 	log.SetLevel(level)
 }
 
-func WithPrefix(prefix string) *log.Entry {
-	return log.WithField("prefix", prefix)
+func WithPrefix(ctx context.Context, prefix string) *log.Entry {
+	entry := log.WithField("prefix", prefix).WithContext(ctx)
+	if span := tracing.SpanFromContext(ctx); span != nil {
+		if info := span.Info(); info != nil {
+			entry = entry.WithFields(log.Fields{
+				"trace":   info.TraceID,
+				"span":    info.SpanID,
+				"parent":  info.ParentID,
+				"sampled": info.IsSampled,
+			})
+		}
+	}
+	return entry
 }
 
 func IsTrace() bool {
