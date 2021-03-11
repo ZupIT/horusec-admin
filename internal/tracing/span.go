@@ -15,6 +15,7 @@
 package tracing
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"runtime/debug"
@@ -23,7 +24,7 @@ import (
 	"github.com/opentracing/opentracing-go/ext"
 	"github.com/opentracing/opentracing-go/log"
 	"github.com/uber/jaeger-client-go"
-	"k8s.io/apimachinery/pkg/api/errors"
+	kerrors "k8s.io/apimachinery/pkg/api/errors"
 )
 
 type (
@@ -58,10 +59,13 @@ func (s *Span) SetError(err error) {
 	ext.Error.Set(s, true)
 	fields := make([]log.Field, 0)
 	fields = append(fields, log.String("event", "error"), log.String("message", err.Error()))
-	if serr, ok := err.(*errors.StatusError); ok {
+
+	var serr *kerrors.StatusError
+	if errors.As(err, &serr) {
 		status := serr.Status()
 		fields = append(fields, log.Int32("code", status.Code), log.String("reason", string(status.Reason)))
 	}
+
 	s.LogFields(fields...)
 }
 
