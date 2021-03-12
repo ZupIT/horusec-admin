@@ -91,9 +91,7 @@ func (r *router) routePages() {
 }
 
 func (r *router) serveStaticAssets() {
-	for _, a := range r.Assets {
-		a.Serve(r.Mux)
-	}
+	r.Assets.Serve(r)
 }
 
 func (r *router) routeErrors() {
