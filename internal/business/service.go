@@ -67,6 +67,8 @@ func (s *ConfigService) CreateOrUpdate(ctx context.Context, cfg *core.Configurat
 }
 
 func (s *ConfigService) getOne(ctx context.Context) (*api.HorusecManager, error) {
+	log := logger.WithPrefix(ctx, "config_service")
+
 	hm, err := s.list(ctx)
 	if err != nil {
 		return nil, err
@@ -75,17 +77,11 @@ func (s *ConfigService) getOne(ctx context.Context) (*api.HorusecManager, error)
 	if len(hm) > 1 {
 		return nil, errors.New("more than one HorusecManager CR were found")
 	} else if len(hm) == 0 {
-		logger.WithPrefix(ctx, "service").Debug("no HorusecManager was found")
+		log.Debug("no HorusecManager was found")
 		return nil, nil
 	}
 
-	res := &hm[0]
-	logger.WithPrefix(ctx, "service").
-		WithField("name", res.Name).
-		WithField("namespace", res.Namespace).
-		Debug("a HorusecManager was found")
-
-	return res, nil
+	return &hm[0], nil
 }
 
 func (s *ConfigService) apply(ctx context.Context, r *api.HorusecManager) error {
@@ -94,29 +90,12 @@ func (s *ConfigService) apply(ctx context.Context, r *api.HorusecManager) error 
 		return err
 	}
 
-	log := logger.WithPrefix(ctx, "service")
 	if o == nil {
 		r.SetName("horusec")
-		if err := s.create(ctx, r); err != nil {
-			return err
-		}
-		log.Debug("resource created")
-		return nil
+		return s.create(ctx, r)
 	}
 
-	r.SetName(o.GetName())
-	r.SetResourceVersion(o.GetResourceVersion())
-	diff := s.comparator.Diff(o, r)
-	if diff != "" {
-		log.Debug("resource changes:\n" + diff)
-		if err := s.update(ctx, r); err != nil {
-			return err
-		}
-		log.Debug("resource updated")
-	} else {
-		log.Debug("resource unchanged")
-	}
-	return nil
+	return s.updateIfNeeded(ctx, r, o)
 }
 
 func (s *ConfigService) list(ctx context.Context) ([]api.HorusecManager, error) {
@@ -140,6 +119,24 @@ func (s *ConfigService) create(ctx context.Context, r *api.HorusecManager) error
 		span.SetError(err)
 		return fmt.Errorf("failed to create HorusecManager: %w", err)
 	}
+
+	logger.WithPrefix(ctx, "config_service").Debug("resource created")
+	return nil
+}
+
+func (s *ConfigService) updateIfNeeded(ctx context.Context, newest, older *api.HorusecManager) error {
+	log := logger.WithPrefix(ctx, "config_service")
+
+	newest.SetName(older.GetName())
+	newest.SetResourceVersion(older.GetResourceVersion())
+	if diff := s.comparator.Diff(older, newest); diff != "" {
+		log.WithField("diff", diff).Debug("resource changed")
+		if err := s.update(ctx, newest); err != nil {
+			return err
+		}
+	} else {
+		log.Debug("resource unchanged")
+	}
 	return nil
 }
 
@@ -152,5 +149,7 @@ func (s *ConfigService) update(ctx context.Context, r *api.HorusecManager) error
 		span.SetError(err)
 		return fmt.Errorf("failed to update HorusecManager: %w", err)
 	}
+
+	logger.WithPrefix(ctx, "config_service").Debug("resource updated")
 	return nil
 }
