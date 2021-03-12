@@ -109,6 +109,6 @@ func TestConfigService_GetConfig_When_MultipleResults_Expect_Error(t *testing.T)
 
 func setup() (*ConfigService, *mocks.HorusecManagerInterface) {
 	client := new(mocks.HorusecManagerInterface)
-	comparator := kubernetes.NewObjectComparator()
+	comparator := new(kubernetes.ObjectComparator)
 	return NewConfigService(client, comparator), client
 }

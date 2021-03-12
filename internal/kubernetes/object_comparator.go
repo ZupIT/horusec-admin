@@ -18,15 +18,7 @@ var ignore = []string{
 	"ObjectMeta.UID",
 }
 
-type ObjectComparator struct {
-	opts []cmp.Option
-}
-
-func NewObjectComparator() *ObjectComparator {
-	c := new(ObjectComparator)
-	c.opts = append(c.opts, cmp.FilterPath(c.filter, cmp.Ignore()))
-	return c
-}
+type ObjectComparator struct{}
 
 func (c *ObjectComparator) filter(path cmp.Path) bool {
 	for _, p := range ignore {
@@ -38,5 +30,5 @@ func (c *ObjectComparator) filter(path cmp.Path) bool {
 }
 
 func (c *ObjectComparator) Diff(x, y k8s.Object) string {
-	return cmp.Diff(x, y, c.opts...)
+	return cmp.Diff(x, y, cmp.FilterPath(c.filter, cmp.Ignore()))
 }
