@@ -27,22 +27,22 @@ func NewCustomResource(cfg *Configuration) (*CustomResource, error) {
 	cr := new(CustomResource)
 
 	if mng := cfg.Manager; mng != nil {
-		err := cr.SetAPIEndpoint(mng.APIEndpoint)
+		err := cr.setAPIEndpoint(mng.APIEndpoint)
 		if err != nil {
 			return nil, err
 		}
 
-		err = cr.SetAnalyticEndpoint(mng.AnalyticEndpoint)
+		err = cr.setAnalyticEndpoint(mng.AnalyticEndpoint)
 		if err != nil {
 			return nil, err
 		}
 
-		err = cr.SetAccountEndpoint(mng.AccountEndpoint)
+		err = cr.setAccountEndpoint(mng.AccountEndpoint)
 		if err != nil {
 			return nil, err
 		}
 
-		err = cr.SetAuthEndpoint(mng.AuthEndpoint)
+		err = cr.setAuthEndpoint(mng.AuthEndpoint)
 		if err != nil {
 			return nil, err
 		}
@@ -51,7 +51,7 @@ func NewCustomResource(cfg *Configuration) (*CustomResource, error) {
 	return cr, nil
 }
 
-func (c *CustomResource) SetAPIEndpoint(endpoint string) error {
+func (c *CustomResource) setAPIEndpoint(endpoint string) error {
 	u, err := url.Parse(endpoint)
 	if err != nil {
 		return fmt.Errorf("fail to update the API endpoint: %w", err)
@@ -74,7 +74,7 @@ func (c *CustomResource) SetAPIEndpoint(endpoint string) error {
 	return nil
 }
 
-func (c *CustomResource) SetAnalyticEndpoint(endpoint string) error {
+func (c *CustomResource) setAnalyticEndpoint(endpoint string) error {
 	u, err := url.Parse(endpoint)
 	if err != nil {
 		return fmt.Errorf("fail to update the Analytic endpoint: %w", err)
@@ -97,7 +97,7 @@ func (c *CustomResource) SetAnalyticEndpoint(endpoint string) error {
 	return nil
 }
 
-func (c *CustomResource) SetAccountEndpoint(endpoint string) error {
+func (c *CustomResource) setAccountEndpoint(endpoint string) error {
 	u, err := url.Parse(endpoint)
 	if err != nil {
 		return fmt.Errorf("fail to update the Account endpoint: %w", err)
@@ -120,7 +120,7 @@ func (c *CustomResource) SetAccountEndpoint(endpoint string) error {
 	return nil
 }
 
-func (c *CustomResource) SetAuthEndpoint(endpoint string) error {
+func (c *CustomResource) setAuthEndpoint(endpoint string) error {
 	u, err := url.Parse(endpoint)
 	if err != nil {
 		return fmt.Errorf("fail to update the Auth endpoint: %w", err)
