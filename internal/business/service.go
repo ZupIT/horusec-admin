@@ -20,44 +20,22 @@ import (
 	"fmt"
 
 	"github.com/ZupIT/horusec-admin/internal/business/adapter"
+	"github.com/ZupIT/horusec-admin/internal/kubernetes"
 	"github.com/ZupIT/horusec-admin/internal/logger"
 	"github.com/ZupIT/horusec-admin/internal/tracing"
 	api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
 	client "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v1alpha1"
 	"github.com/ZupIT/horusec-admin/pkg/core"
-	"github.com/google/go-cmp/cmp"
 	k8s "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 type ConfigService struct {
-	client      client.HorusecManagerInterface
-	compareOpts cmp.Option
+	client     client.HorusecManagerInterface
+	comparator *kubernetes.ObjectComparator
 }
 
-func NewConfigService(client client.HorusecManagerInterface) *ConfigService {
-	ignore := [...]string{
-		"TypeMeta.APIVersion",
-		"TypeMeta.Kind",
-		"ObjectMeta.CreationTimestamp",
-		"ObjectMeta.Finalizers",
-		"ObjectMeta.Generation",
-		"ObjectMeta.ManagedFields",
-		"ObjectMeta.Namespace",
-		"ObjectMeta.ResourceVersion",
-		"ObjectMeta.SelfLink",
-		"ObjectMeta.UID",
-	}
-	return &ConfigService{
-		client: client,
-		compareOpts: cmp.FilterPath(func(path cmp.Path) bool {
-			for _, p := range ignore {
-				if p == path.String() {
-					return true
-				}
-			}
-			return false
-		}, cmp.Ignore()),
-	}
+func NewConfigService(c client.HorusecManagerInterface, cmp *kubernetes.ObjectComparator) *ConfigService {
+	return &ConfigService{client: c, comparator: cmp}
 }
 
 func (s *ConfigService) GetConfig(ctx context.Context) (*core.Configuration, error) {
@@ -128,7 +106,7 @@ func (s *ConfigService) apply(ctx context.Context, r *api.HorusecManager) error 
 
 	r.SetName(o.GetName())
 	r.SetResourceVersion(o.GetResourceVersion())
-	diff := cmp.Diff(o, r, s.compareOpts)
+	diff := s.comparator.Diff(o, r)
 	if diff != "" {
 		log.Debug("resource changes:\n" + diff)
 		if err := s.update(ctx, r); err != nil {
