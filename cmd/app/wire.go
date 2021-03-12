@@ -27,9 +27,7 @@ import (
 
 var providers = wire.NewSet(
 	business.NewConfigService,
-	kubernetes.NewHorusecManagerClient,
-	kubernetes.NewObjectComparator,
-	kubernetes.NewRestConfig,
+	kubernetes.Providers,
 	router.New,
 	wire.Bind(new(core.ConfigurationReader), new(*business.ConfigService)),
 	wire.Bind(new(core.ConfigurationWriter), new(*business.ConfigService)),

@@ -25,7 +25,7 @@ func newRouter() (chi.Router, error) {
 	if err != nil {
 		return nil, err
 	}
-	objectComparator := kubernetes.NewObjectComparator()
+	objectComparator := &kubernetes.ObjectComparator{}
 	configService := business.NewConfigService(horusecManagerInterface, objectComparator)
 	chiRouter, err := router.New(configService, configService)
 	if err != nil {
@@ -36,4 +36,4 @@ func newRouter() (chi.Router, error) {
 
 // wire.go:
 
-var providers = wire.NewSet(business.NewConfigService, kubernetes.NewHorusecManagerClient, kubernetes.NewObjectComparator, kubernetes.NewRestConfig, router.New, wire.Bind(new(core.ConfigurationReader), new(*business.ConfigService)), wire.Bind(new(core.ConfigurationWriter), new(*business.ConfigService)))
+var providers = wire.NewSet(business.NewConfigService, kubernetes.Providers, router.New, wire.Bind(new(core.ConfigurationReader), new(*business.ConfigService)), wire.Bind(new(core.ConfigurationWriter), new(*business.ConfigService)))
