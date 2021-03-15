@@ -33,20 +33,21 @@ func NewCustomResource(cfg *Configuration) (*CustomResource, error) {
 	return cr, nil
 }
 
-func (c *CustomResource) setManager(manager *core.Manager) (err error) {
+// nolint:funlen,gocyclo // setManager method needs to set all manager fields
+func (c *CustomResource) setManager(manager *core.Manager) error {
 	if manager == nil {
-		return
-	} else if err = c.setAPIEndpoint(manager.APIEndpoint); err != nil {
+		return nil
+	} else if err := c.setAPIEndpoint(manager.APIEndpoint); err != nil {
 		return err
-	} else if err = c.setAnalyticEndpoint(manager.AnalyticEndpoint); err != nil {
+	} else if err := c.setAnalyticEndpoint(manager.AnalyticEndpoint); err != nil {
 		return err
-	} else if err = c.setAccountEndpoint(manager.AccountEndpoint); err != nil {
+	} else if err := c.setAccountEndpoint(manager.AccountEndpoint); err != nil {
 		return err
-	} else if err = c.setAuthEndpoint(manager.AuthEndpoint); err != nil {
+	} else if err := c.setAuthEndpoint(manager.AuthEndpoint); err != nil {
 		return err
 	}
 
-	return
+	return nil
 }
 
 func (c *CustomResource) setAPIEndpoint(endpoint string) error {

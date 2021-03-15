@@ -22,6 +22,7 @@ import (
 	api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
 )
 
+// nolint:funlen // newManager method needs to set all manager endpoints
 func newManager(cr *api.HorusecManager) *core.Manager {
 	mng := new(core.Manager)
 	components := cr.Spec.Components

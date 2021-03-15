@@ -27,6 +27,7 @@ import (
 
 var log = logger.WithPrefix(context.TODO(), "main")
 
+// nolint:funlen // main will initialize all components
 func main() {
 	closer, err := tracing.Initialize("horusec-admin", logger.WithPrefix(context.TODO(), "tracing"))
 	if err != nil {
