@@ -16,7 +16,7 @@ import (
 
 // Injectors from wire.go:
 
-func newRouter() (*chi.Mux, error) {
+func newRouter() (chi.Router, error) {
 	config, err := kubernetes.NewRestConfig()
 	if err != nil {
 		return nil, err
@@ -25,14 +25,15 @@ func newRouter() (*chi.Mux, error) {
 	if err != nil {
 		return nil, err
 	}
-	configService := business.NewConfigService(horusecManagerInterface)
-	mux, err := router.New(configService, configService)
+	objectComparator := &kubernetes.ObjectComparator{}
+	configService := business.NewConfigService(horusecManagerInterface, objectComparator)
+	chiRouter, err := router.New(configService, configService)
 	if err != nil {
 		return nil, err
 	}
-	return mux, nil
+	return chiRouter, nil
 }
 
 // wire.go:
 
-var providers = wire.NewSet(business.NewConfigService, kubernetes.NewHorusecManagerClient, kubernetes.NewRestConfig, router.New, wire.Bind(new(core.ConfigurationReader), new(*business.ConfigService)), wire.Bind(new(core.ConfigurationWriter), new(*business.ConfigService)))
+var providers = wire.NewSet(business.NewConfigService, kubernetes.Providers, router.New, wire.Bind(new(core.ConfigurationReader), new(*business.ConfigService)), wire.Bind(new(core.ConfigurationWriter), new(*business.ConfigService)))

@@ -41,7 +41,7 @@ type router struct {
 }
 
 // New creates the router with all API routes and the static files handler.
-func New(reader core.ConfigurationReader, writer core.ConfigurationWriter) (*chi.Mux, error) {
+func New(reader core.ConfigurationReader, writer core.ConfigurationWriter) (chi.Router, error) {
 	r, err := newRouter(reader, writer)
 	if err != nil {
 		return nil, err
@@ -91,9 +91,7 @@ func (r *router) routePages() {
 }
 
 func (r *router) serveStaticAssets() {
-	for _, a := range r.Assets {
-		a.Serve(r.Mux)
-	}
+	r.Assets.Serve(r)
 }
 
 func (r *router) routeErrors() {

@@ -25,26 +25,29 @@ import (
 	"github.com/ZupIT/horusec-admin/internal/tracing"
 )
 
+var log = logger.WithPrefix(context.TODO(), "main")
+
+// nolint:funlen // main will initialize all components
 func main() {
 	closer, err := tracing.Initialize("horusec-admin", logger.WithPrefix(context.TODO(), "tracing"))
 	if err != nil {
-		logger.WithPrefix(context.TODO(), "main").WithError(err).Fatal("failed to initialize tracer")
+		log.WithError(err).Fatal("failed to initialize tracer")
 	}
 	defer closer.Close()
 
 	r, err := newRouter()
 	if err != nil {
-		logger.WithPrefix(context.TODO(), "main").WithError(err).Fatal("failed to create HTTP request router")
+		log.WithError(err).Fatal("failed to create HTTP request router")
 	}
 
 	srv := server.New(r).Start()
 
 	waitForInterruptSignal()
 	if err = srv.GracefullyShutdown(); err != nil {
-		logger.WithPrefix(context.TODO(), "main").WithError(err).Fatal("server forced to shutdown")
+		log.WithError(err).Fatal("server forced to shutdown")
 	}
 
-	logger.WithPrefix(context.TODO(), "main").Info("server exiting")
+	log.Info("server exiting")
 }
 
 func waitForInterruptSignal() {

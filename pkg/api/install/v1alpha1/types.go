@@ -49,8 +49,7 @@ type HorusecManagerList struct {
 	Items       []HorusecManager `json:"items" protobuf:"bytes,2,rep,name=items"`
 }
 
-type Status struct {
-}
+type Status struct{}
 
 // HorusecManagerSpec defines the installation properties that will be applied.
 //
