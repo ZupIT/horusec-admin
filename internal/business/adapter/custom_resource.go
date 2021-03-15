@@ -19,36 +19,34 @@ import (
 	"net/url"
 
 	api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
+	"github.com/ZupIT/horusec-admin/pkg/core"
 )
 
 type CustomResource api.HorusecManager
 
 func NewCustomResource(cfg *Configuration) (*CustomResource, error) {
 	cr := new(CustomResource)
-
-	if mng := cfg.Manager; mng != nil {
-		err := cr.setAPIEndpoint(mng.APIEndpoint)
-		if err != nil {
-			return nil, err
-		}
-
-		err = cr.setAnalyticEndpoint(mng.AnalyticEndpoint)
-		if err != nil {
-			return nil, err
-		}
-
-		err = cr.setAccountEndpoint(mng.AccountEndpoint)
-		if err != nil {
-			return nil, err
-		}
-
-		err = cr.setAuthEndpoint(mng.AuthEndpoint)
-		if err != nil {
-			return nil, err
-		}
+	if err := cr.setManager(cfg.Manager); err != nil {
+		return nil, err
 	}
 
 	return cr, nil
+}
+
+func (c *CustomResource) setManager(manager *core.Manager) (err error) {
+	if manager == nil {
+		return
+	} else if err = c.setAPIEndpoint(manager.APIEndpoint); err != nil {
+		return err
+	} else if err = c.setAnalyticEndpoint(manager.AnalyticEndpoint); err != nil {
+		return err
+	} else if err = c.setAccountEndpoint(manager.AccountEndpoint); err != nil {
+		return err
+	} else if err = c.setAuthEndpoint(manager.AuthEndpoint); err != nil {
+		return err
+	}
+
+	return
 }
 
 func (c *CustomResource) setAPIEndpoint(endpoint string) error {
@@ -57,14 +55,7 @@ func (c *CustomResource) setAPIEndpoint(endpoint string) error {
 		return fmt.Errorf("fail to update the API endpoint: %w", err)
 	}
 
-	if c.Spec.Components == nil {
-		c.Spec.Components = new(api.Components)
-	}
-	if c.Spec.Components.API == nil {
-		c.Spec.Components.API = new(api.API)
-	}
-
-	component := c.Spec.Components.API
+	component := c.initAPI()
 	if component.Ingress == nil {
 		component.Ingress = new(api.Ingress)
 	}
@@ -80,14 +71,7 @@ func (c *CustomResource) setAnalyticEndpoint(endpoint string) error {
 		return fmt.Errorf("fail to update the Analytic endpoint: %w", err)
 	}
 
-	if c.Spec.Components == nil {
-		c.Spec.Components = new(api.Components)
-	}
-	if c.Spec.Components.Analytic == nil {
-		c.Spec.Components.Analytic = new(api.Analytic)
-	}
-
-	component := c.Spec.Components.Analytic
+	component := c.initAnalytic()
 	if component.Ingress == nil {
 		component.Ingress = new(api.Ingress)
 	}
@@ -103,14 +87,7 @@ func (c *CustomResource) setAccountEndpoint(endpoint string) error {
 		return fmt.Errorf("fail to update the Account endpoint: %w", err)
 	}
 
-	if c.Spec.Components == nil {
-		c.Spec.Components = new(api.Components)
-	}
-	if c.Spec.Components.Account == nil {
-		c.Spec.Components.Account = new(api.Account)
-	}
-
-	component := c.Spec.Components.Account
+	component := c.initAccount()
 	if component.Ingress == nil {
 		component.Ingress = new(api.Ingress)
 	}
@@ -126,14 +103,7 @@ func (c *CustomResource) setAuthEndpoint(endpoint string) error {
 		return fmt.Errorf("fail to update the Auth endpoint: %w", err)
 	}
 
-	if c.Spec.Components == nil {
-		c.Spec.Components = new(api.Components)
-	}
-	if c.Spec.Components.Auth == nil {
-		c.Spec.Components.Auth = new(api.Auth)
-	}
-
-	component := c.Spec.Components.Auth
+	component := c.initAuth()
 	if component.Ingress == nil {
 		component.Ingress = new(api.Ingress)
 	}
@@ -141,4 +111,44 @@ func (c *CustomResource) setAuthEndpoint(endpoint string) error {
 	component.Ingress.Scheme = u.Scheme
 
 	return nil
+}
+
+func (c *CustomResource) initAPI() *api.API {
+	if c.Spec.Components == nil {
+		c.Spec.Components = new(api.Components)
+	}
+	if c.Spec.Components.API == nil {
+		c.Spec.Components.API = new(api.API)
+	}
+	return c.Spec.Components.API
+}
+
+func (c *CustomResource) initAnalytic() *api.Analytic {
+	if c.Spec.Components == nil {
+		c.Spec.Components = new(api.Components)
+	}
+	if c.Spec.Components.Analytic == nil {
+		c.Spec.Components.Analytic = new(api.Analytic)
+	}
+	return c.Spec.Components.Analytic
+}
+
+func (c *CustomResource) initAccount() *api.Account {
+	if c.Spec.Components == nil {
+		c.Spec.Components = new(api.Components)
+	}
+	if c.Spec.Components.Account == nil {
+		c.Spec.Components.Account = new(api.Account)
+	}
+	return c.Spec.Components.Account
+}
+
+func (c *CustomResource) initAuth() *api.Auth {
+	if c.Spec.Components == nil {
+		c.Spec.Components = new(api.Components)
+	}
+	if c.Spec.Components.Auth == nil {
+		c.Spec.Components.Auth = new(api.Auth)
+	}
+	return c.Spec.Components.Auth
 }
