@@ -58,6 +58,14 @@
 
                     <input id="react_app_horusec_manager_path" placeholder="/horusec" type="text">
                 </div>
+
+                <div class="divider">
+                    <label class="key" for="">REACT_APP_HORUSEC_ENDPOINT_MANAGER</label>
+
+                    <span class="description">Endpoint to access the manager.</span>
+
+                    <input id="react_app_horusec_endpoint_manager" placeholder="http://127.0.0.1:8043" type="text">
+                </div>
             </div>
 
             <div class="btns-wrapper">
@@ -82,6 +90,7 @@ function submitManagerForm(e) {
         const react_app_horusec_endpoint_account = document.getElementById('react_app_horusec_endpoint_account').value
         const react_app_horusec_endpoint_auth = document.getElementById('react_app_horusec_endpoint_auth').value
         const react_app_horusec_manager_path = document.getElementById('react_app_horusec_manager_path').value
+        const react_app_horusec_endpoint_manager = document.getElementById('react_app_horusec_endpoint_manager').value
 
         const xhr = new XMLHttpRequest();
         xhr.open('PATCH', '/api/config', true);
@@ -93,7 +102,8 @@ function submitManagerForm(e) {
             react_app_horusec_endpoint_analytic,
             react_app_horusec_endpoint_account,
             react_app_horusec_endpoint_auth,
-            react_app_horusec_manager_path
+            react_app_horusec_manager_path,
+            react_app_horusec_endpoint_manager
         }))
 
         xhr.onreadystatechange = function (ev) {
