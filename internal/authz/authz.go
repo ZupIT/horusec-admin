@@ -35,7 +35,7 @@ type Authz struct {
 func New() *Authz {
 	authz := &Authz{}
 
-	authz.generateToken()
+	authz.generateNewTokenAndPrint()
 	authz.startRefreshTokenCycle()
 
 	return authz
@@ -49,8 +49,7 @@ func (a *Authz) startRefreshTokenCycle() {
 		for {
 			select {
 			case <-ticker.C:
-				a.generateToken()
-				a.PrintToken()
+				a.generateNewTokenAndPrint()
 			case <-a.quitRefreshTokenCycleCn:
 				ticker.Stop()
 				return
@@ -59,11 +58,13 @@ func (a *Authz) startRefreshTokenCycle() {
 	}()
 }
 
-func (a *Authz) generateToken() {
+func (a *Authz) generateNewTokenAndPrint() {
 	token, _ := a.getRandTokenString()
 
 	a.token = token
 	a.createdAt = time.Now()
+
+	a.PrintToken()
 }
 
 func (a *Authz) getRandTokenString() (string, error) {
