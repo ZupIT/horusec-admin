@@ -22,8 +22,8 @@ kustomize: ## Download kustomize locally if necessary
 build: ## Build the container
 	docker build -t $(IMG) . -f ./deployments/Dockerfile
 
-run: ## Run container on port 65532
-	docker run -i -t --rm -p=65532:65532 --name="$(APP_NAME)" $(IMG)
+run: ## Run container on port 8007
+	docker run -i -t --rm -p=8007:3000 --name="$(APP_NAME)" $(IMG)
 
 stop: ## Stop and remove a running container
 	docker stop $(APP_NAME)
