@@ -40,28 +40,28 @@ func NewSet(h *Handlers) Set {
 			Method:        "GET",
 			Pattern:       "/config",
 			Handler:       h.ConfigReading,
-			Authenticated: false,
+			Authenticated: true,
 		},
 		{
 			Name:          "Configurations",
 			Method:        "PATCH",
 			Pattern:       "/config",
 			Handler:       h.ConfigEditing,
-			Authenticated: false,
+			Authenticated: true,
 		},
 		{
 			Name:          "HealthCheck",
 			Method:        "GET",
 			Pattern:       "/health",
 			Handler:       h.Health,
-			Authenticated: false,
+			Authenticated: true,
 		},
 		{
 			Name:          "Authentication",
 			Method:        "POST",
 			Pattern:       "/auth",
 			Handler:       h.Auth,
-			Authenticated: false,
+			Authenticated: true,
 		},
 	}
 }
