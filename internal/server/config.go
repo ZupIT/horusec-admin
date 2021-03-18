@@ -1,4 +1,4 @@
-package serverconfig
+package server
 
 import (
 	"fmt"
@@ -12,7 +12,7 @@ type Config struct {
 
 const DefaultPort = 3000
 
-func New() *Config {
+func NewConfig() *Config {
 	return &Config{
 		addr: fmt.Sprintf(`:%d`, env.GetEnvOrDefaultInt("PORT", DefaultPort)),
 	}

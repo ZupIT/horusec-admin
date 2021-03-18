@@ -21,7 +21,6 @@ import (
 	"net/http"
 	"time"
 
-	serverconfig "github.com/ZupIT/horusec-admin/config/server"
 	"github.com/ZupIT/horusec-admin/internal/logger"
 )
 
@@ -32,7 +31,7 @@ const (
 type (
 	server struct {
 		*http.Server
-		Config *serverconfig.Config
+		Config *Config
 	}
 	Interface interface {
 		Start() Interface
@@ -40,7 +39,8 @@ type (
 	}
 )
 
-func New(handler http.Handler, config *serverconfig.Config) Interface {
+func New(handler http.Handler) Interface {
+	config := NewConfig()
 	return &server{
 		Server: &http.Server{Addr: config.GetAddr(), Handler: handler},
 		Config: config,

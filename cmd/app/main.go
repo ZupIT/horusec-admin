@@ -20,7 +20,6 @@ import (
 	"os/signal"
 	"syscall"
 
-	serverconfig "github.com/ZupIT/horusec-admin/config/server"
 	"github.com/ZupIT/horusec-admin/internal/logger"
 	"github.com/ZupIT/horusec-admin/internal/server"
 	"github.com/ZupIT/horusec-admin/internal/tracing"
@@ -41,8 +40,7 @@ func main() {
 		log.WithError(err).Fatal("failed to create HTTP request router")
 	}
 
-	c := serverconfig.New()
-	srv := server.New(r, c).Start()
+	srv := server.New(r).Start()
 
 	waitForInterruptSignal()
 	if err = srv.GracefullyShutdown(); err != nil {
