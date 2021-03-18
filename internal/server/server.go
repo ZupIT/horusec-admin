@@ -21,17 +21,18 @@ import (
 	"net/http"
 	"time"
 
+	serverconfig "github.com/ZupIT/horusec-admin/config/server"
 	"github.com/ZupIT/horusec-admin/internal/logger"
 )
 
 const (
-	Addr            = ":3000"
 	ShutdownTimeout = 5 * time.Second
 )
 
 type (
 	server struct {
 		*http.Server
+		Config *serverconfig.Config
 	}
 	Interface interface {
 		Start() Interface
@@ -39,14 +40,17 @@ type (
 	}
 )
 
-func New(handler http.Handler) Interface {
-	return &server{Server: &http.Server{Addr: Addr, Handler: handler}}
+func New(handler http.Handler, config *serverconfig.Config) Interface {
+	return &server{
+		Server: &http.Server{Addr: config.GetAddr(), Handler: handler},
+		Config: config,
+	}
 }
 
 func (s *server) Start() Interface {
 	go func() {
 		log := logger.WithPrefix(context.Background(), "server")
-		log.WithField("addr", Addr).Info("listening")
+		log.WithField("addr", s.Server.Addr).Info("listening")
 		if err := s.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.WithError(err).Fatal("listen error")
 		}
