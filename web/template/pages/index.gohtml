@@ -44,7 +44,7 @@
 
             const xhr = new XMLHttpRequest();
             xhr.open('POST', '/api/auth', true);
-            xhr.setRequestHeader('authorization', accessToken)
+            xhr.setRequestHeader('X-Horusec-Authorization', accessToken)
 
             xhr.send()
 

@@ -18,7 +18,7 @@ function setCurrentValues() {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', '/api/config', true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhr.setRequestHeader('authorization', getCookie('horusec::access_token'))
+    xhr.setRequestHeader('X-Horusec-Authorization', getCookie('horusec::access_token'))
 
     xhr.send()
 
