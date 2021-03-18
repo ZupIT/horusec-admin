@@ -15,9 +15,12 @@
 package authz
 
 import (
+	"context"
 	"crypto/rand"
 	"encoding/hex"
 	"time"
+
+	"github.com/ZupIT/horusec-admin/internal/logger"
 )
 
 const TokenLength = 20
@@ -73,8 +76,11 @@ func (a *Authz) getRandTokenString() (string, error) {
 }
 
 func (a *Authz) PrintToken() {
-	print("Token:", a.token)
-	print("Valid until:", a.GetTokenExpiresTime().String())
+	ctx := context.TODO()
+	l := logger.WithPrefix(ctx, "authz")
+
+	l.Info("Token:", a.token)
+	l.Info("Valid until:", a.GetTokenExpiresTime().String())
 }
 
 func (a *Authz) Stop() {
