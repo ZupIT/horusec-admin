@@ -14,7 +14,7 @@ const DefaultPort = 3000
 
 func New() *Config {
 	return &Config{
-		addr: fmt.Sprintf(`:%b`, env.GetEnvOrDefaultInt("PORT", DefaultPort)),
+		addr: fmt.Sprintf(`:%d`, env.GetEnvOrDefaultInt("PORT", DefaultPort)),
 	}
 }
 
