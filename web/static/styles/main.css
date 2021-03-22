@@ -1,0 +1,219 @@
+/**
+ * Copyright 2020 ZUP IT SERVICOS EM TECNOLOGIA E INOVACAO SA
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@import './reset.css';
+
+:root {
+    --dark: #1C1C1E;
+    --darkSecundary: #3c3c3d;
+    --primary: #EF4123;
+    --secundary: #F7941E;
+    --disabled: #2C2C2E;
+    --text: #F2F2F9;
+    --textSecundary: #b4b4b4;
+    --success: #10AA80;
+    --error: #FF453A;
+    --info: #5C6BC0;
+}
+
+body {
+    background-color: var(--dark);
+    height: 100vh;
+}
+
+span,
+h1,
+h2,
+h3,
+h4,
+h5,
+button,
+input,
+label,
+input::placeholder,
+ul li {
+    font-family: 'Lato', sans-serif;
+    color: var(--text);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    border: none;
+    outline: none;
+    background: none;
+    border-bottom: 1px solid var(--text);
+    width: 250px;
+    margin: 20px 0;
+}
+
+input::placeholder {
+    color: var(--textSecundary);
+}
+
+button {
+    background: linear-gradient(90deg, var(--primary) 0%, var(--secundary) 100%);
+    color: var(--text);
+    border-radius: 18px;
+    box-sizing: border-box;
+    border: none;
+    outline: none;
+    font-size: 12px;
+    cursor: pointer;
+    text-align: center;
+    width: 250px;
+    height: 40px;
+    margin: 20px 0;
+}
+
+button.outline {
+    background: none;
+    border: 1px solid var(--text);
+}
+
+button a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--text);
+}
+
+button:hover:not(:disabled) {
+    transform: scale(1.03);
+}
+
+button:disabled {
+    cursor: default;
+    background: var(--disabled);
+}
+
+div.logo-container {
+    padding: 30px 0 30px 30px;
+}
+
+div.logo-container img.head-logo {
+    width: 180px;
+    display: block;
+}
+
+section.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: calc(100% - 200px);
+    position: relative;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+    margin-top: 20px;
+  }
+  
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px var(--primary);
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(18px);
+    -ms-transform: translateX(18px);
+    transform: translateX(18px);
+}
+
+.slider.round {
+    border-radius: 24px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+div.error-bar, div.success-bar {
+    width: 100%;
+    color: var(--text);
+    position: fixed;
+    z-index: 1;
+    padding: 10px;
+    text-transform: uppercase;
+    text-align: center;
+    bottom: -40px;
+    transition: all 1s ease;
+}
+
+
+.error-active, .success-active {
+    animation: showAndHidden 6s;
+}
+
+div.error-bar {
+    background-color: var(--error);
+}
+
+div.success-bar {
+    background-color: var(--success);
+}
+
+@keyframes showAndHidden {
+    0%   { bottom: -40px; }
+    25%   { bottom: 0px; }
+    50%   { bottom: 0px; }
+    75%   { bottom: 0px; }
+    100% { bottom: -40px; }
+}

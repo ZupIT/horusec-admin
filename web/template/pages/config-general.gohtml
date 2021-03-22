@@ -1,0 +1,107 @@
+{{ define "config-general" }}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{ template "head" }}
+    <link href="/styles/config-general.css" rel="stylesheet" />
+</head>
+
+<body>
+    {{ template "snackbar" }}
+    {{ template "logo" }}
+
+    <section class="container">
+        <form onsubmit="event.preventDefault();submitGeneralForm()" id="form">
+            <h1>
+                <img src="/icons/settings.svg">
+                General
+            </h1>
+
+            <div class="divider">
+                <label class="key">HORUSEC_JWT_SECRET_KEY</label>
+
+                <span class="description">Symmetric key for signing the JSON Web Token (JWT).</span>
+
+                <input id="horusec_jwt_secret_key" placeholder="A long and security string" type="text">
+            </div>
+
+            <div class="divider">
+                <label class="key">HORUSEC_ENABLE_APPLICATION_ADMIN</label>
+
+                <span class="description">Use this option to enable/disable the use of application admin. <br> View more about in this section of the <a target="_blank" href="https://docs.horusec.io/v/v1-eng/tutorials/horusec-usage-options#enable-disable-application-admin">documentation</a>.</span>
+
+                <label class="switch">
+                    <input id="horusec_enable_application_admin" value="false" type="checkbox" onchange="handleSwitchEnableApp()">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
+            <div class="divider" id="horusec_application_admin_data">
+                <label class="key">HORUSEC_APPLICATION_ADMIN_DATA</label>
+
+                <span class="description">The information for authenticating the application administrator account.</span>
+
+                <div class="inputs-group">
+                    <input id="admin_data_username" placeholder="Username" type="text">
+
+                    <input id="admin_data_email" placeholder="Email" type="email">
+
+                    <input id="admin_data_password" placeholder="Password" type="password">
+                </div>
+            </div>
+
+            <div class="btns-wrapper">
+                <button type="submit">SAVE</button>
+
+                <button class="outline">
+                    <a href="/view/home">BACK</a>
+                </button>
+            </div>
+        </form>
+    </section>
+</body>
+
+<script type="text/javascript">
+window.onload = () => {
+    setCurrentValues()
+};
+
+function submitGeneralForm(e) {
+    try {
+        const horusec_jwt_secret_key = document.getElementById('horusec_jwt_secret_key').value
+        const horusec_enable_application_admin = document.getElementById('horusec_enable_application_admin').value
+        const horusec_application_admin_data = JSON.stringify({
+            username: document.getElementById('admin_data_username').value,
+            email: document.getElementById('admin_data_email').value,
+            password: document.getElementById('admin_data_password').value
+        })
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('PATCH', '/api/config', true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.setRequestHeader('X-Horusec-Authorization', getCookie('horusec::access_token'))
+
+        xhr.send(JSON.stringify({ horusec_enable_application_admin, horusec_jwt_secret_key, horusec_application_admin_data }))
+
+        xhr.onreadystatechange = function (ev) {
+            if (ev.currentTarget.status === 204) {
+                showSnackBar('success')
+            } else {
+                showSnackBar('error')
+            }
+        }
+
+    } catch (error) {
+        showSnackBar('error')
+    }
+}
+function handleSwitchEnableApp() {
+    let currentValue = document.getElementById('horusec_enable_application_admin').value
+    const valueToSet = currentValue == 'true' ? 'false' : 'true'
+    setEnableApplicationAdmin(valueToSet)
+}
+</script>
+
+</html>
+{{end}}
