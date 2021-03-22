@@ -20,10 +20,10 @@ kustomize: ## Download kustomize locally if necessary
 	$(call go-get-tool,$(KUSTOMIZE),sigs.k8s.io/kustomize/kustomize/v3@v3.8.7)
 
 build: ## Build the container
-	docker build -t $(IMG) .
+	docker build -t $(IMG) . -f ./deployments/Dockerfile
 
-run: ## Run container on port 3000
-	docker run -i -t --rm -p=3000:3000 --name="$(APP_NAME)" $(IMG)
+run: ## Run container on port 8007
+	docker run -i -t --rm -p=8007:3000 --name="$(APP_NAME)" $(IMG)
 
 stop: ## Stop and remove a running container
 	docker stop $(APP_NAME)

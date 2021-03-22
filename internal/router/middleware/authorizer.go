@@ -14,17 +14,32 @@
 
 package middleware
 
-import "net/http"
+import (
+	"net/http"
 
-type Authorizer struct{}
+	"github.com/ZupIT/horusec-admin/internal/authz"
+)
 
-func NewAuthorizer() *Authorizer {
-	return new(Authorizer)
+type Authorizer struct {
+	authz *authz.Authz
+}
+
+func NewAuthorizer(a *authz.Authz) *Authorizer {
+	return &Authorizer{
+		authz: a,
+	}
 }
 
 func (a *Authorizer) Authorize(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// TODO: handle access token
+		tokenStr := r.Header.Get("X-Horusec-Authorization")
+		if !a.authz.IsValid(tokenStr) {
+			w.WriteHeader(401)
+			_, _ = w.Write([]byte("Unauthorized"))
+
+			return
+		}
+
 		next.ServeHTTP(w, r)
 	})
 }

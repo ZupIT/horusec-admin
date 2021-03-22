@@ -12,14 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: horusec-admin
-subjects:
-  - kind: ServiceAccount
-    name: horusec-admin
-roleRef:
-  kind: Role
-  name: horusec-admin
-  apiGroup: rbac.authorization.k8s.io
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- files/deployment.yaml
+- files/role-binding.yaml
+- files/role.yaml
+- files/service-account.yaml
+- files/service.yaml

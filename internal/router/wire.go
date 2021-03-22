@@ -17,6 +17,7 @@
 package router
 
 import (
+	"github.com/ZupIT/horusec-admin/internal/authz"
 	"github.com/ZupIT/horusec-admin/internal/router/api"
 	"github.com/ZupIT/horusec-admin/internal/router/handler"
 	"github.com/ZupIT/horusec-admin/internal/router/middleware"
@@ -38,6 +39,7 @@ var providers = wire.NewSet(
 	handler.NewHealth,
 	middleware.NewAuthorizer,
 	middleware.NewTracer,
+	authz.New,
 	page.NewSet,
 	render.New,
 	static.ListAssets,

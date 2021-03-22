@@ -95,7 +95,7 @@ function submitManagerForm(e) {
         const xhr = new XMLHttpRequest();
         xhr.open('PATCH', '/api/config', true);
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        xhr.setRequestHeader('authorization', getCookie('horusec::access_token'))
+        xhr.setRequestHeader('X-Horusec-Authorization', getCookie('horusec::access_token'))
 
         xhr.send(JSON.stringify({
             react_app_horusec_endpoint_api,

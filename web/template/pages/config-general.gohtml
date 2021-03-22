@@ -80,7 +80,7 @@ function submitGeneralForm(e) {
         const xhr = new XMLHttpRequest();
         xhr.open('PATCH', '/api/config', true);
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        xhr.setRequestHeader('authorization', getCookie('horusec::access_token'))
+        xhr.setRequestHeader('X-Horusec-Authorization', getCookie('horusec::access_token'))
 
         xhr.send(JSON.stringify({ horusec_enable_application_admin, horusec_jwt_secret_key, horusec_application_admin_data }))
 
