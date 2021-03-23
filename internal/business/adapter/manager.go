@@ -17,28 +17,49 @@ package adapter
 import (
 	"net/url"
 
-	"github.com/ZupIT/horusec-admin/pkg/core"
-
 	api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
+	"github.com/ZupIT/horusec-admin/pkg/core"
 )
+
+type Manager core.Manager
+
+func (m *Manager) setAPI(api *api.API) {
+	if api != nil && api.Ingress != nil {
+		u := &url.URL{Scheme: api.Ingress.Scheme, Host: api.Ingress.Host}
+		m.APIEndpoint = u.String()
+	}
+}
+
+func (m *Manager) setAnalytic(analytic *api.Analytic) {
+	if analytic != nil && analytic.Ingress != nil {
+		u := &url.URL{Scheme: analytic.Ingress.Scheme, Host: analytic.Ingress.Host}
+		m.APIEndpoint = u.String()
+	}
+}
+
+func (m *Manager) setAccount(account *api.Account) {
+	if account != nil && account.Ingress != nil {
+		u := &url.URL{Scheme: account.Ingress.Scheme, Host: account.Ingress.Host}
+		m.APIEndpoint = u.String()
+	}
+}
+
+func (m *Manager) setAuth(auth *api.Auth) {
+	if auth != nil && auth.Ingress != nil {
+		u := &url.URL{Scheme: auth.Ingress.Scheme, Host: auth.Ingress.Host}
+		m.APIEndpoint = u.String()
+	}
+}
 
 // nolint:funlen // newManager method needs to set all manager endpoints
 func newManager(cr *api.HorusecManager) *core.Manager {
-	mng := new(core.Manager)
+	mng := new(Manager)
 	components := cr.Spec.Components
 	if components != nil {
-		mng.APIEndpoint = (&url.URL{
-			Scheme: components.API.Ingress.Scheme, Host: components.API.Ingress.Host,
-		}).String()
-		mng.AnalyticEndpoint = (&url.URL{
-			Scheme: components.Analytic.Ingress.Scheme, Host: components.Analytic.Ingress.Host,
-		}).String()
-		mng.AccountEndpoint = (&url.URL{
-			Scheme: components.Account.Ingress.Scheme, Host: components.Account.Ingress.Host,
-		}).String()
-		mng.AuthEndpoint = (&url.URL{
-			Scheme: components.Auth.Ingress.Scheme, Host: components.Auth.Ingress.Host,
-		}).String()
+		mng.setAPI(components.API)
+		mng.setAnalytic(components.Analytic)
+		mng.setAccount(components.Account)
+		mng.setAuth(components.Auth)
 	}
-	return mng
+	return (*core.Manager)(mng)
 }
