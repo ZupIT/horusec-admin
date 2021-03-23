@@ -142,6 +142,7 @@ type Port struct {
 
 type Auth struct {
 	Name    string   `json:"name,omitempty"`
+	Type    string   `json:"type,omitempty"`
 	Enabled bool     `json:"enabled,omitempty"`
 	Port    *Port    `json:"port,omitempty"`
 	Ingress *Ingress `json:"ingress,omitempty"`
