@@ -77,16 +77,16 @@ func (cr *CustomResource) GetManagerEndpoint() string {
 }
 
 func (cr *CustomResource) ToConfiguration() (*core.Configuration, error) {
-	m := newJSONObject()
-
-	m["react_app_horusec_endpoint_account"] = cr.GetAccountEndpoint()
-	m["react_app_horusec_endpoint_analytic"] = cr.GetAnalyticEndpoint()
-	m["react_app_horusec_endpoint_api"] = cr.GetAPIEndpoint()
-	m["react_app_horusec_endpoint_auth"] = cr.GetAuthEndpoint()
-	m["react_app_horusec_endpoint_manager"] = cr.GetManagerEndpoint()
+	jo := jsonObject{
+		"react_app_horusec_endpoint_account":  cr.GetAccountEndpoint(),
+		"react_app_horusec_endpoint_analytic": cr.GetAnalyticEndpoint(),
+		"react_app_horusec_endpoint_api":      cr.GetAPIEndpoint(),
+		"react_app_horusec_endpoint_auth":     cr.GetAuthEndpoint(),
+		"react_app_horusec_endpoint_manager":  cr.GetManagerEndpoint(),
+	}
 
 	var configuration *core.Configuration
-	if err := m.unmarshal(&configuration); err != nil {
+	if err := jo.unmarshal(&configuration); err != nil {
 		return nil, err
 	}
 

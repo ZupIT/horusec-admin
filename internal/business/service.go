@@ -48,12 +48,11 @@ func (s *ConfigService) GetConfig(ctx context.Context) (*core.Configuration, err
 		return new(core.Configuration), nil
 	}
 
-	cfg := adapter.NewConfiguration(cr)
-	return (*core.Configuration)(cfg), nil
+	return adapter.ForCustomResource(cr).ToConfiguration()
 }
 
 func (s *ConfigService) CreateOrUpdate(ctx context.Context, cfg *core.Configuration) error {
-	r, err := (*adapter.Configuration)(cfg).CR()
+	r, err := adapter.ForConfiguration(cfg).ToCustomResource()
 	if err != nil {
 		return err
 	}
