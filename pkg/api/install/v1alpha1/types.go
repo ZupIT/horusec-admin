@@ -85,7 +85,7 @@ type Keycloak struct {
 	PublicURL   string   `json:"publicURL,omitempty"`
 	InternalURL string   `json:"internalURL,omitempty"`
 	Realm       string   `json:"realm,omitempty"`
-	Otp         bool     `json:"otp,omitempty"`
+	OTP         bool     `json:"otp,omitempty"`
 	Clients     *Clients `json:"clients,omitempty"`
 }
 

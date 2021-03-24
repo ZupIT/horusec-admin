@@ -48,7 +48,7 @@ func (s *ConfigService) GetConfig(ctx context.Context) (*core.Configuration, err
 		return new(core.Configuration), nil
 	}
 
-	return adapter.ForCustomResource(cr).ToConfiguration()
+	return adapter.ForCustomResource(cr).ToConfiguration(), nil
 }
 
 func (s *ConfigService) CreateOrUpdate(ctx context.Context, cfg *core.Configuration) error {

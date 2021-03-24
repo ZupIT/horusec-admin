@@ -12,21 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package adapter
+package core
 
-import "encoding/json"
-
-type jsonObject map[string]interface{}
-
-func (m jsonObject) unmarshal(v interface{}) error {
-	j, err := json.Marshal(m)
-	if err != nil {
-		return err
-	}
-
-	if err := json.Unmarshal(j, &v); err != nil {
-		return err
-	}
-
-	return nil
+type Admin struct {
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
