@@ -17,8 +17,9 @@ package adapter
 import (
 	"fmt"
 	api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
-	"github.com/ZupIT/horusec-admin/pkg/core"
 	"net/url"
+
+	"github.com/ZupIT/horusec-admin/pkg/core"
 )
 
 type Configuration core.Configuration
@@ -27,7 +28,65 @@ func ForConfiguration(configuration *core.Configuration) *Configuration {
 	return (*Configuration)(configuration)
 }
 
+func (c Configuration) ToCustomResource() (*api.HorusecManager, error) {
+	components := jsonObject{}
+
+	if aj, err := c.accountJSON(); err != nil {
+		return nil, err
+	} else if aj != nil {
+		components["account"] = aj
+	}
+
+	if aj, err := c.analyticJSON(); err != nil {
+		return nil, err
+	} else if aj != nil {
+		components["analytic"] = aj
+	}
+
+	if aj, err := c.apiJSON(); err != nil {
+		return nil, err
+	} else if aj != nil {
+		components["api"] = aj
+	}
+
+	if aj, err := c.authJSON(); err != nil {
+		return nil, err
+	} else if aj != nil {
+		components["auth"] = aj
+	}
+
+	if mj, err := c.managerJSON(); err != nil {
+		return nil, err
+	} else if mj != nil {
+		components["manager"] = mj
+	}
+
+	jo := jsonObject{}
+	if len(components) > 0 {
+		jo["components"] = components
+	}
+
+	var spec api.HorusecManagerSpec
+	if err := jo.unmarshal(&spec); err != nil {
+		return nil, err
+	}
+
+	return &api.HorusecManager{Spec: spec}, nil
+}
+
+func (c *Configuration) GetAuthType() string {
+	if c.Auth == nil || c.Auth.Type == "horusec" {
+		return ""
+	}
+
+	return c.Auth.Type
+}
+
 func (c *Configuration) GetAccountURL() (*url.URL, error) {
+	if c.Manager == nil {
+		return nil, nil
+	}
+
 	u, err := url.Parse(c.AccountEndpoint)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse Account URL: %w", err)
@@ -37,6 +96,10 @@ func (c *Configuration) GetAccountURL() (*url.URL, error) {
 }
 
 func (c *Configuration) GetAnalyticURL() (*url.URL, error) {
+	if c.Manager == nil {
+		return nil, nil
+	}
+
 	u, err := url.Parse(c.AnalyticEndpoint)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse Analytic URL: %w", err)
@@ -46,6 +109,10 @@ func (c *Configuration) GetAnalyticURL() (*url.URL, error) {
 }
 
 func (c *Configuration) GetAPIURL() (*url.URL, error) {
+	if c.Manager == nil {
+		return nil, nil
+	}
+
 	u, err := url.Parse(c.APIEndpoint)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse API URL: %w", err)
@@ -55,6 +122,10 @@ func (c *Configuration) GetAPIURL() (*url.URL, error) {
 }
 
 func (c *Configuration) GetAuthURL() (*url.URL, error) {
+	if c.Manager == nil {
+		return nil, nil
+	}
+
 	u, err := url.Parse(c.AuthEndpoint)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse Auth URL: %w", err)
@@ -64,6 +135,10 @@ func (c *Configuration) GetAuthURL() (*url.URL, error) {
 }
 
 func (c *Configuration) GetManagerURL() (*url.URL, error) {
+	if c.Manager == nil {
+		return nil, nil
+	}
+
 	u, err := url.Parse(c.ManagerEndpoint)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse Manager URL: %w", err)
@@ -72,40 +147,101 @@ func (c *Configuration) GetManagerURL() (*url.URL, error) {
 	return u, nil
 }
 
-func (c Configuration) ToCustomResource() (*api.HorusecManager, error) {
-	m := jsonObject{}
+func (c Configuration) accountJSON() (jsonObject, error) {
+	jo := jsonObject{}
 
-	if u, err := c.GetAccountURL(); err == nil {
-		m["account"] = jsonObject{"ingress": jsonObject{"host": u.Host, "scheme": u.Scheme}}
-	} else {
-		return nil, err
-	}
-	if u, err := c.GetAnalyticURL(); err == nil {
-		m["analytic"] = jsonObject{"ingress": jsonObject{"host": u.Host, "scheme": u.Scheme}}
-	} else {
-		return nil, err
-	}
-	if u, err := c.GetAPIURL(); err == nil {
-		m["api"] = jsonObject{"ingress": jsonObject{"host": u.Host, "scheme": u.Scheme}}
-	} else {
-		return nil, err
-	}
-	if u, err := c.GetAuthURL(); err == nil {
-		m["auth"] = jsonObject{"ingress": jsonObject{"host": u.Host, "scheme": u.Scheme}}
-	} else {
-		return nil, err
-	}
-	if u, err := c.GetManagerURL(); err == nil {
-		m["manager"] = jsonObject{"ingress": jsonObject{"host": u.Host, "scheme": u.Scheme}}
-	} else {
+	u, err := c.GetAccountURL()
+	if err != nil {
 		return nil, err
 	}
 
-	jo := jsonObject{"components": m}
-	var spec api.HorusecManagerSpec
-	if err := jo.unmarshal(&spec); err != nil {
+	if u != nil {
+		jo["ingress"] = jsonObject{"host": u.Host, "scheme": u.Scheme}
+	}
+
+	if len(jo) > 0 {
+		return jo, nil
+	}
+
+	return nil, nil
+}
+
+func (c Configuration) analyticJSON() (jsonObject, error) {
+	jo := jsonObject{}
+
+	u, err := c.GetAnalyticURL()
+	if err != nil {
 		return nil, err
 	}
 
-	return &api.HorusecManager{Spec: spec}, nil
+	if u != nil {
+		jo["ingress"] = jsonObject{"host": u.Host, "scheme": u.Scheme}
+	}
+
+	if len(jo) > 0 {
+		return jo, nil
+	}
+
+	return nil, nil
+}
+
+func (c Configuration) apiJSON() (jsonObject, error) {
+	jo := jsonObject{}
+
+	u, err := c.GetAPIURL()
+	if err != nil {
+		return nil, err
+	}
+
+	if u != nil {
+		jo["ingress"] = jsonObject{"host": u.Host, "scheme": u.Scheme}
+	}
+
+	if len(jo) > 0 {
+		return jo, nil
+	}
+
+	return nil, nil
+}
+
+func (c Configuration) authJSON() (jsonObject, error) {
+	jo := jsonObject{}
+
+	if at := c.GetAuthType(); at != "" {
+		jo["type"] = at
+	}
+
+	u, err := c.GetAuthURL()
+	if err != nil {
+		return nil, err
+	}
+
+	if u != nil {
+		jo["ingress"] = jsonObject{"host": u.Host, "scheme": u.Scheme}
+	}
+
+	if len(jo) > 0 {
+		return jo, nil
+	}
+
+	return nil, nil
+}
+
+func (c Configuration) managerJSON() (jsonObject, error) {
+	jo := jsonObject{}
+
+	u, err := c.GetManagerURL()
+	if err != nil {
+		return nil, err
+	}
+
+	if u != nil {
+		jo["ingress"] = jsonObject{"host": u.Host, "scheme": u.Scheme}
+	}
+
+	if len(jo) > 0 {
+		return jo, nil
+	}
+
+	return nil, nil
 }
