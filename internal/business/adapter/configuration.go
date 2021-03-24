@@ -62,6 +62,12 @@ func (c Configuration) ToCustomResource() (*api.HorusecManager, error) {
 	}
 
 	jo := jsonObject{}
+	if k, err := c.keycloakJSON(); err != nil {
+		return nil, err
+	} else if k != nil {
+		jo["global"] = jsonObject{"keycloak": k}
+	}
+
 	if len(components) > 0 {
 		jo["components"] = components
 	}
@@ -237,6 +243,59 @@ func (c Configuration) managerJSON() (jsonObject, error) {
 
 	if u != nil {
 		jo["ingress"] = jsonObject{"host": u.Host, "scheme": u.Scheme}
+	}
+
+	if len(jo) > 0 {
+		return jo, nil
+	}
+
+	return nil, nil
+}
+
+func (c Configuration) keycloakJSON() (jsonObject, error) {
+	if c.Auth == nil || c.Auth.Keycloak == nil {
+		return nil, nil
+	}
+
+	jo := jsonObject{}
+
+	if c.Auth.Keycloak.BasePath != "" {
+		jo["internalURL"] = c.Auth.Keycloak.BasePath
+	}
+	if c.Auth.Keycloak.Realm != "" {
+		jo["realm"] = c.Auth.Keycloak.Realm
+	}
+	if c.Auth.Keycloak.OTP {
+		jo["otp"] = c.Auth.Keycloak.OTP
+	}
+
+	confidentialClient := jsonObject{}
+	if c.Auth.Keycloak.ClientID != "" {
+		confidentialClient["id"] = c.Auth.Keycloak.ClientID
+	}
+	if c.Auth.Keycloak.ClientSecret != "" {
+		confidentialClient["secret"] = c.Auth.Keycloak.ClientSecret
+	}
+
+	clients := jsonObject{}
+	if len(confidentialClient) > 0 {
+		clients["confidential"] = confidentialClient
+	}
+
+	if c.Auth.Keycloak.KeycloakReactApp != nil {
+		if c.Auth.Keycloak.KeycloakReactApp.ClientID != "" {
+			clients["public"] = jsonObject{"id": c.Auth.Keycloak.KeycloakReactApp.ClientID}
+		}
+		if c.Auth.Keycloak.KeycloakReactApp.Realm != "" && jo["realm"] == nil {
+			jo["realm"] = c.Auth.Keycloak.KeycloakReactApp.Realm
+		}
+		if c.Auth.Keycloak.KeycloakReactApp.BasePath != "" {
+			jo["publicURL"] = c.Auth.Keycloak.KeycloakReactApp.BasePath
+		}
+	}
+
+	if len(clients) > 0 {
+		jo["clients"] = clients
 	}
 
 	if len(jo) > 0 {

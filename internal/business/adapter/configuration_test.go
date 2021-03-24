@@ -73,7 +73,7 @@ func TestConfiguration_ToCustomResource(t *testing.T) {
 	})
 
 	t.Run("SHOULD marshal to expected json WHEN keycloak configurations are populated", func(t *testing.T) {
-		expected := "{\"global\":{\"keycloak\":{\"publicURL\":\"http://keycloak.iam/auth\",\"realm\":\"zup\",\"otp\":false,\"clients\":{\"public\":{\"id\":\"horusec-frontend\"},\"confidential\":{\"id\":\"horusec-backend\",\"secret\":\"0548d0ba-0aea-4c76-b601-3d2dc5f30e6b\"}}}},\"components\":{\"auth\":{\"type\":\"keycloak\"}}}"
+		expected := "{\"global\":{\"keycloak\":{\"publicURL\":\"http://keycloak.iam/auth\",\"internalURL\":\"http://keycloak.iam.svc.cluster.local/auth\",\"realm\":\"zup\",\"clients\":{\"public\":{\"id\":\"horusec-frontend\"},\"confidential\":{\"id\":\"horusec-backend\",\"secret\":\"0548d0ba-0aea-4c76-b601-3d2dc5f30e6b\"}}}},\"components\":{\"auth\":{\"type\":\"keycloak\"}}}"
 
 		cfg := &core.Configuration{Auth: &core.Auth{
 			Type: "keycloak",
@@ -83,6 +83,29 @@ func TestConfiguration_ToCustomResource(t *testing.T) {
 				ClientSecret: "0548d0ba-0aea-4c76-b601-3d2dc5f30e6b",
 				Realm:        "zup",
 				OTP:          false,
+				KeycloakReactApp: &core.KeycloakReactApp{
+					ClientID: "horusec-frontend",
+					Realm:    "zup",
+					BasePath: "http://keycloak.iam/auth",
+				},
+			},
+		}}
+
+		cr, err := ForConfiguration(cfg).ToCustomResource()
+		require.NoError(t, err)
+
+		b, err := json.Marshal(cr.Spec)
+		require.NoError(t, err)
+
+		assert.Equal(t, expected, string(b))
+	})
+
+	t.Run("SHOULD marshal to expected json WHEN just public keycloak configurations are populated", func(t *testing.T) {
+		expected := "{\"global\":{\"keycloak\":{\"publicURL\":\"http://keycloak.iam/auth\",\"realm\":\"zup\",\"clients\":{\"public\":{\"id\":\"horusec-frontend\"}}}},\"components\":{\"auth\":{\"type\":\"keycloak\"}}}"
+
+		cfg := &core.Configuration{Auth: &core.Auth{
+			Type: "keycloak",
+			Keycloak: &core.Keycloak{
 				KeycloakReactApp: &core.KeycloakReactApp{
 					ClientID: "horusec-frontend",
 					Realm:    "zup",
