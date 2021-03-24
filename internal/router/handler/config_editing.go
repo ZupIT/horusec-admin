@@ -18,8 +18,8 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/ZupIT/horusec-admin/internal/tracing"
 	"github.com/ZupIT/horusec-admin/pkg/core"
-
 	"github.com/thedevsaddam/renderer"
 )
 
@@ -35,6 +35,9 @@ func NewConfigEditing(render *renderer.Render, writer core.ConfigurationWriter) 
 }
 
 func (h *ConfigEditing) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	span, ctx := tracing.StartSpanFromContext(r.Context(), "internal/router/handler.(*ConfigEditing).ServeHTTP")
+	defer span.Finish()
+
 	// Unmarshall request body
 	cfg := new(core.Configuration)
 	if err := json.NewDecoder(r.Body).Decode(cfg); err != nil {
@@ -43,7 +46,7 @@ func (h *ConfigEditing) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Update configurations
-	if err := h.writer.CreateOrUpdate(r.Context(), cfg); err != nil {
+	if err := h.writer.CreateOrUpdate(ctx, cfg); err != nil {
 		panic(err)
 	}
 
