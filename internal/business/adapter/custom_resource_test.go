@@ -25,7 +25,7 @@ import (
 
 func TestCustomResource_ToConfiguration(t *testing.T) {
 	t.Run("SHOULD marshal to expected json WHEN hosts and schemes are populated", func(t *testing.T) {
-		expected := "{\"react_app_horusec_endpoint_api\":\"http://api.horus.local\",\"react_app_horusec_endpoint_analytic\":\"http://analytic.horus.local\",\"react_app_horusec_endpoint_account\":\"http://account.horus.local\",\"react_app_horusec_endpoint_auth\":\"http://auth.horus.local\",\"react_app_horusec_manager_path\":\"\"}"
+		expected := "{\"react_app_horusec_endpoint_api\":\"http://api.horus.local\",\"react_app_horusec_endpoint_analytic\":\"http://analytic.horus.local\",\"react_app_horusec_endpoint_account\":\"http://account.horus.local\",\"react_app_horusec_endpoint_auth\":\"http://auth.horus.local\",\"react_app_horusec_endpoint_manager\":\"http://manager.horus.local\",\"react_app_horusec_manager_path\":\"\"}"
 
 		hm := &api.HorusecManager{Spec: api.HorusecManagerSpec{Components: &api.Components{
 			Account:  &api.Account{Ingress: &api.Ingress{Host: "account.horus.local", Scheme: "http"}},
