@@ -16,13 +16,42 @@ package adapter
 
 import (
 	"encoding/json"
+	"testing"
+
 	"github.com/ZupIT/horusec-admin/pkg/core"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func TestConfiguration_ToCustomResource(t *testing.T) {
+	t.Run("SHOULD marshal to expected json WHEN auth type is set to a non-default value", func(t *testing.T) {
+		expected := "{\"components\":{\"auth\":{\"type\":\"keycloak\"}}}"
+
+		cfg := &core.Configuration{Auth: &core.Auth{Type: "keycloak"}}
+
+		cr, err := ForConfiguration(cfg).ToCustomResource()
+		require.NoError(t, err)
+
+		b, err := json.Marshal(cr.Spec)
+		require.NoError(t, err)
+
+		assert.Equal(t, expected, string(b))
+	})
+
+	t.Run("SHOULD marshal to an empty json WHEN auth type is set to default value 'horusec'", func(t *testing.T) {
+		expected := "{}"
+
+		cfg := &core.Configuration{Auth: &core.Auth{Type: "horusec"}}
+
+		cr, err := ForConfiguration(cfg).ToCustomResource()
+		require.NoError(t, err)
+
+		b, err := json.Marshal(cr.Spec)
+		require.NoError(t, err)
+
+		assert.Equal(t, expected, string(b))
+	})
+
 	t.Run("SHOULD marshal to expected json WHEN hosts and schemes are populated", func(t *testing.T) {
 		expected := "{\"components\":{\"account\":{\"ingress\":{\"scheme\":\"http\",\"host\":\"account.horus.local\"}},\"analytic\":{\"ingress\":{\"scheme\":\"http\",\"host\":\"analytic.horus.local\"}},\"api\":{\"ingress\":{\"scheme\":\"http\",\"host\":\"api.horus.local\"}},\"auth\":{\"ingress\":{\"scheme\":\"http\",\"host\":\"auth.horus.local\"}},\"manager\":{\"ingress\":{\"scheme\":\"http\",\"host\":\"manager.horus.local\"}}}}"
 
@@ -32,6 +61,34 @@ func TestConfiguration_ToCustomResource(t *testing.T) {
 			AccountEndpoint:  "http://account.horus.local",
 			AuthEndpoint:     "http://auth.horus.local",
 			ManagerEndpoint:  "http://manager.horus.local",
+		}}
+
+		cr, err := ForConfiguration(cfg).ToCustomResource()
+		require.NoError(t, err)
+
+		b, err := json.Marshal(cr.Spec)
+		require.NoError(t, err)
+
+		assert.Equal(t, expected, string(b))
+	})
+
+	t.Run("SHOULD marshal to expected json WHEN keycloak configurations are populated", func(t *testing.T) {
+		expected := "{\"global\":{\"keycloak\":{\"publicURL\":\"http://keycloak.iam/auth\",\"realm\":\"zup\",\"otp\":false,\"clients\":{\"public\":{\"id\":\"horusec-frontend\"},\"confidential\":{\"id\":\"horusec-backend\",\"secret\":\"0548d0ba-0aea-4c76-b601-3d2dc5f30e6b\"}}}},\"components\":{\"auth\":{\"type\":\"keycloak\"}}}"
+
+		cfg := &core.Configuration{Auth: &core.Auth{
+			Type: "keycloak",
+			Keycloak: &core.Keycloak{
+				BasePath:     "http://keycloak.iam.svc.cluster.local/auth",
+				ClientID:     "horusec-backend",
+				ClientSecret: "0548d0ba-0aea-4c76-b601-3d2dc5f30e6b",
+				Realm:        "zup",
+				OTP:          false,
+				KeycloakReactApp: &core.KeycloakReactApp{
+					ClientID: "horusec-frontend",
+					Realm:    "zup",
+					BasePath: "http://keycloak.iam/auth",
+				},
+			},
 		}}
 
 		cr, err := ForConfiguration(cfg).ToCustomResource()
