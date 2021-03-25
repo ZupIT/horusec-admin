@@ -16,8 +16,9 @@ package adapter
 
 import (
 	"fmt"
-	"github.com/ZupIT/horusec-admin/pkg/core"
 	"net/url"
+
+	"github.com/ZupIT/horusec-admin/pkg/core"
 )
 
 func (c *Configuration) GetKeycloak() *core.Keycloak {
