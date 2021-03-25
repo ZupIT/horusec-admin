@@ -285,6 +285,8 @@ function submitAuthForm() {
             xhr.onreadystatechange = function (ev) {
                 if (ev.currentTarget.status === 204) {
                     showSnackBar('success')
+                } else if (ev.currentTarget.status === 401) {
+                    window.location.href = '/view/not-authorized'
                 } else {
                     showSnackBar('error')
                 }

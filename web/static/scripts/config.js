@@ -23,6 +23,10 @@ function setCurrentValues() {
     xhr.send()
 
     xhr.onreadystatechange = function (ev) {
+        if (ev.currentTarget.status === 401) {
+            window.location.href = '/view/not-authorized'
+        }
+
         if (ev.currentTarget.status === 200 && ev.currentTarget.response) {
             const result = JSON.parse(ev.currentTarget.response)
 
