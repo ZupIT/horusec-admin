@@ -29,8 +29,8 @@ func (cr *CustomResource) GetJWT() *v1alpha1.JWT {
 }
 
 func (cr *CustomResource) GetAuthType() string {
-	if cr.Spec.Components == nil || cr.Spec.Components.Auth == nil || cr.Spec.Components.Auth.Type == "horusec" {
-		return ""
+	if cr.Spec.Components == nil || cr.Spec.Components.Auth == nil || cr.Spec.Components.Auth.Type == "" {
+		return "horusec"
 	}
 
 	return cr.Spec.Components.Auth.Type

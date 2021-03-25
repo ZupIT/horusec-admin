@@ -26,13 +26,9 @@ func ForCustomResource(hm *api.HorusecManager) *CustomResource {
 }
 
 func (cr *CustomResource) ToConfiguration() *core.Configuration {
-	general := cr.toGeneral()
-	auth := cr.toAuth()
-	manager := cr.toManager()
-
-	if general == nil && auth == nil && manager == nil {
-		return nil
+	return &core.Configuration{
+		General: cr.toGeneral(),
+		Auth:    cr.toAuth(),
+		Manager: cr.toManager(),
 	}
-
-	return &core.Configuration{General: general, Auth: auth, Manager: manager}
 }

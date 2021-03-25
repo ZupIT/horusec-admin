@@ -26,7 +26,7 @@ import (
 
 func TestCustomResource_ToConfiguration(t *testing.T) {
 	t.Run("SHOULD marshal to expected json WHEN hosts and schemes are populated", func(t *testing.T) {
-		expected := "{\"react_app_horusec_endpoint_api\":\"http://api.horus.local\",\"react_app_horusec_endpoint_analytic\":\"http://analytic.horus.local\",\"react_app_horusec_endpoint_account\":\"http://account.horus.local\",\"react_app_horusec_endpoint_auth\":\"http://auth.horus.local\",\"react_app_horusec_endpoint_manager\":\"http://manager.horus.local\",\"react_app_horusec_manager_path\":\"\"}"
+		expected := "{\"horusec_enable_application_admin\":false,\"horusec_jwt_secret_key\":\"horusec-jwt\",\"horusec_auth_type\":\"horusec\",\"react_app_horusec_endpoint_api\":\"http://api.horus.local\",\"react_app_horusec_endpoint_analytic\":\"http://analytic.horus.local\",\"react_app_horusec_endpoint_account\":\"http://account.horus.local\",\"react_app_horusec_endpoint_auth\":\"http://auth.horus.local\",\"react_app_horusec_endpoint_manager\":\"http://manager.horus.local\",\"react_app_horusec_manager_path\":\"/horusec\"}"
 
 		hm := &api.HorusecManager{Spec: api.HorusecManagerSpec{
 			Components: &api.Components{
@@ -47,32 +47,34 @@ func TestCustomResource_ToConfiguration(t *testing.T) {
 	})
 
 	t.Run("SHOULD marshal to expected json WHEN keycloak configurations are populated", func(t *testing.T) {
-		expected := "{\"horusec_auth_type\":\"keycloak\",\"horusec_keycloak_client_id\":\"horusec-backend\",\"horusec_keycloak_client_secret\":\"horusec-backend\",\"horusec_keycloak_realm\":\"zup\",\"react_app_keycloak_client_id\":\"horusec-frontend\",\"react_app_keycloak_realm\":\"zup\",\"react_app_keycloak_base_path\":\"http://keycloak.iam/auth\"}"
+		expected := "{\"horusec_enable_application_admin\":false,\"horusec_jwt_secret_key\":\"horusec-jwt\",\"horusec_auth_type\":\"keycloak\",\"horusec_keycloak_client_id\":\"horusec-backend\",\"horusec_keycloak_client_secret\":\"horusec-backend\",\"horusec_keycloak_realm\":\"zup\",\"react_app_keycloak_client_id\":\"horusec-frontend\",\"react_app_keycloak_realm\":\"zup\",\"react_app_keycloak_base_path\":\"http://keycloak.iam/auth\",\"react_app_horusec_endpoint_api\":\"http://api.local/\",\"react_app_horusec_endpoint_analytic\":\"http://analytic.local/\",\"react_app_horusec_endpoint_account\":\"http://account.local/\",\"react_app_horusec_endpoint_auth\":\"http://auth.local/\",\"react_app_horusec_endpoint_manager\":\"http://manager.local/\",\"react_app_horusec_manager_path\":\"/horusec\"}"
 
-		hm := &api.HorusecManager{Spec: api.HorusecManagerSpec{
-			Components: &api.Components{Auth: &api.Auth{
-				Type: "keycloak",
-			}},
-			Global: &api.Global{
-				Keycloak: &api.Keycloak{
-					PublicURL: "http://keycloak.iam/auth",
-					Realm:     "zup",
-					OTP:       false,
-					Clients: &api.Clients{
-						Public: &api.ClientCredentials{
-							ID: "horusec-frontend",
-						},
-						Confidential: &api.ClientCredentials{
-							ID:     "horusec-backend",
-							Secret: "0548d0ba-0aea-4c76-b601-3d2dc5f30e6b",
-						},
+		cfg := ForCustomResource(&api.HorusecManager{Spec: api.HorusecManagerSpec{
+			Components: &api.Components{Auth: &api.Auth{Type: "keycloak"}},
+			Global: &api.Global{Keycloak: &api.Keycloak{
+				PublicURL: "http://keycloak.iam/auth",
+				Realm:     "zup",
+				OTP:       false,
+				Clients: &api.Clients{
+					Public: &api.ClientCredentials{
+						ID: "horusec-frontend",
 					},
-				},
-			},
-		}}
+					Confidential: &api.ClientCredentials{
+						ID:     "horusec-backend",
+						Secret: "0548d0ba-0aea-4c76-b601-3d2dc5f30e6b",
+					}}}},
+		}}).ToConfiguration()
 
-		cfg := ForCustomResource(hm).ToConfiguration()
+		b, err := json.Marshal(cfg)
+		require.NoError(t, err)
 
+		assert.Equal(t, expected, string(b))
+	})
+
+	t.Run("SHOULD contain default values WHEN when no information is populated", func(t *testing.T) {
+		expected := "{\"horusec_enable_application_admin\":false,\"horusec_jwt_secret_key\":\"horusec-jwt\",\"horusec_auth_type\":\"horusec\",\"react_app_horusec_endpoint_api\":\"http://api.local/\",\"react_app_horusec_endpoint_analytic\":\"http://analytic.local/\",\"react_app_horusec_endpoint_account\":\"http://account.local/\",\"react_app_horusec_endpoint_auth\":\"http://auth.local/\",\"react_app_horusec_endpoint_manager\":\"http://manager.local/\",\"react_app_horusec_manager_path\":\"/horusec\"}"
+
+		cfg := ForCustomResource(&api.HorusecManager{}).ToConfiguration()
 		b, err := json.Marshal(cfg)
 		require.NoError(t, err)
 

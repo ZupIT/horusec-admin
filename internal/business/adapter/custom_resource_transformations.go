@@ -24,16 +24,12 @@ func (cr *CustomResource) toGeneral() *core.General {
 		enabled = cr.Spec.Global.EnableAdmin
 	}
 
-	var secret string
+	secret := "horusec-jwt"
 	if jwt := cr.GetJWT(); jwt != nil {
 		secret = cr.Spec.Global.JWT.SecretName
 	}
 
-	if enabled || secret != "" || admin != nil {
-		return &core.General{EnableApplicationAdmin: enabled, JwtSecretKey: secret, ApplicationAdminData: admin}
-	}
-
-	return nil
+	return &core.General{EnableApplicationAdmin: enabled, JwtSecretKey: secret, ApplicationAdminData: admin}
 }
 
 func (cr *CustomResource) toAdmin() *core.Admin {
@@ -109,7 +105,12 @@ func (cr *CustomResource) toKeycloakReactApp() *core.KeycloakReactApp {
 }
 
 func (cr *CustomResource) toManager() *core.Manager {
-	var apiEndpoint, analyticEndpoint, accountEndpoint, authEndpoint, managerEndpoint, managerPath string
+	apiEndpoint := "http://api.local/"
+	analyticEndpoint := "http://analytic.local/"
+	accountEndpoint := "http://account.local/"
+	authEndpoint := "http://auth.local/"
+	managerEndpoint := "http://manager.local/"
+	managerPath := "/horusec"
 
 	if u := cr.GetAPIURL(); u != nil {
 		apiEndpoint = u.String()
@@ -127,16 +128,12 @@ func (cr *CustomResource) toManager() *core.Manager {
 		managerEndpoint = u.String()
 	}
 
-	if apiEndpoint != "" || analyticEndpoint != "" || accountEndpoint != "" || authEndpoint != "" || managerEndpoint != "" || managerPath != "" {
-		return &core.Manager{
-			APIEndpoint:      apiEndpoint,
-			AnalyticEndpoint: analyticEndpoint,
-			AccountEndpoint:  accountEndpoint,
-			AuthEndpoint:     authEndpoint,
-			ManagerEndpoint:  managerEndpoint,
-			ManagerPath:      managerPath, // TODO: make manager path configurable
-		}
+	return &core.Manager{
+		APIEndpoint:      apiEndpoint,
+		AnalyticEndpoint: analyticEndpoint,
+		AccountEndpoint:  accountEndpoint,
+		AuthEndpoint:     authEndpoint,
+		ManagerEndpoint:  managerEndpoint,
+		ManagerPath:      managerPath, // TODO: make manager path configurable
 	}
-
-	return nil
 }
