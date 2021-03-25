@@ -45,7 +45,7 @@ func (s *ConfigService) GetConfig(ctx context.Context) (*core.Configuration, err
 	}
 
 	if cr == nil {
-		return new(core.Configuration), nil
+		cr = &api.HorusecManager{}
 	}
 
 	return adapter.ForCustomResource(cr).ToConfiguration(), nil
