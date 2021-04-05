@@ -16,23 +16,20 @@ package adapter
 
 import api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
 
-// nolint:gocyclo // if all Global fields are empty then it should return nil
 func (c *Configuration) toGlobal() *api.Global {
-	jwt := c.toJWT()
-	broker := c.toBroker()
-	database := c.toDatabase()
-	keycloak := c.toKeycloak()
-
-	var enableAdmin bool
-	if c.General != nil {
-		enableAdmin = c.General.EnableApplicationAdmin
+	g := &api.Global{
+		EnableAdmin: c.IsAdminEnabled(),
+		JWT:         c.toJWT(),
+		Broker:      c.toBroker(),
+		Database:    c.toDatabase(),
+		Keycloak:    c.toKeycloak(),
 	}
 
-	if enableAdmin || jwt != nil || broker != nil || database != nil || keycloak != nil {
-		return &api.Global{EnableAdmin: enableAdmin, JWT: jwt, Broker: broker, Database: database, Keycloak: keycloak}
+	if (api.Global{}) == *g {
+		return nil
 	}
 
-	return nil
+	return g
 }
 
 func (c *Configuration) toJWT() *api.JWT {
@@ -53,86 +50,82 @@ func (c *Configuration) toDatabase() *api.Database {
 	return nil
 }
 
-//nolint:funlen,gocyclo // the complexity for this object conversion cannot be reduced
+//nolint:funlen // the number of statements cannot be reduced
 func (c *Configuration) toKeycloak() *api.Keycloak {
-	var otp bool
-	var publicURL, internalURL, realm string
-	clients := c.toClients()
+	k := &api.Keycloak{Clients: c.toClients()}
 
 	if keycloak := c.GetKeycloak(); keycloak != nil {
-		internalURL = keycloak.BasePath
-		realm = keycloak.Realm
-		otp = keycloak.OTP
+		k.InternalURL = keycloak.BasePath
+		k.Realm = keycloak.Realm
+		k.OTP = keycloak.OTP
 	}
 
-	reactApp := c.GetKeycloakReactApp()
-	if reactApp != nil {
-		publicURL = reactApp.BasePath
-		if realm == "" {
-			realm = reactApp.Realm
+	if reactApp := c.GetKeycloakReactApp(); reactApp != nil {
+		k.PublicURL = reactApp.BasePath
+		if k.Realm == "" {
+			k.Realm = reactApp.Realm
 		}
 	}
 
-	if publicURL != "" || internalURL != "" || realm != "" || otp || clients != nil {
-		return &api.Keycloak{PublicURL: publicURL, InternalURL: internalURL, Realm: realm, OTP: otp, Clients: clients}
+	if (api.Keycloak{}) == *k {
+		return nil
 	}
 
-	return nil
+	return k
 }
 
-//nolint:funlen,gocyclo // these linters are not feasible for objects adapters
 func (c *Configuration) toClients() *api.Clients {
-	var confidential, public *api.ClientCredentials
-
-	keycloak := c.GetKeycloak()
-	if keycloak != nil && (keycloak.ClientID != "" || keycloak.ClientSecret != "") {
-		confidential = &api.ClientCredentials{ID: keycloak.ClientID, Secret: keycloak.ClientSecret}
+	client := &api.Clients{
+		Public:       c.GetKeycloakPublicCredentials(),
+		Confidential: c.GetKeycloakConfidentialCredentials(),
 	}
 
-	reactApp := c.GetKeycloakReactApp()
-	if reactApp != nil && reactApp.ClientID != "" {
-		public = &api.ClientCredentials{ID: reactApp.ClientID}
+	if (api.Clients{}) == *client {
+		return nil
 	}
 
-	if confidential != nil || public != nil {
-		return &api.Clients{Confidential: confidential, Public: public}
-	}
-
-	return nil
+	return client
 }
 
-//nolint:funlen,gocyclo // these linters are not feasible for objects adapters
+//nolint:funlen,gocyclo // the number of statements and cyclomatic complexity cannot be reduced
 func (c *Configuration) toComponents() (*api.Components, error) {
-	account, err := c.toAccount()
-	if err != nil {
+	components := new(api.Components)
+
+	if account, err := c.toAccount(); err == nil {
+		components.Account = account
+	} else {
 		return nil, err
 	}
 
-	analytic, err := c.toAnalytic()
-	if err != nil {
+	if analytic, err := c.toAnalytic(); err == nil {
+		components.Analytic = analytic
+	} else {
 		return nil, err
 	}
 
-	rapi, err := c.toAPI()
-	if err != nil {
+	if rapi, err := c.toAPI(); err == nil {
+		components.API = rapi
+	} else {
 		return nil, err
 	}
 
-	auth, err := c.toAuth()
-	if err != nil {
+	if auth, err := c.toAuth(); err == nil {
+		components.Auth = auth
+	} else {
 		return nil, err
 	}
 
-	manager, err := c.toManager()
-	if err != nil {
+	if manager, err := c.toManager(); err == nil {
+		components.Manager = manager
+	} else {
 		return nil, err
 	}
 
-	if account != nil || analytic != nil || rapi != nil || auth != nil || manager != nil {
-		return &api.Components{Account: account, Analytic: analytic, API: rapi, Auth: auth, Manager: manager}, nil
+	if (api.Components{} == *components) {
+		return nil, nil
 	}
 
-	return nil, nil
+	return components, nil
 }
 
 func (c *Configuration) toAccount() (*api.Account, error) {

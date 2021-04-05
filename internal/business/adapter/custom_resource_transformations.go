@@ -64,89 +64,70 @@ func (cr *CustomResource) toLDAP() *core.LDAP {
 	return nil
 }
 
-//nolint:funlen,gocyclo // these linters are not feasible for objects adapters
+//nolint:funlen // the number of statements cannot be reduced
 func (cr *CustomResource) toKeycloak() *core.Keycloak {
-	var basePath, clientID, clientSecret, realm string
-	var otp bool
-	reactApp := cr.toKeycloakReactApp()
+	keycloak := &core.Keycloak{KeycloakReactApp: cr.toKeycloakReactApp()}
 
 	if k := cr.GetKeycloak(); k != nil {
-		basePath = k.InternalURL
-		realm = k.Realm
-		otp = k.OTP
+		keycloak.BasePath = k.InternalURL
+		keycloak.Realm = k.Realm
+		keycloak.OTP = k.OTP
 	}
 
 	if cc := cr.GetKeycloakConfidentialCredentials(); cc != nil {
-		clientID = cc.ID
-		clientSecret = cc.ID
+		keycloak.ClientID = cc.ID
+		keycloak.ClientSecret = cc.Secret
 	}
 
-	if basePath != "" || clientID != "" || clientSecret != "" || realm != "" || otp || reactApp != nil {
-		return &core.Keycloak{
-			BasePath:         basePath,
-			ClientID:         clientID,
-			ClientSecret:     clientSecret,
-			Realm:            realm,
-			OTP:              otp,
-			KeycloakReactApp: reactApp,
-		}
+	if (core.Keycloak{}) == *keycloak {
+		return nil
 	}
 
-	return nil
+	return keycloak
 }
 
-//nolint:funlen,gocyclo // these linters are not feasible for objects adapters
 func (cr *CustomResource) toKeycloakReactApp() *core.KeycloakReactApp {
-	var clientID, realm, basePath string
-
+	reactApp := new(core.KeycloakReactApp)
 	if k := cr.GetKeycloak(); k != nil {
-		basePath = k.PublicURL
-		realm = k.Realm
+		reactApp.BasePath = k.PublicURL
+		reactApp.Realm = k.Realm
+	}
+	if pc := cr.GetKeycloakPublicCredentials(); pc != nil {
+		reactApp.ClientID = pc.ID
+	}
+	if (core.KeycloakReactApp{}) == *reactApp {
+		return nil
 	}
 
-	pc := cr.GetKeycloakPublicCredentials()
-	if pc != nil {
-		clientID = pc.ID
-	}
-
-	if clientID != "" || realm != "" || basePath != "" {
-		return &core.KeycloakReactApp{ClientID: clientID, Realm: realm, BasePath: basePath}
-	}
-
-	return nil
+	return reactApp
 }
 
-//nolint:funlen,gocyclo // these linters are not feasible for objects adapters
+//nolint:funlen,gocyclo // the number of statements and cyclomatic complexity cannot be reduced
 func (cr *CustomResource) toManager() *core.Manager {
-	apiEndpoint := defaultAPIEndpoint
-	analyticEndpoint := defaultAnalyticEndpoint
-	accountEndpoint := defaultAccountEndpoint
-	authEndpoint := defaultAuthEndpoint
-	managerEndpoint := defaultManagerEndpoint
-	managerPath := defaultManagerPath
+	m := &core.Manager{
+		APIEndpoint:      defaultAPIEndpoint,
+		AnalyticEndpoint: defaultAnalyticEndpoint,
+		AccountEndpoint:  defaultAccountEndpoint,
+		AuthEndpoint:     defaultAuthEndpoint,
+		ManagerEndpoint:  defaultManagerEndpoint,
+		ManagerPath:      defaultManagerPath, // TODO: make manager path configurable
+	}
 
 	if u := cr.GetAPIURL(); u != nil {
-		apiEndpoint = u.String()
+		m.APIEndpoint = u.String()
 	}
 	if u := cr.GetAnalyticURL(); u != nil {
-		analyticEndpoint = u.String()
+		m.AnalyticEndpoint = u.String()
 	}
 	if u := cr.GetAccountURL(); u != nil {
-		accountEndpoint = u.String()
+		m.AccountEndpoint = u.String()
 	}
 	if u := cr.GetAuthURL(); u != nil {
-		authEndpoint = u.String()
+		m.AuthEndpoint = u.String()
 	}
 	if u := cr.GetManagerURL(); u != nil {
-		managerEndpoint = u.String()
+		m.ManagerEndpoint = u.String()
 	}
 
-	return &core.Manager{
-		APIEndpoint:      apiEndpoint,
-		AnalyticEndpoint: analyticEndpoint,
-		AccountEndpoint:  accountEndpoint,
-		AuthEndpoint:     authEndpoint,
-		ManagerEndpoint:  managerEndpoint,
-		ManagerPath:      managerPath, // TODO: make manager path configurable
-	}
+	return m
 }

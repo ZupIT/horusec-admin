@@ -16,6 +16,7 @@ package adapter
 
 import (
 	"fmt"
+	api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
 	"net/url"
 
 	"github.com/ZupIT/horusec-admin/pkg/core"
@@ -26,6 +27,20 @@ const defaultAuthType = "horusec"
 func (c *Configuration) GetKeycloak() *core.Keycloak {
 	if c.Auth != nil && c.Auth.Keycloak != nil {
 		return c.Auth.Keycloak
+	}
+	return nil
+}
+
+func (c *Configuration) GetKeycloakConfidentialCredentials() *api.ClientCredentials {
+	if keycloak := c.GetKeycloak(); keycloak != nil && (keycloak.ClientID != "" || keycloak.ClientSecret != "") {
+		return &api.ClientCredentials{ID: keycloak.ClientID, Secret: keycloak.ClientSecret}
+	}
+	return nil
+}
+
+func (c *Configuration) GetKeycloakPublicCredentials() *api.ClientCredentials {
+	if reactApp := c.GetKeycloakReactApp(); reactApp != nil && reactApp.ClientID != "" {
+		return &api.ClientCredentials{ID: reactApp.ClientID}
 	}
 	return nil
 }
@@ -108,4 +123,12 @@ func (c *Configuration) GetAuthType() string {
 	}
 
 	return c.Auth.Type
+}
+
+func (c *Configuration) IsAdminEnabled() bool {
+	if c.General != nil {
+		return c.General.EnableApplicationAdmin
+	}
+
+	return false
 }
