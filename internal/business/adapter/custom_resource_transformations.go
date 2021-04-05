@@ -16,8 +16,15 @@ package adapter
 
 import "github.com/ZupIT/horusec-admin/pkg/core"
 
-// nolint:gosec // its not a hardcoded credential
-const defaultSecretName = "horusec-jwt"
+const (
+	defaultSecretName       = "horusec-jwt" // nolint:gosec // its not a hardcoded credential
+	defaultAPIEndpoint      = "http://api.local/"
+	defaultAnalyticEndpoint = "http://analytic.local/"
+	defaultAccountEndpoint  = "http://account.local/"
+	defaultAuthEndpoint     = "http://auth.local/"
+	defaultManagerEndpoint  = "http://manager.local/"
+	defaultManagerPath      = "/horusec"
+)
 
 func (cr *CustomResource) toGeneral() *core.General {
 	admin := cr.toAdmin()
@@ -108,12 +115,12 @@ func (cr *CustomResource) toKeycloakReactApp() *core.KeycloakReactApp {
 }
 
 func (cr *CustomResource) toManager() *core.Manager {
-	apiEndpoint := "http://api.local/"
-	analyticEndpoint := "http://analytic.local/"
-	accountEndpoint := "http://account.local/"
-	authEndpoint := "http://auth.local/"
-	managerEndpoint := "http://manager.local/"
-	managerPath := "/horusec"
+	apiEndpoint := defaultAPIEndpoint
+	analyticEndpoint := defaultAnalyticEndpoint
+	accountEndpoint := defaultAccountEndpoint
+	authEndpoint := defaultAuthEndpoint
+	managerEndpoint := defaultManagerEndpoint
+	managerPath := defaultManagerPath
 
 	if u := cr.GetAPIURL(); u != nil {
 		apiEndpoint = u.String()
