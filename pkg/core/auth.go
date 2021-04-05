@@ -25,7 +25,7 @@ type (
 		ClientID          string `json:"horusec_keycloak_client_id,omitempty"`
 		ClientSecret      string `json:"horusec_keycloak_client_secret,omitempty"`
 		Realm             string `json:"horusec_keycloak_realm,omitempty"`
-		OTP               string `json:"horusec_keycloak_otp,omitempty"`
+		OTP               bool   `json:"horusec_keycloak_otp,omitempty"`
 		*KeycloakReactApp `json:",inline,omitempty"`
 	}
 	KeycloakReactApp struct {

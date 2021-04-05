@@ -12,14 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package kubernetes
+package adapter
 
 import (
-	"github.com/google/wire"
+	api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
+	"github.com/ZupIT/horusec-admin/pkg/core"
 )
 
-var Providers = wire.NewSet(
-	NewHorusecManagerClient,
-	NewRestConfig,
-	wire.Struct(new(ObjectComparator), "*"),
-)
+type Configuration core.Configuration
+
+func ForConfiguration(configuration *core.Configuration) *Configuration {
+	return (*Configuration)(configuration)
+}
+
+func (c Configuration) ToCustomResource() (*api.HorusecManager, error) {
+	components, err := c.toComponents()
+	if err != nil {
+		return nil, err
+	}
+
+	return &api.HorusecManager{Spec: api.HorusecManagerSpec{Global: c.toGlobal(), Components: components}}, nil
+}

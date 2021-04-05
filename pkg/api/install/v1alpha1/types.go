@@ -81,11 +81,30 @@ type Database struct {
 	SecretName string `json:"secretName,omitempty"`
 }
 
+type Keycloak struct {
+	PublicURL   string   `json:"publicURL,omitempty"`
+	InternalURL string   `json:"internalURL,omitempty"`
+	Realm       string   `json:"realm,omitempty"`
+	OTP         bool     `json:"otp,omitempty"`
+	Clients     *Clients `json:"clients,omitempty"`
+}
+
+type Clients struct {
+	Public       *ClientCredentials `json:"public,omitempty"`
+	Confidential *ClientCredentials `json:"confidential,omitempty"`
+}
+
+type ClientCredentials struct {
+	ID     string `json:"id,omitempty"`
+	Secret string `json:"secret,omitempty"`
+}
+
 type Global struct {
 	EnableAdmin bool      `json:"enableAdmin,omitempty"`
 	JWT         *JWT      `json:"jwt,omitempty"`
 	Broker      *Broker   `json:"broker,omitempty"`
 	Database    *Database `json:"database,omitempty"`
+	Keycloak    *Keycloak `json:"keycloak,omitempty"`
 }
 
 type Ingress struct {
@@ -123,6 +142,7 @@ type Port struct {
 
 type Auth struct {
 	Name    string   `json:"name,omitempty"`
+	Type    string   `json:"type,omitempty"`
 	Enabled bool     `json:"enabled,omitempty"`
 	Port    *Port    `json:"port,omitempty"`
 	Ingress *Ingress `json:"ingress,omitempty"`

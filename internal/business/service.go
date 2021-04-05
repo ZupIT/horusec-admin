@@ -45,15 +45,14 @@ func (s *ConfigService) GetConfig(ctx context.Context) (*core.Configuration, err
 	}
 
 	if cr == nil {
-		return new(core.Configuration), nil
+		cr = &api.HorusecManager{}
 	}
 
-	cfg := adapter.NewConfiguration(cr)
-	return (*core.Configuration)(cfg), nil
+	return adapter.ForCustomResource(cr).ToConfiguration(), nil
 }
 
 func (s *ConfigService) CreateOrUpdate(ctx context.Context, cfg *core.Configuration) error {
-	r, err := (*adapter.Configuration)(cfg).CR()
+	r, err := adapter.ForConfiguration(cfg).ToCustomResource()
 	if err != nil {
 		return err
 	}

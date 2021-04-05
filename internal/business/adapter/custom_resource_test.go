@@ -18,28 +18,66 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/ZupIT/horusec-admin/pkg/core"
-	"github.com/stretchr/testify/assert"
+	api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
 	"github.com/stretchr/testify/require"
+
+	"github.com/stretchr/testify/assert"
 )
 
-func TestConfiguration_CR_When_TheFieldsAreNotFilled(t *testing.T) {
-	expected := "{\"components\":{\"account\":{\"ingress\":{\"scheme\":\"http\",\"host\":\"account.horus.zup\"}},\"analytic\":{\"ingress\":{\"scheme\":\"http\",\"host\":\"analytic.horus.zup\"}},\"api\":{\"ingress\":{\"scheme\":\"http\",\"host\":\"api.horus.zup\"}},\"auth\":{\"ingress\":{\"scheme\":\"http\",\"host\":\"auth.horus.zup\"}}}}"
-	cfg := &Configuration{
-		Manager: &core.Manager{
-			APIEndpoint:      "http://api.horus.zup/",
-			AnalyticEndpoint: "http://analytic.horus.zup/",
-			AccountEndpoint:  "http://account.horus.zup/",
-			AuthEndpoint:     "http://auth.horus.zup/",
-			ManagerPath:      "/horusec",
-		},
-	}
+func TestCustomResource_ToConfiguration(t *testing.T) {
+	t.Run("SHOULD marshal to expected json WHEN hosts and schemes are populated", func(t *testing.T) {
+		expected := "{\"horusec_enable_application_admin\":false,\"horusec_jwt_secret_key\":\"horusec-jwt\",\"horusec_auth_type\":\"horusec\",\"react_app_horusec_endpoint_api\":\"http://api.horus.local\",\"react_app_horusec_endpoint_analytic\":\"http://analytic.horus.local\",\"react_app_horusec_endpoint_account\":\"http://account.horus.local\",\"react_app_horusec_endpoint_auth\":\"http://auth.horus.local\",\"react_app_horusec_endpoint_manager\":\"http://manager.horus.local\",\"react_app_horusec_manager_path\":\"/horusec\"}"
 
-	cr, err := cfg.CR()
-	require.NoError(t, err)
+		hm := &api.HorusecManager{Spec: api.HorusecManagerSpec{
+			Components: &api.Components{
+				Account:  &api.Account{Ingress: &api.Ingress{Host: "account.horus.local", Scheme: "http"}},
+				Analytic: &api.Analytic{Ingress: &api.Ingress{Host: "analytic.horus.local", Scheme: "http"}},
+				API:      &api.API{Ingress: &api.Ingress{Host: "api.horus.local", Scheme: "http"}},
+				Auth:     &api.Auth{Ingress: &api.Ingress{Host: "auth.horus.local", Scheme: "http"}},
+				Manager:  &api.Manager{Ingress: &api.Ingress{Host: "manager.horus.local", Scheme: "http"}},
+			},
+		}}
 
-	b, err := json.Marshal(cr.Spec)
-	require.NoError(t, err)
+		cfg := ForCustomResource(hm).ToConfiguration()
 
-	assert.Equal(t, expected, string(b))
+		b, err := json.Marshal(cfg)
+		require.NoError(t, err)
+
+		assert.Equal(t, expected, string(b))
+	})
+
+	t.Run("SHOULD marshal to expected json WHEN keycloak configurations are populated", func(t *testing.T) {
+		expected := "{\"horusec_enable_application_admin\":false,\"horusec_jwt_secret_key\":\"horusec-jwt\",\"horusec_auth_type\":\"keycloak\",\"horusec_keycloak_client_id\":\"horusec-backend\",\"horusec_keycloak_client_secret\":\"0548d0ba-0aea-4c76-b601-3d2dc5f30e6b\",\"horusec_keycloak_realm\":\"zup\",\"react_app_keycloak_client_id\":\"horusec-frontend\",\"react_app_keycloak_realm\":\"zup\",\"react_app_keycloak_base_path\":\"http://keycloak.iam/auth\",\"react_app_horusec_endpoint_api\":\"http://api.local/\",\"react_app_horusec_endpoint_analytic\":\"http://analytic.local/\",\"react_app_horusec_endpoint_account\":\"http://account.local/\",\"react_app_horusec_endpoint_auth\":\"http://auth.local/\",\"react_app_horusec_endpoint_manager\":\"http://manager.local/\",\"react_app_horusec_manager_path\":\"/horusec\"}"
+
+		cfg := ForCustomResource(&api.HorusecManager{Spec: api.HorusecManagerSpec{
+			Components: &api.Components{Auth: &api.Auth{Type: "keycloak"}},
+			Global: &api.Global{Keycloak: &api.Keycloak{
+				PublicURL: "http://keycloak.iam/auth",
+				Realm:     "zup",
+				OTP:       false,
+				Clients: &api.Clients{
+					Public: &api.ClientCredentials{
+						ID: "horusec-frontend",
+					},
+					Confidential: &api.ClientCredentials{
+						ID:     "horusec-backend",
+						Secret: "0548d0ba-0aea-4c76-b601-3d2dc5f30e6b",
+					}}}},
+		}}).ToConfiguration()
+
+		b, err := json.Marshal(cfg)
+		require.NoError(t, err)
+
+		assert.Equal(t, expected, string(b))
+	})
+
+	t.Run("SHOULD contain default values WHEN when no information is populated", func(t *testing.T) {
+		expected := "{\"horusec_enable_application_admin\":false,\"horusec_jwt_secret_key\":\"horusec-jwt\",\"horusec_auth_type\":\"horusec\",\"react_app_horusec_endpoint_api\":\"http://api.local/\",\"react_app_horusec_endpoint_analytic\":\"http://analytic.local/\",\"react_app_horusec_endpoint_account\":\"http://account.local/\",\"react_app_horusec_endpoint_auth\":\"http://auth.local/\",\"react_app_horusec_endpoint_manager\":\"http://manager.local/\",\"react_app_horusec_manager_path\":\"/horusec\"}"
+
+		cfg := ForCustomResource(&api.HorusecManager{}).ToConfiguration()
+		b, err := json.Marshal(cfg)
+		require.NoError(t, err)
+
+		assert.Equal(t, expected, string(b))
+	})
 }

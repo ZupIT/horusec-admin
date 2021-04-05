@@ -19,5 +19,6 @@ type Manager struct {
 	AnalyticEndpoint string `json:"react_app_horusec_endpoint_analytic"`
 	AccountEndpoint  string `json:"react_app_horusec_endpoint_account"`
 	AuthEndpoint     string `json:"react_app_horusec_endpoint_auth"`
+	ManagerEndpoint  string `json:"react_app_horusec_endpoint_manager"`
 	ManagerPath      string `json:"react_app_horusec_manager_path"`
 }

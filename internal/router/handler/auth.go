@@ -14,7 +14,11 @@
 
 package handler
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/ZupIT/horusec-admin/internal/tracing"
+)
 
 type Auth struct{}
 
@@ -23,5 +27,8 @@ func NewAuth() *Auth {
 }
 
 func (h *Auth) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	span, _ := tracing.StartSpanFromContext(r.Context(), "internal/router/handler.(*Auth).ServeHTTP")
+	defer span.Finish()
+
 	w.WriteHeader(http.StatusNoContent)
 }

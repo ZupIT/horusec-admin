@@ -47,10 +47,10 @@ coverage: ## Run converage with threshold
 
 lint: ## Run lint checks
     ifeq ($(wildcard $(GOCILINT)), $(GOCILINT))
-		$(GOCILINT) run -v --timeout=5m -c .golangci.yml ./...
+		$(GOCILINT) run --timeout=5m -c .golangci.yml ./...
     else
-		curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.25.0
-		$(GOCILINT) run -v --timeout=5m -c .golangci.yml ./...
+		curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.39.0
+		$(GOCILINT) run --timeout=5m -c .golangci.yml ./...
     endif
 
 # go-get-tool will 'go get' any package $2 and install it to $1.
