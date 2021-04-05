@@ -21,6 +21,8 @@ import (
 	"github.com/ZupIT/horusec-admin/pkg/core"
 )
 
+const defaultAuthType = "horusec"
+
 func (c *Configuration) GetKeycloak() *core.Keycloak {
 	if c.Auth != nil && c.Auth.Keycloak != nil {
 		return c.Auth.Keycloak
@@ -101,7 +103,7 @@ func (c *Configuration) GetManagerURL() (*url.URL, error) {
 }
 
 func (c *Configuration) GetAuthType() string {
-	if c.Auth == nil || c.Auth.Type == "horusec" {
+	if c.Auth == nil || c.Auth.Type == defaultAuthType {
 		return ""
 	}
 

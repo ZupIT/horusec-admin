@@ -16,6 +16,9 @@ package adapter
 
 import "github.com/ZupIT/horusec-admin/pkg/core"
 
+// nolint:gosec // its not a hardcoded credential
+const defaultSecretName = "horusec-jwt"
+
 func (cr *CustomResource) toGeneral() *core.General {
 	admin := cr.toAdmin()
 
@@ -24,7 +27,7 @@ func (cr *CustomResource) toGeneral() *core.General {
 		enabled = cr.Spec.Global.EnableAdmin
 	}
 
-	secret := "horusec-jwt"
+	secret := defaultSecretName
 	if jwt := cr.GetJWT(); jwt != nil {
 		secret = cr.Spec.Global.JWT.SecretName
 	}

@@ -16,6 +16,7 @@ package adapter
 
 import api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
 
+// nolint:gocyclo // if all Global fields are empty then it should return nil
 func (c *Configuration) toGlobal() *api.Global {
 	jwt := c.toJWT()
 	broker := c.toBroker()
