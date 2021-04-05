@@ -53,6 +53,7 @@ func (c *Configuration) toDatabase() *api.Database {
 	return nil
 }
 
+//nolint:funlen,gocyclo // the complexity for this object conversion cannot be reduced
 func (c *Configuration) toKeycloak() *api.Keycloak {
 	var otp bool
 	var publicURL, internalURL, realm string
@@ -79,6 +80,7 @@ func (c *Configuration) toKeycloak() *api.Keycloak {
 	return nil
 }
 
+//nolint:funlen,gocyclo // these linters are not feasible for objects adapters
 func (c *Configuration) toClients() *api.Clients {
 	var confidential, public *api.ClientCredentials
 
@@ -99,6 +101,7 @@ func (c *Configuration) toClients() *api.Clients {
 	return nil
 }
 
+//nolint:funlen,gocyclo // these linters are not feasible for objects adapters
 func (c *Configuration) toComponents() (*api.Components, error) {
 	account, err := c.toAccount()
 	if err != nil {
@@ -171,6 +174,7 @@ func (c *Configuration) toAPI() (*api.API, error) {
 	return nil, nil
 }
 
+//nolint:funlen // breaking the method 'toAuth' is infeasible
 func (c *Configuration) toAuth() (*api.Auth, error) {
 	u, err := c.GetAuthURL()
 	if err != nil {

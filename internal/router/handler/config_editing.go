@@ -34,6 +34,7 @@ func NewConfigEditing(render *renderer.Render, writer core.ConfigurationWriter) 
 	return &ConfigEditing{render: render, writer: writer}
 }
 
+//nolint:funlen // breaking the method 'ServeHTTP' is infeasible
 func (h *ConfigEditing) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	span, ctx := tracing.StartSpanFromContext(r.Context(), "internal/router/handler.(*ConfigEditing).ServeHTTP")
 	defer span.Finish()

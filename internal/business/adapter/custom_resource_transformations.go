@@ -64,6 +64,7 @@ func (cr *CustomResource) toLDAP() *core.LDAP {
 	return nil
 }
 
+//nolint:funlen,gocyclo // these linters are not feasible for objects adapters
 func (cr *CustomResource) toKeycloak() *core.Keycloak {
 	var basePath, clientID, clientSecret, realm string
 	var otp bool
@@ -94,6 +95,7 @@ func (cr *CustomResource) toKeycloak() *core.Keycloak {
 	return nil
 }
 
+//nolint:funlen,gocyclo // these linters are not feasible for objects adapters
 func (cr *CustomResource) toKeycloakReactApp() *core.KeycloakReactApp {
 	var clientID, realm, basePath string
 
@@ -114,6 +116,7 @@ func (cr *CustomResource) toKeycloakReactApp() *core.KeycloakReactApp {
 	return nil
 }
 
+//nolint:funlen,gocyclo // these linters are not feasible for objects adapters
 func (cr *CustomResource) toManager() *core.Manager {
 	apiEndpoint := defaultAPIEndpoint
 	analyticEndpoint := defaultAnalyticEndpoint
