@@ -70,7 +70,7 @@ window.onload = () => {
 function submitGeneralForm(e) {
     try {
         const horusec_jwt_secret_key = document.getElementById('horusec_jwt_secret_key').value
-        const horusec_enable_application_admin = document.getElementById('horusec_enable_application_admin').value
+        const horusec_enable_application_admin = toBoolean(document.getElementById('horusec_enable_application_admin').value)
         const horusec_application_admin_data = JSON.stringify({
             username: document.getElementById('admin_data_username').value,
             email: document.getElementById('admin_data_email').value,
