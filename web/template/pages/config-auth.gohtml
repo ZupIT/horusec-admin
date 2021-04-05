@@ -237,7 +237,7 @@ function submitAuthForm() {
             const horusec_keycloak_client_id = document.getElementById('horusec_keycloak_client_id').value
             const horusec_keycloak_client_secret = document.getElementById('horusec_keycloak_client_secret').value
             const horusec_keycloak_realm = document.getElementById('horusec_keycloak_realm').value
-            const horusec_keycloak_otp = document.getElementById('horusec_keycloak_otp').value
+            const horusec_keycloak_otp = toBoolean(document.getElementById('horusec_keycloak_otp').value)
             const react_app_keycloak_client_id = document.getElementById('react_app_keycloak_client_id').value
             const react_app_keycloak_realm = document.getElementById('react_app_keycloak_realm').value
             const react_app_keycloak_base_path = document.getElementById('react_app_keycloak_base_path').value
@@ -245,9 +245,9 @@ function submitAuthForm() {
             const horusec_ldap_base = document.getElementById('horusec_ldap_base').value
             const horusec_ldap_host = document.getElementById('horusec_ldap_host').value
             const horusec_ldap_port = document.getElementById('horusec_ldap_port').value
-            const horusec_ldap_usessl = document.getElementById('horusec_ldap_usessl').value
-            const horusec_ldap_skip_tls = document.getElementById('horusec_ldap_skip_tls').value
-            const horusec_ldap_insecure_skip_verify = document.getElementById('horusec_ldap_insecure_skip_verify').value
+            const horusec_ldap_usessl = toBoolean(document.getElementById('horusec_ldap_usessl').value)
+            const horusec_ldap_skip_tls = toBoolean(document.getElementById('horusec_ldap_skip_tls').value)
+            const horusec_ldap_insecure_skip_verify = toBoolean(document.getElementById('horusec_ldap_insecure_skip_verify').value)
             const horusec_ldap_binddn = document.getElementById('horusec_ldap_binddn').value
             const horusec_ldap_bindpassword = document.getElementById('horusec_ldap_bindpassword').value
             const horusec_ldap_userfilter = document.getElementById('horusec_ldap_userfilter').value
