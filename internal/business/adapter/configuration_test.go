@@ -75,6 +75,7 @@ func TestConfiguration_ToCustomResource(t *testing.T) {
 	t.Run("SHOULD marshal to expected json WHEN keycloak configurations are populated", func(t *testing.T) {
 		expected := "{\"global\":{\"keycloak\":{\"publicURL\":\"http://keycloak.iam/auth\",\"internalURL\":\"http://keycloak.iam.svc.cluster.local/auth\",\"realm\":\"zup\",\"clients\":{\"public\":{\"id\":\"horusec-frontend\"},\"confidential\":{\"id\":\"horusec-backend\",\"secret\":\"0548d0ba-0aea-4c76-b601-3d2dc5f30e6b\"}}}},\"components\":{\"auth\":{\"type\":\"keycloak\"}}}"
 
+		otp := false
 		cfg := &core.Configuration{Auth: &core.Auth{
 			Type: "keycloak",
 			Keycloak: &core.Keycloak{
@@ -82,7 +83,7 @@ func TestConfiguration_ToCustomResource(t *testing.T) {
 				ClientID:     "horusec-backend",
 				ClientSecret: "0548d0ba-0aea-4c76-b601-3d2dc5f30e6b",
 				Realm:        "zup",
-				OTP:          false,
+				OTP:          &otp,
 				KeycloakReactApp: &core.KeycloakReactApp{
 					ClientID: "horusec-frontend",
 					Realm:    "zup",

@@ -49,12 +49,13 @@ func TestCustomResource_ToConfiguration(t *testing.T) {
 	t.Run("SHOULD marshal to expected json WHEN keycloak configurations are populated", func(t *testing.T) {
 		expected := "{\"horusec_enable_application_admin\":false,\"horusec_jwt_secret_key\":\"horusec-jwt\",\"horusec_auth_type\":\"keycloak\",\"horusec_keycloak_client_id\":\"horusec-backend\",\"horusec_keycloak_client_secret\":\"0548d0ba-0aea-4c76-b601-3d2dc5f30e6b\",\"horusec_keycloak_realm\":\"zup\",\"react_app_keycloak_client_id\":\"horusec-frontend\",\"react_app_keycloak_realm\":\"zup\",\"react_app_keycloak_base_path\":\"http://keycloak.iam/auth\",\"react_app_horusec_endpoint_api\":\"http://api.local/\",\"react_app_horusec_endpoint_analytic\":\"http://analytic.local/\",\"react_app_horusec_endpoint_account\":\"http://account.local/\",\"react_app_horusec_endpoint_auth\":\"http://auth.local/\",\"react_app_horusec_endpoint_manager\":\"http://manager.local/\",\"react_app_horusec_manager_path\":\"/horusec\"}"
 
+		otp := false
 		cfg := ForCustomResource(&api.HorusecManager{Spec: api.HorusecManagerSpec{
 			Components: &api.Components{Auth: &api.Auth{Type: "keycloak"}},
 			Global: &api.Global{Keycloak: &api.Keycloak{
 				PublicURL: "http://keycloak.iam/auth",
 				Realm:     "zup",
-				OTP:       false,
+				OTP:       &otp,
 				Clients: &api.Clients{
 					Public: &api.ClientCredentials{
 						ID: "horusec-frontend",
