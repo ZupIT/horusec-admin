@@ -66,7 +66,7 @@ type JWT struct {
 }
 
 type Broker struct {
-	Enabled    bool   `json:"enabled,omitempty"`
+	Enabled    *bool  `json:"enabled,omitempty"`
 	Host       string `json:"host,omitempty"`
 	Port       int    `json:"port,omitempty"`
 	SecretName string `json:"secretName,omitempty"`
@@ -76,8 +76,8 @@ type Database struct {
 	Host       string `json:"host,omitempty"`
 	Port       int    `json:"port,omitempty"`
 	Dialect    string `json:"dialect,omitempty"`
-	SslMode    bool   `json:"sslMode,omitempty"`
-	LogMode    bool   `json:"logMode,omitempty"`
+	SslMode    *bool  `json:"sslMode,omitempty"`
+	LogMode    *bool  `json:"logMode,omitempty"`
 	SecretName string `json:"secretName,omitempty"`
 }
 
@@ -85,7 +85,7 @@ type Keycloak struct {
 	PublicURL   string   `json:"publicURL,omitempty"`
 	InternalURL string   `json:"internalURL,omitempty"`
 	Realm       string   `json:"realm,omitempty"`
-	OTP         bool     `json:"otp,omitempty"`
+	OTP         *bool    `json:"otp,omitempty"`
 	Clients     *Clients `json:"clients,omitempty"`
 }
 
@@ -100,15 +100,22 @@ type ClientCredentials struct {
 }
 
 type Global struct {
-	EnableAdmin bool      `json:"enableAdmin,omitempty"`
-	JWT         *JWT      `json:"jwt,omitempty"`
-	Broker      *Broker   `json:"broker,omitempty"`
-	Database    *Database `json:"database,omitempty"`
-	Keycloak    *Keycloak `json:"keycloak,omitempty"`
+	Administrator *Administrator `json:"administrator,omitempty"`
+	JWT           *JWT           `json:"jwt,omitempty"`
+	Broker        *Broker        `json:"broker,omitempty"`
+	Database      *Database      `json:"database,omitempty"`
+	Keycloak      *Keycloak      `json:"keycloak,omitempty"`
+}
+
+type Administrator struct {
+	Enabled  *bool  `json:"enabled,omitempty"`
+	Username string `json:"username,omitempty"`
+	Email    string `json:"email,omitempty"`
+	Password string `json:"password,omitempty"`
 }
 
 type Ingress struct {
-	Enabled   bool     `json:"enabled,omitempty"`
+	Enabled   *bool    `json:"enabled,omitempty"`
 	Scheme    string   `json:"scheme,omitempty"`
 	Host      string   `json:"host,omitempty"`
 	Protocols []string `json:"protocols,omitempty"`
@@ -116,21 +123,21 @@ type Ingress struct {
 
 type Account struct {
 	Name    string   `json:"name,omitempty"`
-	Enabled bool     `json:"enabled,omitempty"`
+	Enabled *bool    `json:"enabled,omitempty"`
 	Port    *Port    `json:"port,omitempty"`
 	Ingress *Ingress `json:"ingress,omitempty"`
 }
 
 type Analytic struct {
 	Name    string   `json:"name,omitempty"`
-	Enabled bool     `json:"enabled,omitempty"`
+	Enabled *bool    `json:"enabled,omitempty"`
 	Port    *Port    `json:"port,omitempty"`
 	Ingress *Ingress `json:"ingress,omitempty"`
 }
 
 type API struct {
 	Name    string   `json:"name,omitempty"`
-	Enabled bool     `json:"enabled,omitempty"`
+	Enabled *bool    `json:"enabled,omitempty"`
 	Port    *Port    `json:"port,omitempty"`
 	Ingress *Ingress `json:"ingress,omitempty"`
 }
@@ -143,14 +150,14 @@ type Port struct {
 type Auth struct {
 	Name    string   `json:"name,omitempty"`
 	Type    string   `json:"type,omitempty"`
-	Enabled bool     `json:"enabled,omitempty"`
+	Enabled *bool    `json:"enabled,omitempty"`
 	Port    *Port    `json:"port,omitempty"`
 	Ingress *Ingress `json:"ingress,omitempty"`
 }
 
 type Manager struct {
 	Name    string   `json:"name,omitempty"`
-	Enabled bool     `json:"enabled,omitempty"`
+	Enabled *bool    `json:"enabled,omitempty"`
 	Port    *Port    `json:"port,omitempty"`
 	Ingress *Ingress `json:"ingress,omitempty"`
 }

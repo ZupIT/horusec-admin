@@ -27,24 +27,33 @@ const (
 )
 
 func (cr *CustomResource) toGeneral() *core.General {
-	admin := cr.toAdmin()
-
-	var enabled bool
-	if cr.Spec.Global != nil {
-		enabled = cr.Spec.Global.EnableAdmin
+	g := &core.General{
+		EnableApplicationAdmin: cr.IsAdministratorEnabled(),
+		ApplicationAdminData:   cr.toAdmin(),
+		JwtSecretKey:           defaultSecretName,
 	}
 
-	secret := defaultSecretName
 	if jwt := cr.GetJWT(); jwt != nil {
-		secret = cr.Spec.Global.JWT.SecretName
+		g.JwtSecretKey = cr.Spec.Global.JWT.SecretName
 	}
 
-	return &core.General{EnableApplicationAdmin: enabled, JwtSecretKey: secret, ApplicationAdminData: admin}
+	return g
 }
 
 func (cr *CustomResource) toAdmin() *core.Admin {
-	// TODO: implement Admin integration
-	return nil
+	adm := new(core.Admin)
+
+	if cr.Spec.Global != nil && cr.Spec.Global.Administrator != nil {
+		adm.Username = cr.Spec.Global.Administrator.Username
+		adm.Email = cr.Spec.Global.Administrator.Email
+		adm.Password = cr.Spec.Global.Administrator.Password
+	}
+
+	if (core.Admin{}) == *adm {
+		return nil
+	}
+
+	return adm
 }
 
 func (cr *CustomResource) toAuth() *core.Auth {

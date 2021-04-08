@@ -18,11 +18,11 @@ import api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
 
 func (c *Configuration) toGlobal() *api.Global {
 	g := &api.Global{
-		EnableAdmin: c.IsAdminEnabled(),
-		JWT:         c.toJWT(),
-		Broker:      c.toBroker(),
-		Database:    c.toDatabase(),
-		Keycloak:    c.toKeycloak(),
+		Administrator: c.toAdministrator(),
+		JWT:           c.toJWT(),
+		Broker:        c.toBroker(),
+		Database:      c.toDatabase(),
+		Keycloak:      c.toKeycloak(),
 	}
 
 	if (api.Global{}) == *g {
@@ -30,6 +30,19 @@ func (c *Configuration) toGlobal() *api.Global {
 	}
 
 	return g
+}
+
+func (c *Configuration) toAdministrator() *api.Administrator {
+	if c.General != nil && c.General.ApplicationAdminData != nil && *c.General.EnableApplicationAdmin {
+		return &api.Administrator{
+			Enabled:  c.General.EnableApplicationAdmin,
+			Username: c.General.ApplicationAdminData.Username,
+			Email:    c.General.ApplicationAdminData.Email,
+			Password: c.General.ApplicationAdminData.Password,
+		}
+	}
+
+	return nil
 }
 
 func (c *Configuration) toJWT() *api.JWT {
