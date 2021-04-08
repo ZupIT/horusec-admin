@@ -42,12 +42,14 @@ func (h *ConfigEditing) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Unmarshall request body
 	cfg := new(core.Configuration)
 	if err := json.NewDecoder(r.Body).Decode(cfg); err != nil {
+		span.SetError(err)
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	// Update configurations
 	if err := h.writer.CreateOrUpdate(ctx, cfg); err != nil {
+		span.SetError(err)
 		panic(err)
 	}
 
