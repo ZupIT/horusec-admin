@@ -126,11 +126,14 @@ func (s *ConfigService) create(ctx context.Context, r *api.HorusecManager) error
 func (s *ConfigService) updateIfNeeded(ctx context.Context, newest, older *api.HorusecManager) error {
 	log := logger.WithPrefix(ctx, "config_service")
 
-	newest.SetName(older.GetName())
-	newest.SetResourceVersion(older.GetResourceVersion())
-	if diff := s.comparator.Diff(older, newest); diff != "" {
+	merged, err := adapter.ForCustomResource(older).Merge(newest)
+	if err != nil {
+		return err
+	}
+
+	if diff := s.comparator.Diff(merged, older); diff != "" {
 		log.WithField("diff", diff).Debug("resource changed")
-		if err := s.update(ctx, newest); err != nil {
+		if err := s.update(ctx, merged); err != nil {
 			return err
 		}
 	} else {

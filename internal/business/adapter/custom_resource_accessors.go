@@ -20,13 +20,12 @@ import (
 	"github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
 )
 
-func (cr *CustomResource) IsAdministratorEnabled() *bool {
+func (cr *CustomResource) IsAdministratorEnabled() bool {
 	if cr.Spec.Global != nil && cr.Spec.Global.Administrator != nil {
 		return cr.Spec.Global.Administrator.Enabled
 	}
 
-	enabled := false
-	return &enabled
+	return false
 }
 
 func (cr *CustomResource) GetJWT() *v1alpha1.JWT {

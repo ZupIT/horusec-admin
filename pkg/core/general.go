@@ -15,7 +15,7 @@
 package core
 
 type General struct {
-	EnableApplicationAdmin *bool  `json:"horusec_enable_application_admin"`
+	EnableApplicationAdmin bool   `json:"horusec_enable_application_admin"`
 	JwtSecretKey           string `json:"horusec_jwt_secret_key,omitempty"`
 	ApplicationAdminData   *Admin `json:"horusec_application_admin_data,omitempty"`
 }

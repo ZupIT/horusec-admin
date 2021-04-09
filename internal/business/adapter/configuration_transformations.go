@@ -33,7 +33,7 @@ func (c *Configuration) toGlobal() *api.Global {
 }
 
 func (c *Configuration) toAdministrator() *api.Administrator {
-	if c.General != nil && c.General.ApplicationAdminData != nil && *c.General.EnableApplicationAdmin {
+	if c.General != nil && c.General.ApplicationAdminData != nil && c.General.EnableApplicationAdmin {
 		return &api.Administrator{
 			Enabled:  c.General.EnableApplicationAdmin,
 			Username: c.General.ApplicationAdminData.Username,
