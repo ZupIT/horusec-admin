@@ -15,8 +15,10 @@
 package adapter
 
 import (
+	"encoding/json"
 	api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
 	"github.com/ZupIT/horusec-admin/pkg/core"
+	jsonpatch "github.com/evanphx/json-patch"
 )
 
 type Configuration core.Configuration
@@ -32,4 +34,27 @@ func (c Configuration) ToCustomResource() (*api.HorusecManager, error) {
 	}
 
 	return &api.HorusecManager{Spec: api.HorusecManagerSpec{Global: c.toGlobal(), Components: components}}, nil
+}
+
+func (c *Configuration) MergePatch(patch []byte) (*Configuration, error) {
+	v1, err := json.Marshal(c)
+	if err != nil {
+		return nil, err
+	}
+
+	return mergeConfigurations(v1, patch)
+}
+
+func mergeConfigurations(v1, v2 []byte) (*Configuration, error) {
+	merged, err := jsonpatch.MergePatch(v1, v2)
+	if err != nil {
+		return nil, err
+	}
+
+	var result *Configuration
+	if err := json.Unmarshal(merged, &result); err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }
