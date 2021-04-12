@@ -62,7 +62,9 @@ func TestCustomResource_ToConfiguration(t *testing.T) {
 					Confidential: &api.ClientCredentials{
 						ID:     "horusec-backend",
 						Secret: "0548d0ba-0aea-4c76-b601-3d2dc5f30e6b",
-					}}}},
+					},
+				},
+			}},
 		}}).ToConfiguration()
 
 		b, err := json.Marshal(cfg)

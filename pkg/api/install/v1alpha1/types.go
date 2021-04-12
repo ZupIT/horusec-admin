@@ -76,7 +76,7 @@ type Database struct {
 	Host       string `json:"host,omitempty"`
 	Port       int    `json:"port,omitempty"`
 	Dialect    string `json:"dialect,omitempty"`
-	SslMode    bool   `json:"sslMode,omitempty"`
+	SSLMode    bool   `json:"sslMode,omitempty"`
 	LogMode    bool   `json:"logMode,omitempty"`
 	SecretName string `json:"secretName,omitempty"`
 }
@@ -100,11 +100,18 @@ type ClientCredentials struct {
 }
 
 type Global struct {
-	EnableAdmin bool      `json:"enableAdmin,omitempty"`
-	JWT         *JWT      `json:"jwt,omitempty"`
-	Broker      *Broker   `json:"broker,omitempty"`
-	Database    *Database `json:"database,omitempty"`
-	Keycloak    *Keycloak `json:"keycloak,omitempty"`
+	Administrator *Administrator `json:"administrator,omitempty"`
+	JWT           *JWT           `json:"jwt,omitempty"`
+	Broker        *Broker        `json:"broker,omitempty"`
+	Database      *Database      `json:"database,omitempty"`
+	Keycloak      *Keycloak      `json:"keycloak,omitempty"`
+}
+
+type Administrator struct {
+	Enabled  bool   `json:"enabled"`
+	Username string `json:"username,omitempty"`
+	Email    string `json:"email,omitempty"`
+	Password string `json:"password,omitempty"`
 }
 
 type Ingress struct {

@@ -15,7 +15,7 @@
 package handler
 
 import (
-	"encoding/json"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/ZupIT/horusec-admin/internal/tracing"
@@ -40,14 +40,16 @@ func (h *ConfigEditing) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	defer span.Finish()
 
 	// Unmarshall request body
-	cfg := new(core.Configuration)
-	if err := json.NewDecoder(r.Body).Decode(cfg); err != nil {
+	payload, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		span.SetError(err)
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	// Update configurations
-	if err := h.writer.CreateOrUpdate(ctx, cfg); err != nil {
+	if err := h.writer.CreateOrUpdate(ctx, payload); err != nil {
+		span.SetError(err)
 		panic(err)
 	}
 

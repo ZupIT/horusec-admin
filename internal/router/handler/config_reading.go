@@ -39,11 +39,13 @@ func (h *ConfigReading) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	cfg, err := h.reader.GetConfig(ctx)
 	if err != nil {
+		span.SetError(err)
 		panic(err)
 	}
 
 	// Answer
 	if err = h.render.JSON(w, http.StatusOK, cfg); err != nil {
+		span.SetError(err)
 		panic(err)
 	}
 }

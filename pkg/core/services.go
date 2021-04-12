@@ -18,7 +18,7 @@ import "context"
 
 type (
 	ConfigurationWriter interface {
-		CreateOrUpdate(context.Context, *Configuration) error
+		CreateOrUpdate(context.Context, []byte) error
 	}
 	ConfigurationReader interface {
 		GetConfig(context.Context) (*Configuration, error)

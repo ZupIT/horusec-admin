@@ -16,8 +16,9 @@ package adapter
 
 import (
 	"fmt"
-	api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
 	"net/url"
+
+	api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
 
 	"github.com/ZupIT/horusec-admin/pkg/core"
 )
@@ -123,12 +124,4 @@ func (c *Configuration) GetAuthType() string {
 	}
 
 	return c.Auth.Type
-}
-
-func (c *Configuration) IsAdminEnabled() bool {
-	if c.General != nil {
-		return c.General.EnableApplicationAdmin
-	}
-
-	return false
 }
