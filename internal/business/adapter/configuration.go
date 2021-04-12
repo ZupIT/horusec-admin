@@ -27,6 +27,14 @@ func ForConfiguration(configuration *core.Configuration) *Configuration {
 	return (*Configuration)(configuration)
 }
 
+func ForConfigurationRaw(raw []byte) (*Configuration, error) {
+	var c *Configuration
+	if err := json.Unmarshal(raw, &c); err != nil {
+		return nil, err
+	}
+	return c, nil
+}
+
 func (c Configuration) ToCustomResource() (*api.HorusecManager, error) {
 	components, err := c.toComponents()
 	if err != nil {
