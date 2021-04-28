@@ -1,6 +1,7 @@
 APP_NAME=horusec-admin
 DOCKER_REPO=docker.io/horuszup
-VERSION=latest
+VERSION=1.0.0
+ENVIRONMENT=production
 IMG ?= $(DOCKER_REPO)/$(APP_NAME):$(VERSION)
 GO ?= go
 GOFMT ?= gofmt
@@ -32,11 +33,11 @@ publish: ## Publish the container to Docker Hub
 	docker push $(IMG)
 
 deploy: kustomize ## Deploy horusec-admin in the configured Kubernetes cluster in ~/.kube/config
-	cd $(PROJECT_DIR)/deployments/k8s/overlays/staging; $(KUSTOMIZE) edit set image $(IMG)
-	$(KUSTOMIZE) build deployments/k8s/overlays/staging | kubectl apply -f -
+	cd $(PROJECT_DIR)/deployments/k8s/overlays/$(ENVIRONMENT); $(KUSTOMIZE) edit set image $(IMG)
+	$(KUSTOMIZE) build deployments/k8s/overlays/$(ENVIRONMENT) | kubectl apply -f -
 
 undeploy: ## UnDeploy horusec-admin from the configured Kubernetes cluster in ~/.kube/config
-	$(KUSTOMIZE) build deployments/k8s/overlays/staging | kubectl delete -f -
+	$(KUSTOMIZE) build deployments/k8s/overlays/$(ENVIRONMENT) | kubectl delete -f -
 
 fmt: ## Format all Go files
 	$(GOFMT) -w $(GOFMT_FILES)
