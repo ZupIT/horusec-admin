@@ -1,6 +1,6 @@
 APP_NAME=horusec-admin
 DOCKER_REPO=docker.io/horuszup
-VERSION=1.0.0
+VERSION=1.1.0-SNAPSHOT
 ENVIRONMENT=production
 IMG ?= $(DOCKER_REPO)/$(APP_NAME):$(VERSION)
 GO ?= go
