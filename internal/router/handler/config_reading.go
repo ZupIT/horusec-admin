@@ -17,8 +17,8 @@ package handler
 import (
 	"net/http"
 
+	"github.com/ZupIT/horusec-admin/internal/tracing"
 	"github.com/ZupIT/horusec-admin/pkg/core"
-
 	"github.com/thedevsaddam/renderer"
 )
 
@@ -34,13 +34,18 @@ func NewConfigReading(render *renderer.Render, reader core.ConfigurationReader) 
 }
 
 func (h *ConfigReading) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	cfg, err := h.reader.GetConfig(r.Context())
+	span, ctx := tracing.StartSpanFromContext(r.Context(), "internal/router/handler.(*ConfigReading).ServeHTTP")
+	defer span.Finish()
+
+	cfg, err := h.reader.GetConfig(ctx)
 	if err != nil {
+		span.SetError(err)
 		panic(err)
 	}
 
 	// Answer
 	if err = h.render.JSON(w, http.StatusOK, cfg); err != nil {
+		span.SetError(err)
 		panic(err)
 	}
 }

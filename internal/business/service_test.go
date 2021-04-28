@@ -20,22 +20,34 @@ import (
 
 	"github.com/ZupIT/horusec-admin/internal/kubernetes"
 
-	"github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
-	"github.com/ZupIT/horusec-admin/pkg/core"
+	api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
 	"github.com/ZupIT/horusec-admin/test/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+var defaultHorusecManager = api.HorusecManager{
+	Spec: api.HorusecManagerSpec{
+		Global: &api.Global{JWT: &api.JWT{SecretName: "horusec-jwt"}},
+		Components: &api.Components{
+			Account:  &api.Account{Ingress: &api.Ingress{Scheme: "http", Host: "account.local"}},
+			Analytic: &api.Analytic{Ingress: &api.Ingress{Scheme: "http", Host: "analytic.local"}},
+			API:      &api.API{Ingress: &api.Ingress{Scheme: "http", Host: "api.local"}},
+			Auth:     &api.Auth{Ingress: &api.Ingress{Scheme: "http", Host: "auth.local"}},
+			Manager:  &api.Manager{Ingress: &api.Ingress{Scheme: "http", Host: "manager.local"}},
+		},
+	},
+}
+
 func TestConfigService_CreateOrUpdate_When_HorusecManagerExistsButHasNoChanges_Expect_NoCall(t *testing.T) {
 	// expected behavior
 	svc, client := setup()
-	singleResult := &v1alpha1.HorusecManagerList{Items: []v1alpha1.HorusecManager{{}}}
+	singleResult := &api.HorusecManagerList{Items: []api.HorusecManager{defaultHorusecManager}}
 	client.On("List", mock.Anything, mock.Anything).Return(singleResult, nil).Once()
 
 	// state under test
-	_ = svc.CreateOrUpdate(context.TODO(), new(core.Configuration))
+	_ = svc.CreateOrUpdate(context.TODO(), []byte(`{}`))
 
 	// assertions
 	client.AssertNotCalled(t, "Update", mock.Anything, mock.Anything, mock.Anything)
@@ -45,12 +57,12 @@ func TestConfigService_CreateOrUpdate_When_HorusecManagerExistsButHasNoChanges_E
 func TestConfigService_CreateOrUpdate_When_HorusecManagerNotExists_Expect_CreateCall(t *testing.T) {
 	// expected behavior
 	svc, client := setup()
-	emptyList := new(v1alpha1.HorusecManagerList)
+	emptyList := new(api.HorusecManagerList)
 	client.On("List", mock.Anything, mock.Anything).Return(emptyList, nil).Once()
 	client.On("Create", mock.Anything, mock.Anything, mock.Anything).Return(nil, nil).Once()
 
 	// state under test
-	_ = svc.CreateOrUpdate(context.TODO(), new(core.Configuration))
+	_ = svc.CreateOrUpdate(context.TODO(), []byte(`{}`))
 
 	// assertions
 	client.AssertCalled(t, "Create", mock.Anything, mock.AnythingOfType("*v1alpha1.HorusecManager"), mock.Anything)
@@ -60,14 +72,14 @@ func TestConfigService_CreateOrUpdate_When_HorusecManagerNotExists_Expect_Create
 func TestConfigService_CreateOrUpdate_When_HorusecManagerExists_Expect_UpdateCall(t *testing.T) {
 	// expected behavior
 	svc, client := setup()
-	singleResult := &v1alpha1.HorusecManagerList{Items: []v1alpha1.HorusecManager{{
-		Spec: v1alpha1.HorusecManagerSpec{Global: &v1alpha1.Global{EnableAdmin: true}},
+	singleResult := &api.HorusecManagerList{Items: []api.HorusecManager{{Spec: api.HorusecManagerSpec{
+		Global: &api.Global{Administrator: &api.Administrator{Enabled: true}}},
 	}}}
 	client.On("List", mock.Anything, mock.Anything).Return(singleResult, nil).Once()
 	client.On("Update", mock.Anything, mock.Anything, mock.Anything).Return(nil, nil).Once()
 
 	// state under test
-	_ = svc.CreateOrUpdate(context.TODO(), new(core.Configuration))
+	_ = svc.CreateOrUpdate(context.TODO(), []byte(`{}`))
 
 	// assertions
 	client.AssertCalled(t, "Update", mock.Anything, mock.AnythingOfType("*v1alpha1.HorusecManager"), mock.Anything)
@@ -77,8 +89,8 @@ func TestConfigService_CreateOrUpdate_When_HorusecManagerExists_Expect_UpdateCal
 func TestConfigService_GetConfig_When_SingleResult_Expect_NoError(t *testing.T) {
 	// expected behavior
 	svc, client := setup()
-	singleResult := &v1alpha1.HorusecManagerList{Items: []v1alpha1.HorusecManager{{
-		Spec: v1alpha1.HorusecManagerSpec{Global: &v1alpha1.Global{EnableAdmin: true}},
+	singleResult := &api.HorusecManagerList{Items: []api.HorusecManager{{
+		Spec: api.HorusecManagerSpec{Global: &api.Global{Administrator: &api.Administrator{Enabled: true}}},
 	}}}
 	client.On("List", mock.Anything, mock.Anything).Return(singleResult, nil).Once()
 	client.On("Update", mock.Anything, mock.Anything, mock.Anything).Return(nil, nil).Once()
@@ -93,7 +105,7 @@ func TestConfigService_GetConfig_When_SingleResult_Expect_NoError(t *testing.T) 
 func TestConfigService_GetConfig_When_MultipleResults_Expect_Error(t *testing.T) {
 	// expected behavior
 	svc, client := setup()
-	multiResult := &v1alpha1.HorusecManagerList{Items: []v1alpha1.HorusecManager{
+	multiResult := &api.HorusecManagerList{Items: []api.HorusecManager{
 		{ObjectMeta: v1.ObjectMeta{Name: "created-by-the-operator"}},
 		{ObjectMeta: v1.ObjectMeta{Name: "created-manually"}},
 	}}

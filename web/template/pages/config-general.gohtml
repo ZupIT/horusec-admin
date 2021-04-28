@@ -70,12 +70,12 @@ window.onload = () => {
 function submitGeneralForm(e) {
     try {
         const horusec_jwt_secret_key = document.getElementById('horusec_jwt_secret_key').value
-        const horusec_enable_application_admin = document.getElementById('horusec_enable_application_admin').value
-        const horusec_application_admin_data = JSON.stringify({
+        const horusec_enable_application_admin = toBoolean(document.getElementById('horusec_enable_application_admin').value)
+        const horusec_application_admin_data = {
             username: document.getElementById('admin_data_username').value,
             email: document.getElementById('admin_data_email').value,
             password: document.getElementById('admin_data_password').value
-        })
+        }
 
         const xhr = new XMLHttpRequest();
         xhr.open('PATCH', '/api/config', true);
@@ -87,6 +87,8 @@ function submitGeneralForm(e) {
         xhr.onreadystatechange = function (ev) {
             if (ev.currentTarget.status === 204) {
                 showSnackBar('success')
+            } else if (ev.currentTarget.status === 401) {
+                window.location.href = '/view/not-authorized'
             } else {
                 showSnackBar('error')
             }

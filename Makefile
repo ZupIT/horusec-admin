@@ -1,6 +1,7 @@
 APP_NAME=horusec-admin
 DOCKER_REPO=docker.io/horuszup
-VERSION=latest
+VERSION=1.0.0
+ENVIRONMENT=production
 IMG ?= $(DOCKER_REPO)/$(APP_NAME):$(VERSION)
 GO ?= go
 GOFMT ?= gofmt
@@ -32,11 +33,11 @@ publish: ## Publish the container to Docker Hub
 	docker push $(IMG)
 
 deploy: kustomize ## Deploy horusec-admin in the configured Kubernetes cluster in ~/.kube/config
-	cd $(PROJECT_DIR)/deployments/k8s/overlays/staging; $(KUSTOMIZE) edit set image $(IMG)
-	$(KUSTOMIZE) build deployments/k8s/overlays/staging | kubectl apply -f -
+	cd $(PROJECT_DIR)/deployments/k8s/overlays/$(ENVIRONMENT); $(KUSTOMIZE) edit set image $(IMG)
+	$(KUSTOMIZE) build deployments/k8s/overlays/$(ENVIRONMENT) | kubectl apply -f -
 
 undeploy: ## UnDeploy horusec-admin from the configured Kubernetes cluster in ~/.kube/config
-	$(KUSTOMIZE) build deployments/k8s/overlays/staging | kubectl delete -f -
+	$(KUSTOMIZE) build deployments/k8s/overlays/$(ENVIRONMENT) | kubectl delete -f -
 
 fmt: ## Format all Go files
 	$(GOFMT) -w $(GOFMT_FILES)
@@ -47,10 +48,10 @@ coverage: ## Run converage with threshold
 
 lint: ## Run lint checks
     ifeq ($(wildcard $(GOCILINT)), $(GOCILINT))
-		$(GOCILINT) run -v --timeout=5m -c .golangci.yml ./...
+		$(GOCILINT) run --timeout=5m -c .golangci.yml ./...
     else
-		curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.25.0
-		$(GOCILINT) run -v --timeout=5m -c .golangci.yml ./...
+		curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.39.0
+		$(GOCILINT) run --timeout=5m -c .golangci.yml ./...
     endif
 
 # go-get-tool will 'go get' any package $2 and install it to $1.

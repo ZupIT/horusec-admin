@@ -18,7 +18,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-
 	"github.com/ZupIT/horusec-admin/internal/business/adapter"
 	"github.com/ZupIT/horusec-admin/internal/kubernetes"
 	"github.com/ZupIT/horusec-admin/internal/logger"
@@ -45,25 +44,53 @@ func (s *ConfigService) GetConfig(ctx context.Context) (*core.Configuration, err
 	}
 
 	if cr == nil {
-		return new(core.Configuration), nil
+		cr = &api.HorusecManager{}
 	}
 
-	cfg := adapter.NewConfiguration(cr)
-	return (*core.Configuration)(cfg), nil
+	cfg := adapter.ForCustomResource(cr).ToConfiguration()
+	return cfg, nil
 }
 
-func (s *ConfigService) CreateOrUpdate(ctx context.Context, cfg *core.Configuration) error {
-	r, err := (*adapter.Configuration)(cfg).CR()
+func (s *ConfigService) CreateOrUpdate(ctx context.Context, raw []byte) error {
+	r, err := s.getOne(ctx)
 	if err != nil {
 		return err
 	}
 
-	err = s.apply(ctx, r)
+	if r == nil {
+		return s.create(ctx, raw)
+	}
+
+	return s.updatePartially(ctx, r, raw)
+}
+
+func (s *ConfigService) create(ctx context.Context, raw []byte) error {
+	cfg, err := adapter.ForConfigurationRaw(raw)
 	if err != nil {
 		return err
 	}
 
-	return nil
+	cr, err := cfg.ToCustomResource()
+	if err != nil {
+		return err
+	}
+
+	return s.createResource(ctx, cr)
+}
+
+func (s *ConfigService) updatePartially(ctx context.Context, older *api.HorusecManager, raw []byte) error {
+	cfg := adapter.ForCustomResource(older).ToConfiguration()
+	merged, err := adapter.ForConfiguration(cfg).MergePatch(raw)
+	if err != nil {
+		return err
+	}
+
+	newest, err := merged.ToCustomResource()
+	if err != nil {
+		return err
+	}
+
+	return s.updateResourceIfNeeded(ctx, older, newest)
 }
 
 func (s *ConfigService) getOne(ctx context.Context) (*api.HorusecManager, error) {
@@ -84,20 +111,6 @@ func (s *ConfigService) getOne(ctx context.Context) (*api.HorusecManager, error)
 	return &hm[0], nil
 }
 
-func (s *ConfigService) apply(ctx context.Context, r *api.HorusecManager) error {
-	o, err := s.getOne(ctx)
-	if err != nil {
-		return err
-	}
-
-	if o == nil {
-		r.SetName("horusec")
-		return s.create(ctx, r)
-	}
-
-	return s.updateIfNeeded(ctx, r, o)
-}
-
 func (s *ConfigService) list(ctx context.Context) ([]api.HorusecManager, error) {
 	span, ctx := tracing.StartSpanFromContext(ctx, "internal/business.(*ConfigService).list")
 	defer span.Finish()
@@ -110,10 +123,11 @@ func (s *ConfigService) list(ctx context.Context) ([]api.HorusecManager, error) 
 	return cfg.Items, nil
 }
 
-func (s *ConfigService) create(ctx context.Context, r *api.HorusecManager) error {
-	span, ctx := tracing.StartSpanFromContext(ctx, "internal/business.(*ConfigService).create")
+func (s *ConfigService) createResource(ctx context.Context, r *api.HorusecManager) error {
+	span, ctx := tracing.StartSpanFromContext(ctx, "internal/business.(*ConfigService).createResource")
 	defer span.Finish()
 
+	r.SetName("horusec")
 	_, err := s.client.Create(ctx, r, k8s.CreateOptions{})
 	if err != nil {
 		span.SetError(err)
@@ -124,14 +138,14 @@ func (s *ConfigService) create(ctx context.Context, r *api.HorusecManager) error
 	return nil
 }
 
-func (s *ConfigService) updateIfNeeded(ctx context.Context, newest, older *api.HorusecManager) error {
+func (s *ConfigService) updateResourceIfNeeded(ctx context.Context, older, newest *api.HorusecManager) error {
 	log := logger.WithPrefix(ctx, "config_service")
 
 	newest.SetName(older.GetName())
 	newest.SetResourceVersion(older.GetResourceVersion())
-	if diff := s.comparator.Diff(older, newest); diff != "" {
+	if diff := s.comparator.Diff(newest, older); diff != "" {
 		log.WithField("diff", diff).Debug("resource changed")
-		if err := s.update(ctx, newest); err != nil {
+		if err := s.updateResource(ctx, newest); err != nil {
 			return err
 		}
 	} else {
@@ -140,8 +154,8 @@ func (s *ConfigService) updateIfNeeded(ctx context.Context, newest, older *api.H
 	return nil
 }
 
-func (s *ConfigService) update(ctx context.Context, r *api.HorusecManager) error {
-	span, ctx := tracing.StartSpanFromContext(ctx, "internal/business.(*ConfigService).update")
+func (s *ConfigService) updateResource(ctx context.Context, r *api.HorusecManager) error {
+	span, ctx := tracing.StartSpanFromContext(ctx, "internal/business.(*ConfigService).updateResource")
 	defer span.Finish()
 
 	_, err := s.client.Update(ctx, r, k8s.UpdateOptions{})
