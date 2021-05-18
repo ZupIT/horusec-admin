@@ -1,0 +1,211 @@
+{{ define "config-resources" }}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{ template "head" }}
+    <link href="/styles/config-resources.css" rel="stylesheet" />
+</head>
+
+<body>
+    {{ template "snackbar" }}
+    {{ template "logo" }}
+
+    <section class="container">
+        <form onsubmit="event.preventDefault();submitGeneralForm()" id="form">
+            <h1>
+                <img src="/icons/resources.svg">
+                Resources
+            </h1>
+
+            <div class="form-group">
+                <h2>PostgreSQL</h2>
+
+                <div class="divider">
+                    <label class="key">Database dialect</label>
+
+                    <span class="description">The dialect configuration setting for your PostgreSQL.</span>
+
+                    <input id="database_dialect" placeholder="sql10" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key">Database host</label>
+
+                    <span class="description">Address for connect in your database.</span>
+
+                    <input id="database_host" placeholder="http://0.0.0.0" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key">Database log mode</label>
+
+                    <span class="description">Enable the verbose logs option.</span>
+
+                    <label class="switch">
+                        <input type="checkbox" id="database_log_mode" value="false" onchange="setCheckboxValue('database_log_mode')">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div class="divider">
+                    <label class="key">Database name</label>
+
+                    <span class="description">Name of your database</span>
+
+                    <input id="database_name" placeholder="horusec_db" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key">Database port</label>
+
+                    <span class="description">Port to connect in your database.</span>
+
+                    <input id="database_port" placeholder="5432" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key">Database secret name</label>
+
+                    <span class="description">A long and security name.</span>
+
+                    <input id="database_secret_name" placeholder="long and security" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key">Database SSL mode</label>
+
+                    <span class="description">Enable SSL mode for your database.</span>
+
+                    <label class="switch">
+                        <input type="checkbox" id="database_ssl_mode" value="false" onchange="setCheckboxValue('database_ssl_mode')">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <h2>RabbitMQ</h2>
+
+                <div class="borker-wrapper">
+                    <div class="divider row">
+                        <label class="key">Enabled</label>
+
+                        <span class="description">Enable broker messaging of Horusec.</span>
+
+                        <label class="switch">
+                            <input type="checkbox" id="broker_enabled" value="false" onchange="handleSetEnableBorker()">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+
+                    <div id="broker-fields">
+                        <div class="divider">
+                            <label class="key">Broker host</label>
+
+                            <span class="description">The host for connect in your broker.</span>
+
+                            <input id="broker_host" placeholder="http://0.0.0.0" type="text">
+                        </div>
+
+                        <div class="divider">
+                            <label class="key">Broker port</label>
+
+                            <span class="description">The port for connect in your broker.</span>
+
+                            <input id="broker_port" placeholder="5672" type="text">
+                        </div>
+
+                        <div class="divider">
+                            <label class="key">Broker secret name</label>
+
+                            <span class="description">A long and security name.</span>
+
+                            <input id="broker_secret_name" placeholder="long and security" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btns-wrapper">
+                <button type="submit">SAVE</button>
+
+                <button class="outline">
+                    <a href="/view/home">BACK</a>
+                </button>
+            </div>
+        </form>
+    </section>
+</body>
+
+<script type="text/javascript">
+window.onload = () => {
+    setCurrentValues()
+};
+
+function submitGeneralForm(e) {
+    try {
+        const database_dialect = document.getElementById('database_dialect').value
+        const database_host = document.getElementById('database_host').value
+        const database_log_mode = toBoolean(document.getElementById('database_log_mode').value)
+        const database_name = document.getElementById('database_name').value
+        const database_port = document.getElementById('database_port').value
+        const database_secret_name = document.getElementById('database_secret_name').value
+        const database_ssl_mode = toBoolean(document.getElementById('database_ssl_mode').value)
+
+        const broker_enabled = toBoolean(document.getElementById('broker_enabled').value)
+        const broker_host = document.getElementById('broker_host').value
+        const broker_port = document.getElementById('broker_port').value
+        const broker_secret_name = document.getElementById('broker_secret_name').value
+
+        const body = {
+            database_dialect,
+            database_host,
+            database_log_mode,
+            database_name,
+            database_port,
+            database_secret_name,
+            database_ssl_mode,
+            broker_enabled,
+            broker_host,
+            broker_port,
+            broker_secret_name,
+        }
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('PATCH', '/api/config', true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.setRequestHeader('X-Horusec-Authorization', getCookie('horusec::access_token'))
+
+        xhr.send(JSON.stringify(body))
+
+        xhr.onreadystatechange = function (ev) {
+            if (ev.currentTarget.status === 204) {
+                showSnackBar('success')
+            } else if (ev.currentTarget.status === 401) {
+                window.location.href = '/view/not-authorized'
+            } else {
+                showSnackBar('error')
+            }
+        }
+
+    } catch (error) {
+        showSnackBar('error')
+    }
+}
+function setCheckboxValue(id) {
+    const value = document.getElementById(id).value
+
+    if (value === 'true') {
+        document.getElementById(id).value = false
+    } else {
+        document.getElementById(id).value = true
+    }
+}
+function handleSetEnableBorker () {
+    let currentValue = document.getElementById('broker_enabled').value
+    const valueToSet = currentValue == 'true' ? 'false' : 'true'
+    setEnableBroker(valueToSet)
+}
+</script>
+
+</html>
+{{end}}
