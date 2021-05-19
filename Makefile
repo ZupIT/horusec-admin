@@ -26,6 +26,9 @@ build: ## Build the container
 run: ## Run container on port 8007
 	docker run -i -t --rm -p=8007:3000 --name="$(APP_NAME)" $(IMG)
 
+install:
+	cd deployments/horusec-terraform && make up
+
 stop: ## Stop and remove a running container
 	docker stop $(APP_NAME)
 
