@@ -97,3 +97,16 @@ function setEnableApplicationAdmin(value) {
 
     }
 }
+function setEnableBroker(value) {
+    document.getElementById('broker_enabled').value = value
+
+    document.getElementById('broker_host').required = value == 'true' ? true : false
+    document.getElementById('broker_port').required = value == 'true' ? true : false
+    document.getElementById('broker_secret_name').required = value == 'true' ? true : false
+
+    if (value === 'false') {
+        document.getElementById('broker-fields').style.display = 'none'
+    } else {
+        document.getElementById('broker-fields').style.display = 'flex'
+    }
+}

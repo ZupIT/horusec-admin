@@ -37,7 +37,7 @@ h1 img {
     background-color: var(--disabled);
     border-radius: 5px;
     width: 600px;
-    margin-top: 20px;
+    margin: 10px 0;
 }
 
 .divider label.key {
