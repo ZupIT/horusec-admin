@@ -76,19 +76,20 @@ window.onload = () => {
 };
 
 function submitGeneralForm(e) {
-    const horusec_jwt_secret_key = document.getElementById('horusec_jwt_secret_key').value
-    const horusec_enable_application_admin = toBoolean(document.getElementById('horusec_enable_application_admin').value)
-    const horusec_application_admin_data = {
-        username: document.getElementById('admin_data_username').value,
-        email: document.getElementById('admin_data_email').value,
-        password: document.getElementById('admin_data_password').value
-    }
+    const inputs = document.querySelectorAll('input')
 
-    sendRequest({
-        horusec_jwt_secret_key,
-        horusec_enable_application_admin,
-        horusec_application_admin_data
+    let body = {}
+
+    inputs.forEach(item => {
+        const value = item.type === 'checkbox' ? toBoolean(item.value) : item.value
+
+        body = {
+            ...body,
+            [item.id]: value
+        }
     })
+
+    sendRequest(body)
 }
 function handleSwitchEnableApp() {
     let currentValue = document.getElementById('horusec_enable_application_admin').value
