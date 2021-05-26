@@ -1,0 +1,115 @@
+{{ define "config-hosts" }}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{ template "head" }}
+    <link href="/styles/config-general.css" rel="stylesheet" />
+</head>
+
+<body>
+    {{ template "snackbar" }}
+    <div class="logo-container">
+        <img class="head-logo" src="/images/logo.svg" alt="Horusec Logo">
+
+        <h1>
+            <img src="/icons/globe.svg">
+            Hosts
+        </h1>
+    </div>
+
+    <section class="container">
+        <form onsubmit="event.preventDefault();submitManagerForm()">
+            <div class="form-container-row">
+                <div class="divider">
+                    <label class="key" for="api_url">API Service</label>
+
+                    <span class="description">URL for the API service.</span>
+
+                    <input id="api_url" placeholder="http://127.0.0.1:8000" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key" for="analytic_url">Analytic Service</label>
+
+                    <span class="description">URL for the Analytic service.</span>
+
+                    <input id="analytic_url" placeholder="http://127.0.0.1:8005" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key" for="core_service">Core Service</label>
+
+                    <span class="description">URL for the Core service.</span>
+
+                    <input id="core_service" placeholder="http://127.0.0.1:8003" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key" for="auth_url">Auth Service</label>
+
+                    <span class="description">URL for the Auth service.</span>
+
+                    <input id="auth_url" placeholder="http://127.0.0.1:8006" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key" for="vulnerability_url">Vulnerability Service</label>
+
+                    <span class="description">URL for the Vulnerability service.</span>
+
+                    <input id="vulnerability_url" placeholder="http://127.0.0.1:8001" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key" for="webhook_url">Webhook Service</label>
+
+                    <span class="description">URL for the Webhook service.</span>
+
+                    <input id="webhook_url" placeholder="http://127.0.0.1:8004" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key" for="manager_url">Manager Dashboard</label>
+
+                    <span class="description">URL for the Manager.</span>
+
+                    <input id="manager_url" placeholder="http://127.0.0.1:8080" type="text">
+                </div>
+            </div>
+
+            <div class="btns-wrapper">
+                <button type="submit">SAVE</button>
+
+                <button class="outline">
+                    <a href="/view/home">BACK</a>
+                </button>
+            </div>
+        </form>
+    </section>
+</body>
+
+<script type="text/javascript">
+window.onload = () => {
+    setCurrentValues()
+};
+function submitManagerForm(e) {
+    const inputs = document.querySelectorAll('input')
+
+    let body = {}
+
+    inputs.forEach(item => {
+        const value = item.type === 'checkbox' ? toBoolean(item.value) : item.value
+
+        body = {
+            ...body,
+            [item.id]: value
+        }
+    })
+
+    sendRequest(body)
+}
+</script>
+
+</html>
+{{end}}
