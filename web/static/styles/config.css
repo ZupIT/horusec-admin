@@ -80,6 +80,17 @@ div.form-container-row {
   margin-top: 10px;
 }
 
+h3 {
+  color: var(--textSecundary);
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+h3 a {
+  color: var(--primary);
+}
+
 .divider span.description a {
   color: var(--primary);
 }
