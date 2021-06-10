@@ -16,6 +16,14 @@
 
  @import './config.css';
 
+.form-container-row {
+    justify-content: space-between !important;
+}
+
+.divider {
+    min-height: 120px !important;
+}
+
 h2 {
     font-size: 1.2em;
     color: var( --text);
@@ -26,11 +34,13 @@ h2 {
 }
 
 .row {
-    width: 95% !important;
+    width: 100% !important;
 }
 
-#broker-fields {
+#smtp-fields {
     display: flex;
+    flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-around;
+    width: 90%;
 }

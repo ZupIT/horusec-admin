@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-function setCurrentValues() {
+ function setCurrentValues() {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', '/api/config', true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -44,12 +44,12 @@ function setCurrentValues() {
                         setAuthType(item[1], true)
                     }
 
-                    if (item[0] === 'horusec_enable_application_admin') {
-                        setEnableApplicationAdmin(item[1])
-                    }
-
                     if (item[0] === 'horusec_application_admin_data') {
                         setDataOfAdminApplication(item[1])
+                    }
+
+                    if (item[0] === 'disable_emails') {
+                        setDisableEmail(item[1])
                     }
                 }
             });
@@ -97,16 +97,18 @@ function setEnableApplicationAdmin(value) {
 
     }
 }
-function setEnableBroker(value) {
-    document.getElementById('broker_enabled').value = value
+function setDisableEmail(value) {
+    document.getElementById('disable_emails').value = value
 
-    document.getElementById('broker_host').required = value == 'true' ? true : false
-    document.getElementById('broker_port').required = value == 'true' ? true : false
-    document.getElementById('broker_secret_name').required = value == 'true' ? true : false
+    document.getElementById('smtp_username').required = value == 'true' ? false : true
+    document.getElementById('smtp_password').required = value == 'true' ? false : true
+    document.getElementById('smtp_host').required = value == 'true' ? false : true
+    document.getElementById('smtp_port').required = value == 'true' ? false : true
+    document.getElementById('email_from').required = value == 'true' ? false : true
 
     if (value === 'false') {
-        document.getElementById('broker-fields').style.display = 'none'
+        document.getElementById('smtp-fields').style.display = 'flex'
     } else {
-        document.getElementById('broker-fields').style.display = 'flex'
+        document.getElementById('smtp-fields').style.display = 'none'
     }
 }
