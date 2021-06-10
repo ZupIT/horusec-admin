@@ -16,7 +16,7 @@
         <div class="auth-wrapper">
             <h3>Your access token will be displayed in the <span>horusec-admin</span> service logs.</h3>
 
-            <form onsubmit="event.preventDefault();sendAccessToken()">
+            <form class="form-auth" onsubmit="event.preventDefault();sendAccessToken()">
                 <input type="text" id="accessToken" placeholder="Access Token" onkeyup="verifyValue()">
 
                 <button disabled id="submit" type="submit">SUBMIT</button>

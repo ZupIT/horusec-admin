@@ -36,7 +36,7 @@ func NewSet(defaultRender *handler.DefaultRender) Set {
 		{Pattern: "/", Handler: defaultRender.HandlerFunc("index")},
 		{Pattern: "/config-auth", Handler: defaultRender.HandlerFunc("config-auth")},
 		{Pattern: "/config-general", Handler: defaultRender.HandlerFunc("config-general")},
-		{Pattern: "/config-manager", Handler: defaultRender.HandlerFunc("config-manager")},
+		{Pattern: "/config-hosts", Handler: defaultRender.HandlerFunc("config-hosts")},
 		{Pattern: "/config-resources", Handler: defaultRender.HandlerFunc("config-resources")},
 		{Pattern: "/status", Handler: defaultRender.HandlerFunc("status")},
 		{Pattern: "/home", Handler: defaultRender.HandlerFunc("home")},

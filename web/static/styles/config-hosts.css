@@ -14,4 +14,13 @@
  * limitations under the License.
  */
 
-@import './config.css';
+@import "./config.css";
+
+
+
+h3 {
+    position: absolute;
+    top: 0;
+    left: 45px;
+    width: auto;
+}
