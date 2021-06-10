@@ -16,6 +16,28 @@
 
 @import "./main.css";
 
+div.logo-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+button.status {
+  background: none;
+  border-radius: 50%;
+  width: auto;
+  margin-right: 30px;
+}
+
+button.status a span {
+  font-size: 20px;
+  margin-left: 10px;
+}
+
+button.status a img {
+  padding: 5px;
+  border-radius: 50%;
+}
+
 img.illustration {
   display: block;
   max-width: 800px;
