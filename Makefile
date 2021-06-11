@@ -7,6 +7,7 @@ GO ?= go
 GOFMT ?= gofmt
 GOFMT_FILES?=$$(find . -name '*.go' | grep -v vendor)
 GOCILINT ?= ./bin/golangci-lint
+CONTROLLER_GEN ?= $(shell pwd)/bin/controller-gen
 KUSTOMIZE = $(shell pwd)/bin/kustomize
 PROJECT_DIR := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
 
@@ -19,6 +20,12 @@ help: ## This help.
 
 kustomize: ## Download kustomize locally if necessary
 	$(call go-get-tool,$(KUSTOMIZE),sigs.k8s.io/kustomize/kustomize/v3@v3.8.7)
+
+controller-gen:
+	$(call go-get-tool,$(CONTROLLER_GEN),sigs.k8s.io/controller-tools/cmd/controller-gen@v0.4.1)
+
+generate: controller-gen
+	$(CONTROLLER_GEN) object:headerFile="hack/boilerplate.go.txt" paths="./..."
 
 build: ## Build the container
 	docker build -t $(IMG) . -f ./deployments/Dockerfile
