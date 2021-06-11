@@ -36,17 +36,17 @@ type FakeHorusecManagers struct {
 
 var horusecmanagersResource = schema.GroupVersionResource{Group: "install.horusec.io", Version: "v1alpha1", Resource: "horusecmanagers"}
 
-var horusecmanagersKind = schema.GroupVersionKind{Group: "install.horusec.io", Version: "v1alpha1", Kind: "HorusecManager"}
+var horusecmanagersKind = schema.GroupVersionKind{Group: "install.horusec.io", Version: "v1alpha1", Kind: "HorusecPlatform"}
 
 // Get takes name of the horusecManager, and returns the corresponding horusecManager object, and an error if there is any.
-func (c *FakeHorusecManagers) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.HorusecManager, err error) {
+func (c *FakeHorusecManagers) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.HorusecPlatform, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewGetAction(horusecmanagersResource, c.ns, name), &v1alpha1.HorusecManager{})
+		Invokes(testing.NewGetAction(horusecmanagersResource, c.ns, name), &v1alpha1.HorusecPlatform{})
 
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*v1alpha1.HorusecManager), err
+	return obj.(*v1alpha1.HorusecPlatform), err
 }
 
 // List takes label and field selectors, and returns the list of HorusecManagers that match those selectors.
@@ -79,43 +79,43 @@ func (c *FakeHorusecManagers) Watch(ctx context.Context, opts v1.ListOptions) (w
 }
 
 // Create takes the representation of a horusecManager and creates it.  Returns the server's representation of the horusecManager, and an error, if there is any.
-func (c *FakeHorusecManagers) Create(ctx context.Context, horusecManager *v1alpha1.HorusecManager, opts v1.CreateOptions) (result *v1alpha1.HorusecManager, err error) {
+func (c *FakeHorusecManagers) Create(ctx context.Context, horusecManager *v1alpha1.HorusecPlatform, opts v1.CreateOptions) (result *v1alpha1.HorusecPlatform, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewCreateAction(horusecmanagersResource, c.ns, horusecManager), &v1alpha1.HorusecManager{})
+		Invokes(testing.NewCreateAction(horusecmanagersResource, c.ns, horusecManager), &v1alpha1.HorusecPlatform{})
 
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*v1alpha1.HorusecManager), err
+	return obj.(*v1alpha1.HorusecPlatform), err
 }
 
 // Update takes the representation of a horusecManager and updates it. Returns the server's representation of the horusecManager, and an error, if there is any.
-func (c *FakeHorusecManagers) Update(ctx context.Context, horusecManager *v1alpha1.HorusecManager, opts v1.UpdateOptions) (result *v1alpha1.HorusecManager, err error) {
+func (c *FakeHorusecManagers) Update(ctx context.Context, horusecManager *v1alpha1.HorusecPlatform, opts v1.UpdateOptions) (result *v1alpha1.HorusecPlatform, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewUpdateAction(horusecmanagersResource, c.ns, horusecManager), &v1alpha1.HorusecManager{})
+		Invokes(testing.NewUpdateAction(horusecmanagersResource, c.ns, horusecManager), &v1alpha1.HorusecPlatform{})
 
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*v1alpha1.HorusecManager), err
+	return obj.(*v1alpha1.HorusecPlatform), err
 }
 
 // UpdateStatus was generated because the type contains a Status member.
 // Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *FakeHorusecManagers) UpdateStatus(ctx context.Context, horusecManager *v1alpha1.HorusecManager, opts v1.UpdateOptions) (*v1alpha1.HorusecManager, error) {
+func (c *FakeHorusecManagers) UpdateStatus(ctx context.Context, horusecManager *v1alpha1.HorusecPlatform, opts v1.UpdateOptions) (*v1alpha1.HorusecPlatform, error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewUpdateSubresourceAction(horusecmanagersResource, "status", c.ns, horusecManager), &v1alpha1.HorusecManager{})
+		Invokes(testing.NewUpdateSubresourceAction(horusecmanagersResource, "status", c.ns, horusecManager), &v1alpha1.HorusecPlatform{})
 
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*v1alpha1.HorusecManager), err
+	return obj.(*v1alpha1.HorusecPlatform), err
 }
 
 // Delete takes name of the horusecManager and deletes it. Returns an error if one occurs.
 func (c *FakeHorusecManagers) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
 	_, err := c.Fake.
-		Invokes(testing.NewDeleteAction(horusecmanagersResource, c.ns, name), &v1alpha1.HorusecManager{})
+		Invokes(testing.NewDeleteAction(horusecmanagersResource, c.ns, name), &v1alpha1.HorusecPlatform{})
 
 	return err
 }
@@ -129,12 +129,12 @@ func (c *FakeHorusecManagers) DeleteCollection(ctx context.Context, opts v1.Dele
 }
 
 // Patch applies the patch and returns the patched horusecManager.
-func (c *FakeHorusecManagers) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.HorusecManager, err error) {
+func (c *FakeHorusecManagers) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.HorusecPlatform, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewPatchSubresourceAction(horusecmanagersResource, c.ns, name, pt, data, subresources...), &v1alpha1.HorusecManager{})
+		Invokes(testing.NewPatchSubresourceAction(horusecmanagersResource, c.ns, name, pt, data, subresources...), &v1alpha1.HorusecPlatform{})
 
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*v1alpha1.HorusecManager), err
+	return obj.(*v1alpha1.HorusecPlatform), err
 }

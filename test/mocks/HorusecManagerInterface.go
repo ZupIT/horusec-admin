@@ -22,20 +22,20 @@ type HorusecManagerInterface struct {
 }
 
 // Create provides a mock function with given fields: ctx, horusecManager, opts
-func (_m *HorusecManagerInterface) Create(ctx context.Context, horusecManager *v1alpha1.HorusecManager, opts v1.CreateOptions) (*v1alpha1.HorusecManager, error) {
+func (_m *HorusecManagerInterface) Create(ctx context.Context, horusecManager *v1alpha1.HorusecPlatform, opts v1.CreateOptions) (*v1alpha1.HorusecPlatform, error) {
 	ret := _m.Called(ctx, horusecManager, opts)
 
-	var r0 *v1alpha1.HorusecManager
-	if rf, ok := ret.Get(0).(func(context.Context, *v1alpha1.HorusecManager, v1.CreateOptions) *v1alpha1.HorusecManager); ok {
+	var r0 *v1alpha1.HorusecPlatform
+	if rf, ok := ret.Get(0).(func(context.Context, *v1alpha1.HorusecPlatform, v1.CreateOptions) *v1alpha1.HorusecPlatform); ok {
 		r0 = rf(ctx, horusecManager, opts)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*v1alpha1.HorusecManager)
+			r0 = ret.Get(0).(*v1alpha1.HorusecPlatform)
 		}
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, *v1alpha1.HorusecManager, v1.CreateOptions) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, *v1alpha1.HorusecPlatform, v1.CreateOptions) error); ok {
 		r1 = rf(ctx, horusecManager, opts)
 	} else {
 		r1 = ret.Error(1)
@@ -73,15 +73,15 @@ func (_m *HorusecManagerInterface) DeleteCollection(ctx context.Context, opts v1
 }
 
 // Get provides a mock function with given fields: ctx, name, opts
-func (_m *HorusecManagerInterface) Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.HorusecManager, error) {
+func (_m *HorusecManagerInterface) Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.HorusecPlatform, error) {
 	ret := _m.Called(ctx, name, opts)
 
-	var r0 *v1alpha1.HorusecManager
-	if rf, ok := ret.Get(0).(func(context.Context, string, v1.GetOptions) *v1alpha1.HorusecManager); ok {
+	var r0 *v1alpha1.HorusecPlatform
+	if rf, ok := ret.Get(0).(func(context.Context, string, v1.GetOptions) *v1alpha1.HorusecPlatform); ok {
 		r0 = rf(ctx, name, opts)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*v1alpha1.HorusecManager)
+			r0 = ret.Get(0).(*v1alpha1.HorusecPlatform)
 		}
 	}
 
@@ -119,7 +119,7 @@ func (_m *HorusecManagerInterface) List(ctx context.Context, opts v1.ListOptions
 }
 
 // Patch provides a mock function with given fields: ctx, name, pt, data, opts, subresources
-func (_m *HorusecManagerInterface) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (*v1alpha1.HorusecManager, error) {
+func (_m *HorusecManagerInterface) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (*v1alpha1.HorusecPlatform, error) {
 	_va := make([]interface{}, len(subresources))
 	for _i := range subresources {
 		_va[_i] = subresources[_i]
@@ -129,12 +129,12 @@ func (_m *HorusecManagerInterface) Patch(ctx context.Context, name string, pt ty
 	_ca = append(_ca, _va...)
 	ret := _m.Called(_ca...)
 
-	var r0 *v1alpha1.HorusecManager
-	if rf, ok := ret.Get(0).(func(context.Context, string, types.PatchType, []byte, v1.PatchOptions, ...string) *v1alpha1.HorusecManager); ok {
+	var r0 *v1alpha1.HorusecPlatform
+	if rf, ok := ret.Get(0).(func(context.Context, string, types.PatchType, []byte, v1.PatchOptions, ...string) *v1alpha1.HorusecPlatform); ok {
 		r0 = rf(ctx, name, pt, data, opts, subresources...)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*v1alpha1.HorusecManager)
+			r0 = ret.Get(0).(*v1alpha1.HorusecPlatform)
 		}
 	}
 
@@ -149,20 +149,20 @@ func (_m *HorusecManagerInterface) Patch(ctx context.Context, name string, pt ty
 }
 
 // Update provides a mock function with given fields: ctx, horusecManager, opts
-func (_m *HorusecManagerInterface) Update(ctx context.Context, horusecManager *v1alpha1.HorusecManager, opts v1.UpdateOptions) (*v1alpha1.HorusecManager, error) {
+func (_m *HorusecManagerInterface) Update(ctx context.Context, horusecManager *v1alpha1.HorusecPlatform, opts v1.UpdateOptions) (*v1alpha1.HorusecPlatform, error) {
 	ret := _m.Called(ctx, horusecManager, opts)
 
-	var r0 *v1alpha1.HorusecManager
-	if rf, ok := ret.Get(0).(func(context.Context, *v1alpha1.HorusecManager, v1.UpdateOptions) *v1alpha1.HorusecManager); ok {
+	var r0 *v1alpha1.HorusecPlatform
+	if rf, ok := ret.Get(0).(func(context.Context, *v1alpha1.HorusecPlatform, v1.UpdateOptions) *v1alpha1.HorusecPlatform); ok {
 		r0 = rf(ctx, horusecManager, opts)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*v1alpha1.HorusecManager)
+			r0 = ret.Get(0).(*v1alpha1.HorusecPlatform)
 		}
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, *v1alpha1.HorusecManager, v1.UpdateOptions) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, *v1alpha1.HorusecPlatform, v1.UpdateOptions) error); ok {
 		r1 = rf(ctx, horusecManager, opts)
 	} else {
 		r1 = ret.Error(1)
@@ -172,20 +172,20 @@ func (_m *HorusecManagerInterface) Update(ctx context.Context, horusecManager *v
 }
 
 // UpdateStatus provides a mock function with given fields: ctx, horusecManager, opts
-func (_m *HorusecManagerInterface) UpdateStatus(ctx context.Context, horusecManager *v1alpha1.HorusecManager, opts v1.UpdateOptions) (*v1alpha1.HorusecManager, error) {
+func (_m *HorusecManagerInterface) UpdateStatus(ctx context.Context, horusecManager *v1alpha1.HorusecPlatform, opts v1.UpdateOptions) (*v1alpha1.HorusecPlatform, error) {
 	ret := _m.Called(ctx, horusecManager, opts)
 
-	var r0 *v1alpha1.HorusecManager
-	if rf, ok := ret.Get(0).(func(context.Context, *v1alpha1.HorusecManager, v1.UpdateOptions) *v1alpha1.HorusecManager); ok {
+	var r0 *v1alpha1.HorusecPlatform
+	if rf, ok := ret.Get(0).(func(context.Context, *v1alpha1.HorusecPlatform, v1.UpdateOptions) *v1alpha1.HorusecPlatform); ok {
 		r0 = rf(ctx, horusecManager, opts)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*v1alpha1.HorusecManager)
+			r0 = ret.Get(0).(*v1alpha1.HorusecPlatform)
 		}
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, *v1alpha1.HorusecManager, v1.UpdateOptions) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, *v1alpha1.HorusecPlatform, v1.UpdateOptions) error); ok {
 		r1 = rf(ctx, horusecManager, opts)
 	} else {
 		r1 = ret.Error(1)

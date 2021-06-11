@@ -43,14 +43,14 @@ type horusecManagerInformer struct {
 	namespace        string
 }
 
-// NewHorusecManagerInformer constructs a new informer for HorusecManager type.
+// NewHorusecManagerInformer constructs a new informer for HorusecPlatform type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
 func NewHorusecManagerInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
 	return NewFilteredHorusecManagerInformer(client, namespace, resyncPeriod, indexers, nil)
 }
 
-// NewFilteredHorusecManagerInformer constructs a new informer for HorusecManager type.
+// NewFilteredHorusecManagerInformer constructs a new informer for HorusecPlatform type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
 func NewFilteredHorusecManagerInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
@@ -69,7 +69,7 @@ func NewFilteredHorusecManagerInformer(client versioned.Interface, namespace str
 				return client.InstallV1alpha1().HorusecManagers(namespace).Watch(context.TODO(), options)
 			},
 		},
-		&installv1alpha1.HorusecManager{},
+		&installv1alpha1.HorusecPlatform{},
 		resyncPeriod,
 		indexers,
 	)
@@ -80,7 +80,7 @@ func (f *horusecManagerInformer) defaultInformer(client versioned.Interface, res
 }
 
 func (f *horusecManagerInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&installv1alpha1.HorusecManager{}, f.defaultInformer)
+	return f.factory.InformerFor(&installv1alpha1.HorusecPlatform{}, f.defaultInformer)
 }
 
 func (f *horusecManagerInformer) Lister() v1alpha1.HorusecManagerLister {

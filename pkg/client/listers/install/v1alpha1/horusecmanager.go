@@ -28,7 +28,7 @@ import (
 type HorusecManagerLister interface {
 	// List lists all HorusecManagers in the indexer.
 	// Objects returned here must be treated as read-only.
-	List(selector labels.Selector) (ret []*v1alpha1.HorusecManager, err error)
+	List(selector labels.Selector) (ret []*v1alpha1.HorusecPlatform, err error)
 	// HorusecManagers returns an object that can list and get HorusecManagers.
 	HorusecManagers(namespace string) HorusecManagerNamespaceLister
 	HorusecManagerListerExpansion
@@ -45,9 +45,9 @@ func NewHorusecManagerLister(indexer cache.Indexer) HorusecManagerLister {
 }
 
 // List lists all HorusecManagers in the indexer.
-func (s *horusecManagerLister) List(selector labels.Selector) (ret []*v1alpha1.HorusecManager, err error) {
+func (s *horusecManagerLister) List(selector labels.Selector) (ret []*v1alpha1.HorusecPlatform, err error) {
 	err = cache.ListAll(s.indexer, selector, func(m interface{}) {
-		ret = append(ret, m.(*v1alpha1.HorusecManager))
+		ret = append(ret, m.(*v1alpha1.HorusecPlatform))
 	})
 	return ret, err
 }
@@ -62,10 +62,10 @@ func (s *horusecManagerLister) HorusecManagers(namespace string) HorusecManagerN
 type HorusecManagerNamespaceLister interface {
 	// List lists all HorusecManagers in the indexer for a given namespace.
 	// Objects returned here must be treated as read-only.
-	List(selector labels.Selector) (ret []*v1alpha1.HorusecManager, err error)
-	// Get retrieves the HorusecManager from the indexer for a given namespace and name.
+	List(selector labels.Selector) (ret []*v1alpha1.HorusecPlatform, err error)
+	// Get retrieves the HorusecPlatform from the indexer for a given namespace and name.
 	// Objects returned here must be treated as read-only.
-	Get(name string) (*v1alpha1.HorusecManager, error)
+	Get(name string) (*v1alpha1.HorusecPlatform, error)
 	HorusecManagerNamespaceListerExpansion
 }
 
@@ -77,15 +77,15 @@ type horusecManagerNamespaceLister struct {
 }
 
 // List lists all HorusecManagers in the indexer for a given namespace.
-func (s horusecManagerNamespaceLister) List(selector labels.Selector) (ret []*v1alpha1.HorusecManager, err error) {
+func (s horusecManagerNamespaceLister) List(selector labels.Selector) (ret []*v1alpha1.HorusecPlatform, err error) {
 	err = cache.ListAllByNamespace(s.indexer, s.namespace, selector, func(m interface{}) {
-		ret = append(ret, m.(*v1alpha1.HorusecManager))
+		ret = append(ret, m.(*v1alpha1.HorusecPlatform))
 	})
 	return ret, err
 }
 
-// Get retrieves the HorusecManager from the indexer for a given namespace and name.
-func (s horusecManagerNamespaceLister) Get(name string) (*v1alpha1.HorusecManager, error) {
+// Get retrieves the HorusecPlatform from the indexer for a given namespace and name.
+func (s horusecManagerNamespaceLister) Get(name string) (*v1alpha1.HorusecPlatform, error) {
 	obj, exists, err := s.indexer.GetByKey(s.namespace + "/" + name)
 	if err != nil {
 		return nil, err
@@ -93,5 +93,5 @@ func (s horusecManagerNamespaceLister) Get(name string) (*v1alpha1.HorusecManage
 	if !exists {
 		return nil, errors.NewNotFound(v1alpha1.Resource("horusecmanager"), name)
 	}
-	return obj.(*v1alpha1.HorusecManager), nil
+	return obj.(*v1alpha1.HorusecPlatform), nil
 }
