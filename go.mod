@@ -5,7 +5,6 @@ go 1.15
 require (
 	github.com/HdrHistogram/hdrhistogram-go v1.0.1 // indirect
 	github.com/ZupIT/horusec-devkit v0.0.0-20210318131703-025d34f2d2d7
-	github.com/evanphx/json-patch v4.9.0+incompatible
 	github.com/go-chi/chi v1.5.4
 	github.com/google/go-cmp v0.5.5
 	github.com/google/wire v0.5.0
@@ -21,6 +20,7 @@ require (
 	github.com/x-cray/logrus-prefixed-formatter v0.5.2
 	go.uber.org/atomic v1.7.0 // indirect
 	gopkg.in/DATA-DOG/go-sqlmock.v1 v1.3.0 // indirect
+	k8s.io/api v0.20.4
 	k8s.io/apimachinery v0.20.4
 	k8s.io/client-go v0.20.4
 )

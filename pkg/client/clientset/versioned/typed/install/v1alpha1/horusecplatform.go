@@ -28,46 +28,46 @@ import (
 	rest "k8s.io/client-go/rest"
 )
 
-// HorusecManagersGetter has a method to return a HorusecManagerInterface.
+// HorusecPlatformsGetter has a method to return a HorusecPlatformInterface.
 // A group's client should implement this interface.
-type HorusecManagersGetter interface {
-	HorusecManagers(namespace string) HorusecManagerInterface
+type HorusecPlatformsGetter interface {
+	HorusecPlatforms(namespace string) HorusecPlatformInterface
 }
 
-// HorusecManagerInterface has methods to work with HorusecPlatform resources.
-type HorusecManagerInterface interface {
-	Create(ctx context.Context, horusecManager *v1alpha1.HorusecPlatform, opts v1.CreateOptions) (*v1alpha1.HorusecPlatform, error)
-	Update(ctx context.Context, horusecManager *v1alpha1.HorusecPlatform, opts v1.UpdateOptions) (*v1alpha1.HorusecPlatform, error)
-	UpdateStatus(ctx context.Context, horusecManager *v1alpha1.HorusecPlatform, opts v1.UpdateOptions) (*v1alpha1.HorusecPlatform, error)
+// HorusecPlatformInterface has methods to work with HorusecPlatform resources.
+type HorusecPlatformInterface interface {
+	Create(ctx context.Context, horusecPlatform *v1alpha1.HorusecPlatform, opts v1.CreateOptions) (*v1alpha1.HorusecPlatform, error)
+	Update(ctx context.Context, horusecPlatform *v1alpha1.HorusecPlatform, opts v1.UpdateOptions) (*v1alpha1.HorusecPlatform, error)
+	UpdateStatus(ctx context.Context, horusecPlatform *v1alpha1.HorusecPlatform, opts v1.UpdateOptions) (*v1alpha1.HorusecPlatform, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
 	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.HorusecPlatform, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.HorusecManagerList, error)
+	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.HorusecPlatformList, error)
 	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
 	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.HorusecPlatform, err error)
-	HorusecManagerExpansion
+	HorusecPlatformExpansion
 }
 
-// horusecManagers implements HorusecManagerInterface
-type horusecManagers struct {
+// horusecPlatforms implements HorusecPlatformInterface
+type horusecPlatforms struct {
 	client rest.Interface
 	ns     string
 }
 
-// newHorusecManagers returns a HorusecManagers
-func newHorusecManagers(c *InstallV1alpha1Client, namespace string) *horusecManagers {
-	return &horusecManagers{
+// newHorusecPlatforms returns a HorusecPlatforms
+func newHorusecPlatforms(c *InstallV1alpha1Client, namespace string) *horusecPlatforms {
+	return &horusecPlatforms{
 		client: c.RESTClient(),
 		ns:     namespace,
 	}
 }
 
-// Get takes name of the horusecManager, and returns the corresponding horusecManager object, and an error if there is any.
-func (c *horusecManagers) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.HorusecPlatform, err error) {
+// Get takes name of the horusecPlatform, and returns the corresponding horusecPlatform object, and an error if there is any.
+func (c *horusecPlatforms) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.HorusecPlatform, err error) {
 	result = &v1alpha1.HorusecPlatform{}
 	err = c.client.Get().
 		Namespace(c.ns).
-		Resource("horusecmanagers").
+		Resource("horusecplatforms").
 		Name(name).
 		VersionedParams(&options, scheme.ParameterCodec).
 		Do(ctx).
@@ -75,16 +75,16 @@ func (c *horusecManagers) Get(ctx context.Context, name string, options v1.GetOp
 	return
 }
 
-// List takes label and field selectors, and returns the list of HorusecManagers that match those selectors.
-func (c *horusecManagers) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.HorusecManagerList, err error) {
+// List takes label and field selectors, and returns the list of HorusecPlatforms that match those selectors.
+func (c *horusecPlatforms) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.HorusecPlatformList, err error) {
 	var timeout time.Duration
 	if opts.TimeoutSeconds != nil {
 		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
 	}
-	result = &v1alpha1.HorusecManagerList{}
+	result = &v1alpha1.HorusecPlatformList{}
 	err = c.client.Get().
 		Namespace(c.ns).
-		Resource("horusecmanagers").
+		Resource("horusecplatforms").
 		VersionedParams(&opts, scheme.ParameterCodec).
 		Timeout(timeout).
 		Do(ctx).
@@ -92,8 +92,8 @@ func (c *horusecManagers) List(ctx context.Context, opts v1.ListOptions) (result
 	return
 }
 
-// Watch returns a watch.Interface that watches the requested horusecManagers.
-func (c *horusecManagers) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
+// Watch returns a watch.Interface that watches the requested horusecPlatforms.
+func (c *horusecPlatforms) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
 	var timeout time.Duration
 	if opts.TimeoutSeconds != nil {
 		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
@@ -101,34 +101,34 @@ func (c *horusecManagers) Watch(ctx context.Context, opts v1.ListOptions) (watch
 	opts.Watch = true
 	return c.client.Get().
 		Namespace(c.ns).
-		Resource("horusecmanagers").
+		Resource("horusecplatforms").
 		VersionedParams(&opts, scheme.ParameterCodec).
 		Timeout(timeout).
 		Watch(ctx)
 }
 
-// Create takes the representation of a horusecManager and creates it.  Returns the server's representation of the horusecManager, and an error, if there is any.
-func (c *horusecManagers) Create(ctx context.Context, horusecManager *v1alpha1.HorusecPlatform, opts v1.CreateOptions) (result *v1alpha1.HorusecPlatform, err error) {
+// Create takes the representation of a horusecPlatform and creates it.  Returns the server's representation of the horusecPlatform, and an error, if there is any.
+func (c *horusecPlatforms) Create(ctx context.Context, horusecPlatform *v1alpha1.HorusecPlatform, opts v1.CreateOptions) (result *v1alpha1.HorusecPlatform, err error) {
 	result = &v1alpha1.HorusecPlatform{}
 	err = c.client.Post().
 		Namespace(c.ns).
-		Resource("horusecmanagers").
+		Resource("horusecplatforms").
 		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(horusecManager).
+		Body(horusecPlatform).
 		Do(ctx).
 		Into(result)
 	return
 }
 
-// Update takes the representation of a horusecManager and updates it. Returns the server's representation of the horusecManager, and an error, if there is any.
-func (c *horusecManagers) Update(ctx context.Context, horusecManager *v1alpha1.HorusecPlatform, opts v1.UpdateOptions) (result *v1alpha1.HorusecPlatform, err error) {
+// Update takes the representation of a horusecPlatform and updates it. Returns the server's representation of the horusecPlatform, and an error, if there is any.
+func (c *horusecPlatforms) Update(ctx context.Context, horusecPlatform *v1alpha1.HorusecPlatform, opts v1.UpdateOptions) (result *v1alpha1.HorusecPlatform, err error) {
 	result = &v1alpha1.HorusecPlatform{}
 	err = c.client.Put().
 		Namespace(c.ns).
-		Resource("horusecmanagers").
-		Name(horusecManager.Name).
+		Resource("horusecplatforms").
+		Name(horusecPlatform.Name).
 		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(horusecManager).
+		Body(horusecPlatform).
 		Do(ctx).
 		Into(result)
 	return
@@ -136,25 +136,25 @@ func (c *horusecManagers) Update(ctx context.Context, horusecManager *v1alpha1.H
 
 // UpdateStatus was generated because the type contains a Status member.
 // Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *horusecManagers) UpdateStatus(ctx context.Context, horusecManager *v1alpha1.HorusecPlatform, opts v1.UpdateOptions) (result *v1alpha1.HorusecPlatform, err error) {
+func (c *horusecPlatforms) UpdateStatus(ctx context.Context, horusecPlatform *v1alpha1.HorusecPlatform, opts v1.UpdateOptions) (result *v1alpha1.HorusecPlatform, err error) {
 	result = &v1alpha1.HorusecPlatform{}
 	err = c.client.Put().
 		Namespace(c.ns).
-		Resource("horusecmanagers").
-		Name(horusecManager.Name).
+		Resource("horusecplatforms").
+		Name(horusecPlatform.Name).
 		SubResource("status").
 		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(horusecManager).
+		Body(horusecPlatform).
 		Do(ctx).
 		Into(result)
 	return
 }
 
-// Delete takes name of the horusecManager and deletes it. Returns an error if one occurs.
-func (c *horusecManagers) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
+// Delete takes name of the horusecPlatform and deletes it. Returns an error if one occurs.
+func (c *horusecPlatforms) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
 	return c.client.Delete().
 		Namespace(c.ns).
-		Resource("horusecmanagers").
+		Resource("horusecplatforms").
 		Name(name).
 		Body(&opts).
 		Do(ctx).
@@ -162,14 +162,14 @@ func (c *horusecManagers) Delete(ctx context.Context, name string, opts v1.Delet
 }
 
 // DeleteCollection deletes a collection of objects.
-func (c *horusecManagers) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
+func (c *horusecPlatforms) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
 	var timeout time.Duration
 	if listOpts.TimeoutSeconds != nil {
 		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
 	}
 	return c.client.Delete().
 		Namespace(c.ns).
-		Resource("horusecmanagers").
+		Resource("horusecplatforms").
 		VersionedParams(&listOpts, scheme.ParameterCodec).
 		Timeout(timeout).
 		Body(&opts).
@@ -177,12 +177,12 @@ func (c *horusecManagers) DeleteCollection(ctx context.Context, opts v1.DeleteOp
 		Error()
 }
 
-// Patch applies the patch and returns the patched horusecManager.
-func (c *horusecManagers) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.HorusecPlatform, err error) {
+// Patch applies the patch and returns the patched horusecPlatform.
+func (c *horusecPlatforms) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.HorusecPlatform, err error) {
 	result = &v1alpha1.HorusecPlatform{}
 	err = c.client.Patch(pt).
 		Namespace(c.ns).
-		Resource("horusecmanagers").
+		Resource("horusecplatforms").
 		Name(name).
 		SubResource(subresources...).
 		VersionedParams(&opts, scheme.ParameterCodec).

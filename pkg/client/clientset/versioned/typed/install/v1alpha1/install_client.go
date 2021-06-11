@@ -24,7 +24,7 @@ import (
 
 type InstallV1alpha1Interface interface {
 	RESTClient() rest.Interface
-	HorusecManagersGetter
+	HorusecPlatformsGetter
 }
 
 // InstallV1alpha1Client is used to interact with features provided by the install.horusec.io group.
@@ -32,8 +32,8 @@ type InstallV1alpha1Client struct {
 	restClient rest.Interface
 }
 
-func (c *InstallV1alpha1Client) HorusecManagers(namespace string) HorusecManagerInterface {
-	return newHorusecManagers(c, namespace)
+func (c *InstallV1alpha1Client) HorusecPlatforms(namespace string) HorusecPlatformInterface {
+	return newHorusecPlatforms(c, namespace)
 }
 
 // NewForConfig creates a new InstallV1alpha1Client for the given config.

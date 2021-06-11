@@ -26,8 +26,8 @@ type FakeInstallV1alpha1 struct {
 	*testing.Fake
 }
 
-func (c *FakeInstallV1alpha1) HorusecManagers(namespace string) v1alpha1.HorusecManagerInterface {
-	return &FakeHorusecManagers{c, namespace}
+func (c *FakeInstallV1alpha1) HorusecPlatforms(namespace string) v1alpha1.HorusecPlatformInterface {
+	return &FakeHorusecPlatforms{c, namespace}
 }
 
 // RESTClient returns a RESTClient that is used to communicate
