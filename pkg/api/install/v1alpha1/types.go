@@ -15,6 +15,7 @@
 package v1alpha1
 
 import (
+	corev1 "k8s.io/api/core/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -73,32 +74,32 @@ type Components struct {
 }
 
 type Analytic struct {
-	Container    Container     `json:"container"`
-	Database     *Database     `json:"database,omitempty"`
-	ExtraEnv     []interface{} `json:"extraEnv"`
-	Ingress      *Ingress      `json:"ingress,omitempty"`
-	Name         string        `json:"name"`
-	Pod          Pod           `json:"pod"`
-	Port         AnalyticPort  `json:"port"`
-	ReplicaCount int64         `json:"replicaCount"`
-	Enabled      *bool         `json:"enabled,omitempty"`
-	MailServer   *Broker       `json:"mailServer,omitempty"`
+	Container    Container       `json:"container"`
+	Database     *Database       `json:"database,omitempty"`
+	ExtraEnv     []corev1.EnvVar `json:"extraEnv"`
+	Ingress      *Ingress        `json:"ingress,omitempty"`
+	Name         string          `json:"name"`
+	Pod          Pod             `json:"pod"`
+	Port         AnalyticPort    `json:"port"`
+	ReplicaCount int64           `json:"replicaCount"`
+	Enabled      *bool           `json:"enabled,omitempty"`
+	MailServer   *Broker         `json:"mailServer,omitempty"`
 }
 
 type Container struct {
 	Image           Image                    `json:"image"`
-	LivenessProbe   interface{}              `json:"livenessProbe"`
-	ReadinessProbe  interface{}              `json:"readinessProbe"`
-	Resources       interface{}              `json:"resources"`
+	LivenessProbe   *corev1.Probe            `json:"livenessProbe"`
+	ReadinessProbe  *corev1.Probe            `json:"readinessProbe"`
+	Resources       *corev1.Probe            `json:"resources"`
 	SecurityContext ContainerSecurityContext `json:"securityContext"`
 }
 
 type Image struct {
-	PullPolicy  PullPolicy    `json:"pullPolicy"`
-	PullSecrets []interface{} `json:"pullSecrets"`
-	Registry    Registry      `json:"registry"`
-	Repository  string        `json:"repository"`
-	Tag         Tag           `json:"tag"`
+	PullPolicy  PullPolicy `json:"pullPolicy"`
+	PullSecrets []string   `json:"pullSecrets"`
+	Registry    Registry   `json:"registry"`
+	Repository  string     `json:"repository"`
+	Tag         Tag        `json:"tag"`
 }
 
 type ContainerSecurityContext struct {
@@ -132,10 +133,9 @@ type SecretKeyRef struct {
 }
 
 type Ingress struct {
-	Enabled bool        `json:"enabled"`
-	Host    string      `json:"host"`
-	Path    string      `json:"path"`
-	TLS     interface{} `json:"tls"`
+	Enabled bool   `json:"enabled"`
+	Host    string `json:"host"`
+	Path    string `json:"path"`
 }
 
 type Broker struct {
@@ -168,14 +168,14 @@ type AnalyticPort struct {
 }
 
 type Auth struct {
-	Container    Container     `json:"container"`
-	ExtraEnv     []interface{} `json:"extraEnv"`
-	Ingress      Ingress       `json:"ingress"`
-	Name         string        `json:"name"`
-	Pod          Pod           `json:"pod"`
-	Port         AuthPort      `json:"port"`
-	ReplicaCount int64         `json:"replicaCount"`
-	Type         string        `json:"type"`
+	Container    Container       `json:"container"`
+	ExtraEnv     []corev1.EnvVar `json:"extraEnv"`
+	Ingress      Ingress         `json:"ingress"`
+	Name         string          `json:"name"`
+	Pod          Pod             `json:"pod"`
+	Port         AuthPort        `json:"port"`
+	ReplicaCount int64           `json:"replicaCount"`
+	Type         string          `json:"type"`
 }
 
 type AuthPort struct {
@@ -221,16 +221,19 @@ type Public struct {
 }
 
 type PullPolicy string
+
 const (
 	IfNotPresent PullPolicy = "IfNotPresent"
 )
 
 type Registry string
+
 const (
 	DockerIoHoruszup Registry = "docker.io/horuszup"
 )
 
 type Tag string
+
 const (
 	V2121 Tag = "v2.13.1"
 )
