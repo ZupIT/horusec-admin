@@ -43,7 +43,7 @@ func NewRestConfig() (*rest.Config, error) {
 	return cfg, nil
 }
 
-func NewHorusecManagerClient(restConfig *rest.Config) (client.HorusecManagerInterface, error) {
+func NewHorusecManagerClient(restConfig *rest.Config) (client.HorusecPlatformInterface, error) {
 	namespace := os.Getenv("NAMESPACE")
 
 	if namespace == "" {
@@ -55,5 +55,5 @@ func NewHorusecManagerClient(restConfig *rest.Config) (client.HorusecManagerInte
 		return nil, fmt.Errorf("failed to create a new HorusecPlatform client: %w", err)
 	}
 
-	return c.InstallV1alpha1().HorusecManagers(namespace), nil
+	return c.InstallV1alpha1().HorusecPlatforms(namespace), nil
 }

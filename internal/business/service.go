@@ -28,11 +28,11 @@ import (
 )
 
 type ConfigService struct {
-	client     client.HorusecManagerInterface
+	client     client.HorusecPlatformInterface
 	comparator *kubernetes.ObjectComparator
 }
 
-func NewConfigService(c client.HorusecManagerInterface, cmp *kubernetes.ObjectComparator) *ConfigService {
+func NewConfigService(c client.HorusecPlatformInterface, cmp *kubernetes.ObjectComparator) *ConfigService {
 	return &ConfigService{client: c, comparator: cmp}
 }
 

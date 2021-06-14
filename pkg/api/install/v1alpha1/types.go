@@ -42,8 +42,8 @@ type HorusecPlatform struct {
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
-// HorusecManagerList is a collection of HorusecManagers.
-type HorusecManagerList struct {
+// HorusecPlatformList is a collection of HorusecManagers.
+type HorusecPlatformList struct {
 	v1.TypeMeta `json:",inline"`
 	// +optional
 	v1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`

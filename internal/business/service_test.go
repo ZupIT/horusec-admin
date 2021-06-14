@@ -43,7 +43,7 @@ var defaultHorusecManager = api.HorusecPlatform{
 func TestConfigService_CreateOrUpdate_When_HorusecManagerExistsButHasNoChanges_Expect_NoCall(t *testing.T) {
 	// expected behavior
 	svc, client := setup()
-	singleResult := &api.HorusecManagerList{Items: []api.HorusecPlatform{defaultHorusecManager}}
+	singleResult := &api.HorusecPlatformList{Items: []api.HorusecPlatform{defaultHorusecManager}}
 	client.On("List", mock.Anything, mock.Anything).Return(singleResult, nil).Once()
 
 	// state under test
@@ -57,7 +57,7 @@ func TestConfigService_CreateOrUpdate_When_HorusecManagerExistsButHasNoChanges_E
 func TestConfigService_CreateOrUpdate_When_HorusecManagerNotExists_Expect_CreateCall(t *testing.T) {
 	// expected behavior
 	svc, client := setup()
-	emptyList := new(api.HorusecManagerList)
+	emptyList := new(api.HorusecPlatformList)
 	client.On("List", mock.Anything, mock.Anything).Return(emptyList, nil).Once()
 	client.On("Create", mock.Anything, mock.Anything, mock.Anything).Return(nil, nil).Once()
 
@@ -72,7 +72,7 @@ func TestConfigService_CreateOrUpdate_When_HorusecManagerNotExists_Expect_Create
 func TestConfigService_CreateOrUpdate_When_HorusecManagerExists_Expect_UpdateCall(t *testing.T) {
 	// expected behavior
 	svc, client := setup()
-	singleResult := &api.HorusecManagerList{Items: []api.HorusecPlatform{{Spec: api.HorusecPlatformSpec{
+	singleResult := &api.HorusecPlatformList{Items: []api.HorusecPlatform{{Spec: api.HorusecPlatformSpec{
 		Global: &api.Global{Administrator: &api.Administrator{Enabled: true}}},
 	}}}
 	client.On("List", mock.Anything, mock.Anything).Return(singleResult, nil).Once()
@@ -89,7 +89,7 @@ func TestConfigService_CreateOrUpdate_When_HorusecManagerExists_Expect_UpdateCal
 func TestConfigService_GetConfig_When_SingleResult_Expect_NoError(t *testing.T) {
 	// expected behavior
 	svc, client := setup()
-	singleResult := &api.HorusecManagerList{Items: []api.HorusecPlatform{{
+	singleResult := &api.HorusecPlatformList{Items: []api.HorusecPlatform{{
 		Spec: api.HorusecPlatformSpec{Global: &api.Global{Administrator: &api.Administrator{Enabled: true}}},
 	}}}
 	client.On("List", mock.Anything, mock.Anything).Return(singleResult, nil).Once()
@@ -105,7 +105,7 @@ func TestConfigService_GetConfig_When_SingleResult_Expect_NoError(t *testing.T) 
 func TestConfigService_GetConfig_When_MultipleResults_Expect_Error(t *testing.T) {
 	// expected behavior
 	svc, client := setup()
-	multiResult := &api.HorusecManagerList{Items: []api.HorusecPlatform{
+	multiResult := &api.HorusecPlatformList{Items: []api.HorusecPlatform{
 		{ObjectMeta: v1.ObjectMeta{Name: "created-by-the-operator"}},
 		{ObjectMeta: v1.ObjectMeta{Name: "created-manually"}},
 	}}
@@ -119,8 +119,8 @@ func TestConfigService_GetConfig_When_MultipleResults_Expect_Error(t *testing.T)
 	assert.Error(t, err)
 }
 
-func setup() (*ConfigService, *mocks.HorusecManagerInterface) {
-	client := new(mocks.HorusecManagerInterface)
+func setup() (*ConfigService, *mocks.HorusecPlatformInterface) {
+	client := new(mocks.HorusecPlatformInterface)
 	comparator := new(kubernetes.ObjectComparator)
 	return NewConfigService(client, comparator), client
 }
