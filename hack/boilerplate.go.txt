@@ -11,24 +11,3 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
-package adapter
-
-import (
-	api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
-	"github.com/ZupIT/horusec-admin/pkg/core"
-)
-
-type CustomResource api.HorusecManager
-
-func ForCustomResource(hm *api.HorusecManager) *CustomResource {
-	return (*CustomResource)(hm)
-}
-
-func (cr *CustomResource) ToConfiguration() *core.Configuration {
-	return &core.Configuration{
-		General: cr.toGeneral(),
-		Auth:    cr.toAuth(),
-		Manager: cr.toManager(),
-	}
-}

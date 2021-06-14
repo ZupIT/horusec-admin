@@ -21,12 +21,12 @@ func newRouter() (chi.Router, error) {
 	if err != nil {
 		return nil, err
 	}
-	horusecManagerInterface, err := kubernetes.NewHorusecManagerClient(config)
+	HorusecPlatformInterface, err := kubernetes.NewHorusecManagerClient(config)
 	if err != nil {
 		return nil, err
 	}
 	objectComparator := &kubernetes.ObjectComparator{}
-	configService := business.NewConfigService(horusecManagerInterface, objectComparator)
+	configService := business.NewConfigService(HorusecPlatformInterface, objectComparator)
 	chiRouter, err := router.New(configService, configService)
 	if err != nil {
 		return nil, err

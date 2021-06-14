@@ -39,8 +39,8 @@ func Resource(resource string) schema.GroupResource {
 
 func addKnownTypes(scheme *runtime.Scheme) error {
 	scheme.AddKnownTypes(SchemeGroupVersion,
-		&HorusecManager{},
-		&HorusecManagerList{},
+		&HorusecPlatform{},
+		&HorusecPlatformList{},
 	)
 
 	scheme.AddKnownTypes(

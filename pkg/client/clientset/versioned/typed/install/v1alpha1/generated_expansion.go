@@ -16,4 +16,4 @@
 
 package v1alpha1
 
-type HorusecManagerExpansion interface{}
+type HorusecPlatformExpansion interface{}
