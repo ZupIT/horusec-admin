@@ -55,5 +55,5 @@ func NewHorusecManagerClient(restConfig *rest.Config) (client.HorusecPlatformInt
 		return nil, fmt.Errorf("failed to create a new HorusecPlatform client: %w", err)
 	}
 
-	return c.InstallV1alpha1().HorusecPlatforms(namespace), nil
+	return c.InstallV2alpha1().HorusecPlatforms(namespace), nil
 }
