@@ -20,7 +20,7 @@ import (
 	"os"
 
 	clientset "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned"
-	client "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v1alpha1"
+	client "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v2alpha1"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 )
@@ -55,5 +55,5 @@ func NewHorusecManagerClient(restConfig *rest.Config) (client.HorusecPlatformInt
 		return nil, fmt.Errorf("failed to create a new HorusecPlatform client: %w", err)
 	}
 
-	return c.InstallV1alpha1().HorusecPlatforms(namespace), nil
+	return c.InstallV2alpha1().HorusecPlatforms(namespace), nil
 }

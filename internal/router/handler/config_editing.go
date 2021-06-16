@@ -15,6 +15,7 @@
 package handler
 
 import (
+	"github.com/ZupIT/horusec-admin/internal/logger"
 	"io/ioutil"
 	"net/http"
 
@@ -55,4 +56,5 @@ func (h *ConfigEditing) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// Answer
 	w.WriteHeader(http.StatusNoContent)
+	logger.WithPrefix(ctx, "[204]").Info("Configurations has been applied!")
 }

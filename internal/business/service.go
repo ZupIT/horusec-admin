@@ -21,8 +21,8 @@ import (
 	"github.com/ZupIT/horusec-admin/internal/kubernetes"
 	"github.com/ZupIT/horusec-admin/internal/logger"
 	"github.com/ZupIT/horusec-admin/internal/tracing"
-	api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
-	client "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v1alpha1"
+	api "github.com/ZupIT/horusec-admin/pkg/api/install/v2alpha1"
+	client "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v2alpha1"
 	k8s "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/json"
 )
@@ -37,41 +37,6 @@ func NewConfigService(c client.HorusecPlatformInterface, cmp *kubernetes.ObjectC
 }
 
 func (s *ConfigService) GetConfig(ctx context.Context) (*api.HorusecPlatform, error) {
-	cr, err := s.getOne(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	if cr == nil {
-		cr = &api.HorusecPlatform{}
-	}
-	return cr, nil
-}
-
-func (s *ConfigService) CreateOrUpdate(ctx context.Context, raw []byte) error {
-	older, err := s.GetConfig(ctx)
-	if err != nil {
-		return err
-	}
-	if raw == nil {
-		return errors.New("not accept raw empty")
-	}
-	newEntity := &api.HorusecPlatform{}
-	if err := json.Unmarshal(raw, newEntity); err != nil {
-		return err
-	}
-	if err := s.createResource(ctx, newEntity); err != nil {
-		return err
-	}
-
-	return s.updatePartially(ctx, older, newEntity)
-}
-
-func (s *ConfigService) updatePartially(ctx context.Context, older, newest *api.HorusecPlatform) error {
-	return s.updateResourceIfNeeded(ctx, older, newest)
-}
-
-func (s *ConfigService) getOne(ctx context.Context) (*api.HorusecPlatform, error) {
 	log := logger.WithPrefix(ctx, "config_service")
 
 	hm, err := s.list(ctx)
@@ -87,6 +52,28 @@ func (s *ConfigService) getOne(ctx context.Context) (*api.HorusecPlatform, error
 	}
 
 	return &hm[0], nil
+}
+
+func (s *ConfigService) CreateOrUpdate(ctx context.Context, raw []byte) error {
+	if raw == nil {
+		return errors.New("not accept raw empty")
+	}
+	newEntity := &api.HorusecPlatform{}
+	if err := json.Unmarshal(raw, newEntity); err != nil {
+		return err
+	}
+	older, err := s.GetConfig(ctx)
+	if err != nil {
+		return err
+	}
+	if older == nil {
+		return s.createResource(ctx, newEntity)
+	}
+	return s.updatePartially(ctx, older, newEntity)
+}
+
+func (s *ConfigService) updatePartially(ctx context.Context, older, newest *api.HorusecPlatform) error {
+	return s.updateResourceIfNeeded(ctx, older, newest)
 }
 
 func (s *ConfigService) list(ctx context.Context) ([]api.HorusecPlatform, error) {
