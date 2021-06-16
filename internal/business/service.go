@@ -21,8 +21,8 @@ import (
 	"github.com/ZupIT/horusec-admin/internal/kubernetes"
 	"github.com/ZupIT/horusec-admin/internal/logger"
 	"github.com/ZupIT/horusec-admin/internal/tracing"
-	api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
-	client "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v1alpha1"
+	api "github.com/ZupIT/horusec-admin/pkg/api/install/v2alpha1"
+	client "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v2alpha1"
 	k8s "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/json"
 )

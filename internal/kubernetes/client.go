@@ -20,7 +20,7 @@ import (
 	"os"
 
 	clientset "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned"
-	client "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v1alpha1"
+	client "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v2alpha1"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 )

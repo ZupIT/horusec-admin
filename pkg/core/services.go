@@ -16,7 +16,7 @@ package core
 
 import (
 	"context"
-	api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
+	api "github.com/ZupIT/horusec-admin/pkg/api/install/v2alpha1"
 )
 
 type (

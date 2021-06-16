@@ -17,4 +17,4 @@
 // +k8s:deepcopy-gen=package
 // +k8s:defaulter-gen=TypeMeta
 // +groupName=install.horusec.io
-package v1alpha1
+package v2alpha1

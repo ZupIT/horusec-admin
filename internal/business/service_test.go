@@ -20,7 +20,7 @@ import (
 
 	"github.com/ZupIT/horusec-admin/internal/kubernetes"
 
-	api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
+	api "github.com/ZupIT/horusec-admin/pkg/api/install/v2alpha1"
 	"github.com/ZupIT/horusec-admin/test/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"

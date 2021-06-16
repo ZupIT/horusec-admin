@@ -19,7 +19,7 @@ package versioned
 import (
 	"fmt"
 
-	installv1alpha1 "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v1alpha1"
+	installv1alpha1 "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v2alpha1"
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"

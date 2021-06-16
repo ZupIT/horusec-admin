@@ -17,7 +17,7 @@
 package scheme
 
 import (
-	installv1alpha1 "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
+	installv1alpha1 "github.com/ZupIT/horusec-admin/pkg/api/install/v2alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"

@@ -18,8 +18,8 @@ package fake
 
 import (
 	clientset "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned"
-	installv1alpha1 "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v1alpha1"
-	fakeinstallv1alpha1 "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v1alpha1/fake"
+	installv1alpha1 "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v2alpha1"
+	fakeinstallv1alpha1 "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v2alpha1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"
