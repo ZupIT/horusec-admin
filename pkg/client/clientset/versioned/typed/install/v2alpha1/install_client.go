@@ -17,27 +17,27 @@
 package v2alpha1
 
 import (
-	v1alpha1 "github.com/ZupIT/horusec-admin/pkg/api/install/v2alpha1"
+	v2alpha1 "github.com/ZupIT/horusec-admin/pkg/api/install/v2alpha1"
 	"github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/scheme"
 	rest "k8s.io/client-go/rest"
 )
 
-type InstallV1alpha1Interface interface {
+type InstallV2alpha1Interface interface {
 	RESTClient() rest.Interface
 	HorusecPlatformsGetter
 }
 
-// InstallV1alpha1Client is used to interact with features provided by the install.horusec.io group.
-type InstallV1alpha1Client struct {
+// InstallV2alpha1Client is used to interact with features provided by the install.horusec.io group.
+type InstallV2alpha1Client struct {
 	restClient rest.Interface
 }
 
-func (c *InstallV1alpha1Client) HorusecPlatforms(namespace string) HorusecPlatformInterface {
+func (c *InstallV2alpha1Client) HorusecPlatforms(namespace string) HorusecPlatformInterface {
 	return newHorusecPlatforms(c, namespace)
 }
 
-// NewForConfig creates a new InstallV1alpha1Client for the given config.
-func NewForConfig(c *rest.Config) (*InstallV1alpha1Client, error) {
+// NewForConfig creates a new InstallV2alpha1Client for the given config.
+func NewForConfig(c *rest.Config) (*InstallV2alpha1Client, error) {
 	config := *c
 	if err := setConfigDefaults(&config); err != nil {
 		return nil, err
@@ -46,12 +46,12 @@ func NewForConfig(c *rest.Config) (*InstallV1alpha1Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &InstallV1alpha1Client{client}, nil
+	return &InstallV2alpha1Client{client}, nil
 }
 
-// NewForConfigOrDie creates a new InstallV1alpha1Client for the given config and
+// NewForConfigOrDie creates a new InstallV2alpha1Client for the given config and
 // panics if there is an error in the config.
-func NewForConfigOrDie(c *rest.Config) *InstallV1alpha1Client {
+func NewForConfigOrDie(c *rest.Config) *InstallV2alpha1Client {
 	client, err := NewForConfig(c)
 	if err != nil {
 		panic(err)
@@ -59,13 +59,13 @@ func NewForConfigOrDie(c *rest.Config) *InstallV1alpha1Client {
 	return client
 }
 
-// New creates a new InstallV1alpha1Client for the given RESTClient.
-func New(c rest.Interface) *InstallV1alpha1Client {
-	return &InstallV1alpha1Client{c}
+// New creates a new InstallV2alpha1Client for the given RESTClient.
+func New(c rest.Interface) *InstallV2alpha1Client {
+	return &InstallV2alpha1Client{c}
 }
 
 func setConfigDefaults(config *rest.Config) error {
-	gv := v1alpha1.SchemeGroupVersion
+	gv := v2alpha1.SchemeGroupVersion
 	config.GroupVersion = &gv
 	config.APIPath = "/apis"
 	config.NegotiatedSerializer = scheme.Codecs.WithoutConversion()
@@ -79,7 +79,7 @@ func setConfigDefaults(config *rest.Config) error {
 
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
-func (c *InstallV1alpha1Client) RESTClient() rest.Interface {
+func (c *InstallV2alpha1Client) RESTClient() rest.Interface {
 	if c == nil {
 		return nil
 	}

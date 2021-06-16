@@ -19,7 +19,7 @@ package versioned
 import (
 	"fmt"
 
-	installv1alpha1 "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v2alpha1"
+	installv2alpha1 "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v2alpha1"
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"
@@ -27,19 +27,19 @@ import (
 
 type Interface interface {
 	Discovery() discovery.DiscoveryInterface
-	InstallV1alpha1() installv1alpha1.InstallV1alpha1Interface
+	InstallV2alpha1() installv2alpha1.InstallV2alpha1Interface
 }
 
 // Clientset contains the clients for groups. Each group has exactly one
 // version included in a Clientset.
 type Clientset struct {
 	*discovery.DiscoveryClient
-	installV1alpha1 *installv1alpha1.InstallV1alpha1Client
+	installV2alpha1 *installv2alpha1.InstallV2alpha1Client
 }
 
-// InstallV1alpha1 retrieves the InstallV1alpha1Client
-func (c *Clientset) InstallV1alpha1() installv1alpha1.InstallV1alpha1Interface {
-	return c.installV1alpha1
+// InstallV2alpha1 retrieves the InstallV2alpha1Client
+func (c *Clientset) InstallV2alpha1() installv2alpha1.InstallV2alpha1Interface {
+	return c.installV2alpha1
 }
 
 // Discovery retrieves the DiscoveryClient
@@ -63,7 +63,7 @@ func NewForConfig(c *rest.Config) (*Clientset, error) {
 	}
 	var cs Clientset
 	var err error
-	cs.installV1alpha1, err = installv1alpha1.NewForConfig(&configShallowCopy)
+	cs.installV2alpha1, err = installv2alpha1.NewForConfig(&configShallowCopy)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +79,7 @@ func NewForConfig(c *rest.Config) (*Clientset, error) {
 // panics if there is an error in the config.
 func NewForConfigOrDie(c *rest.Config) *Clientset {
 	var cs Clientset
-	cs.installV1alpha1 = installv1alpha1.NewForConfigOrDie(c)
+	cs.installV2alpha1 = installv2alpha1.NewForConfigOrDie(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClientForConfigOrDie(c)
 	return &cs
@@ -88,7 +88,7 @@ func NewForConfigOrDie(c *rest.Config) *Clientset {
 // New creates a new Clientset for the given RESTClient.
 func New(c rest.Interface) *Clientset {
 	var cs Clientset
-	cs.installV1alpha1 = installv1alpha1.New(c)
+	cs.installV2alpha1 = installv2alpha1.New(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClient(c)
 	return &cs

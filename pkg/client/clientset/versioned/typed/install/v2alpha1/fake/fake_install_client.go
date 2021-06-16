@@ -17,22 +17,22 @@
 package fake
 
 import (
-	v1alpha1 "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v2alpha1"
+	v2alpha1 "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v2alpha1"
 	rest "k8s.io/client-go/rest"
 	testing "k8s.io/client-go/testing"
 )
 
-type FakeInstallV1alpha1 struct {
+type FakeInstallV2alpha1 struct {
 	*testing.Fake
 }
 
-func (c *FakeInstallV1alpha1) HorusecPlatforms(namespace string) v1alpha1.HorusecPlatformInterface {
+func (c *FakeInstallV2alpha1) HorusecPlatforms(namespace string) v2alpha1.HorusecPlatformInterface {
 	return &FakeHorusecPlatforms{c, namespace}
 }
 
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
-func (c *FakeInstallV1alpha1) RESTClient() rest.Interface {
+func (c *FakeInstallV2alpha1) RESTClient() rest.Interface {
 	var ret *rest.RESTClient
 	return ret
 }
