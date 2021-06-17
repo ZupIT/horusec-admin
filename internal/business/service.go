@@ -23,6 +23,7 @@ import (
 	"github.com/ZupIT/horusec-admin/internal/tracing"
 	api "github.com/ZupIT/horusec-admin/pkg/api/install/v2alpha1"
 	client "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v2alpha1"
+	jsonpatch "github.com/evanphx/json-patch"
 	k8s "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/json"
 )
@@ -58,9 +59,12 @@ func (s *ConfigService) CreateOrUpdate(ctx context.Context, raw []byte) error {
 	if raw == nil {
 		return errors.New("not accept raw empty")
 	}
-	newEntity := &api.HorusecPlatform{}
-	if err := json.Unmarshal(raw, newEntity); err != nil {
+	spec := api.HorusecPlatformSpec{}
+	if err := json.Unmarshal(raw, &spec); err != nil {
 		return err
+	}
+	newEntity := &api.HorusecPlatform{
+		Spec: spec,
 	}
 	older, err := s.GetConfig(ctx)
 	if err != nil {
@@ -69,7 +73,11 @@ func (s *ConfigService) CreateOrUpdate(ctx context.Context, raw []byte) error {
 	if older == nil {
 		return s.createResource(ctx, newEntity)
 	}
-	return s.updatePartially(ctx, older, newEntity)
+	newEntityMerged, err := s.mergePatch(older, newEntity)
+	if err != nil {
+		return err
+	}
+	return s.updatePartially(ctx, older, newEntityMerged)
 }
 
 func (s *ConfigService) updatePartially(ctx context.Context, older, newest *api.HorusecPlatform) error {
@@ -131,4 +139,21 @@ func (s *ConfigService) updateResource(ctx context.Context, r *api.HorusecPlatfo
 
 	logger.WithPrefix(ctx, "config_service").Debug("resource updated")
 	return nil
+}
+
+func (s *ConfigService) mergePatch(older, new *api.HorusecPlatform) (*api.HorusecPlatform, error) {
+	olderBytes := older.ToBytes()
+	newBytes := new.ToBytes()
+
+	merged, err := jsonpatch.MergePatch(olderBytes, newBytes)
+	if err != nil {
+		return nil, err
+	}
+
+	var result *api.HorusecPlatform
+	if err := json.Unmarshal(merged, &result); err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }
