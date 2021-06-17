@@ -43,8 +43,13 @@ func (h *ConfigReading) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
+	response := map[string]interface{}{
+		"spec": cfg.Spec,
+		"status": cfg.Status,
+	}
+
 	// Answer
-	if err = h.render.JSON(w, http.StatusOK, cfg); err != nil {
+	if err = h.render.JSON(w, http.StatusOK, response); err != nil {
 		span.SetError(err)
 		panic(err)
 	}
