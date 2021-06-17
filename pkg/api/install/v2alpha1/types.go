@@ -18,6 +18,7 @@ import (
 	"github.com/ZupIT/horusec-admin/pkg/api/install/v2alpha1/state"
 	corev1 "k8s.io/api/core/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/util/json"
 )
 
 //
@@ -67,6 +68,11 @@ type HorusecPlatformSpec struct {
 	// Important: Run "make" to regenerate code after modifying this file
 	Components Components `json:"components,omitempty"`
 	Global     Global     `json:"global,omitempty"`
+}
+
+func (h *HorusecPlatform) ToBytes() []byte {
+	bytes, _ := json.Marshal(h)
+	return bytes
 }
 
 type Global struct {
