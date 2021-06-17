@@ -19,7 +19,7 @@
     </div>
 
     <section class="container">
-        <form onsubmit="event.preventDefault();submitAuthForm()">
+        <form onsubmit="return submitForm(event)">
             <div class="divider select-auth">
                 <label class="key" for="">HORUSEC_AUTH_TYPE</label>
 
@@ -29,20 +29,20 @@
                 </span>
 
                 <div class="radio-group">
-                    <input id="horusec_auth_type" name="components.auth.type" hidden>
+                    <input name="components.auth.type" hidden>
 
                     <label class="radio-item">
-                        <input id="auth-horusec" name="horusec_auth_type" value="horusec" type="radio" onchange="setAuthType('horusec')">
+                        <input id="radio-auth-horusec" name="!authType" value="horusec" type="radio" onchange="setAuthType('horusec')">
                         <img src="/images/horusec.svg">
                     </label>
 
                     <label class="radio-item">
-                        <input id="auth-keycloak" name="horusec_auth_type" value="ldap" type="radio" onchange="setAuthType('keycloak')">
+                        <input id="radio-auth-keycloak" name="!authType" type="radio" onchange="setAuthType('keycloak')">
                         <img src="/images/keycloak.svg">
                     </label>
 
                     <label class="radio-item">
-                        <input id="auth-ldap" name="horusec_auth_type" value="keycloak" type="radio" onchange="setAuthType('ldap')">
+                        <input id="radio-auth-ldap" name="!authType" value="keycloak" type="radio" onchange="setAuthType('ldap')">
                         <img src="/images/ldap.svg">
                     </label>
                 </div>
@@ -231,19 +231,10 @@
 window.onload = () => {
     setCurrentValues()
 };
-function submitAuthForm() {
-    const inputs = document.querySelectorAll('input')
+function submitForm(event) {
+    event.preventDefault();
 
-    let body = {}
-
-    inputs.forEach(item => {
-        const value = item.type === 'checkbox' ? toBoolean(item.value) : item.value
-
-        body = {
-            ...body,
-            [item.id]: value
-        }
-    })
+    const body = toK8sObject(event.target)
 
     sendRequest(body)
 }

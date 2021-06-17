@@ -103,6 +103,10 @@ button {
   margin: 20px 0;
 }
 
+.italic {
+  font-style: italic;
+}
+
 button.outline {
   background: none;
   border: 1px solid var(--text);

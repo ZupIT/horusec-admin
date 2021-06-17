@@ -21,14 +21,14 @@
     <section class="container">
         <h3>Run the web application in other host: <a href="https://docs.horusec.io/docs/tutorials/how-to-run-the-web-application-on-other-host/">tutorial</a>.</h3>
 
-        <form onsubmit="event.preventDefault();submitManagerForm()">
+        <form onsubmit="return submitForm(event)">
             <div class="form-container-row">
                 <div class="divider">
                     <label class="key" for="api_url">API Service</label>
 
                     <span class="description">URL for the API service.</span>
 
-                    <input id="api_url" placeholder="http://127.0.0.1:8000" type="text">
+                    <input name="components.api.ingress.host" placeholder="http://127.0.0.1:8000" type="text">
                 </div>
 
                 <div class="divider">
@@ -36,7 +36,7 @@
 
                     <span class="description">URL for the Analytic service.</span>
 
-                    <input id="analytic_url" placeholder="http://127.0.0.1:8005" type="text">
+                    <input name="components.analytic.ingress.host" placeholder="http://127.0.0.1:8005" type="text">
                 </div>
 
                 <div class="divider">
@@ -44,7 +44,7 @@
 
                     <span class="description">URL for the Core service.</span>
 
-                    <input id="core_service" placeholder="http://127.0.0.1:8003" type="text">
+                    <input name="components.core.ingress.host" placeholder="http://127.0.0.1:8003" type="text">
                 </div>
 
                 <div class="divider">
@@ -52,7 +52,7 @@
 
                     <span class="description">URL for the Auth service.</span>
 
-                    <input id="auth_url" placeholder="http://127.0.0.1:8006" type="text">
+                    <input name="components.auth.ingress.host" placeholder="http://127.0.0.1:8006" type="text">
                 </div>
 
                 <div class="divider">
@@ -60,7 +60,7 @@
 
                     <span class="description">URL for the Vulnerability service.</span>
 
-                    <input id="vulnerability_url" placeholder="http://127.0.0.1:8001" type="text">
+                    <input name="components.vulnerability.ingress.host" placeholder="http://127.0.0.1:8001" type="text">
                 </div>
 
                 <div class="divider">
@@ -68,7 +68,7 @@
 
                     <span class="description">URL for the Webhook service.</span>
 
-                    <input id="webhook_url" placeholder="http://127.0.0.1:8004" type="text">
+                    <input name="components.webhook.ingress.host" placeholder="http://127.0.0.1:8004" type="text">
                 </div>
 
                 <div class="divider">
@@ -76,7 +76,7 @@
 
                     <span class="description">URL for the Manager.</span>
 
-                    <input id="manager_url" placeholder="http://127.0.0.1:8080" type="text">
+                    <input name="components.manager.ingress.host" placeholder="http://127.0.0.1:8080" type="text">
                 </div>
             </div>
 
@@ -95,21 +95,12 @@
 window.onload = () => {
     setCurrentValues()
 };
-function submitManagerForm(e) {
-    const inputs = document.querySelectorAll('input')
+function submitForm(event) {
+    event.preventDefault();
 
-    let body = {}
+    const body = toK8sObject(event.target);
 
-    inputs.forEach(item => {
-        const value = item.type === 'checkbox' ? toBoolean(item.value) : item.value
-
-        body = {
-            ...body,
-            [item.id]: value
-        }
-    })
-
-    sendRequest(body)
+    sendRequest(body);
 }
 </script>
 

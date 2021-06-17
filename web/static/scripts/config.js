@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
- function setCurrentValues() {
+function setCurrentValues() {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', '/api/config', true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -30,46 +30,21 @@
         if (ev.currentTarget.status === 200 && ev.currentTarget.response) {
             const result = JSON.parse(ev.currentTarget.response)
 
-             Object.entries(result).forEach(item => {
-                const element = document.getElementById(item[0])
-
-                if (element) {
-                    element.value = item[1]
-
-                    if (element.type === 'checkbox' && item[1]) {
-                        element.checked = JSON.parse(item[1])
-                    }
-
-                    if (item[0] === 'horusec_auth_type') {
-                        setAuthType(item[1], true)
-                    }
-
-                    if (item[0] === 'horusec_application_admin_data') {
-                        setDataOfAdminApplication(item[1])
-                    }
-
-                    if (item[0] === 'disable_emails') {
-                        setDisableEmail(item[1])
-                    }
-                }
-            });
+            console.log(result)
         }
     }
 }
-function setAuthType(authType, setRadioOption) {
-    document.getElementById('horusec_auth_type').value = authType
 
-     document.getElementById('keycloak-form').style.display = 'none'
-     document.getElementById('ldap-form').style.display = 'none'
+function setAuthType(authType) {
+    const inputAuthType = document.getElementsByName('components.auth.type')[0];
+    inputAuthType.value = authType;
 
-    if (authType !== 'horusec') {
-         document.getElementById(`${authType}-form`).style.display = 'flex'
-    }
+    document.getElementById('keycloak-form').style.display = 'none';
+    document.getElementById('ldap-form').style.display = 'none';
 
-    if (setRadioOption) {
-        document.getElementById(`auth-${authType}`).checked = true
-    }
- }
+    if (authType !== 'horusec') document.getElementById(`${authType}-form`).style.display = 'flex';
+}
+
 function setDataOfAdminApplication(data) {
     try {
         const appAdminData = JSON.parse(data)
@@ -83,6 +58,7 @@ function setDataOfAdminApplication(data) {
         console.info('No admin data to set')
     }
 }
+
 function setEnableApplicationAdmin(value) {
     document.getElementById('horusec_enable_application_admin').value = value
 
@@ -97,6 +73,7 @@ function setEnableApplicationAdmin(value) {
 
     }
 }
+
 function setDisableEmail(value) {
     document.getElementById('disable_emails').value = value
 

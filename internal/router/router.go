@@ -71,9 +71,9 @@ func (r *router) routeAPIs() {
 	}
 	for _, route := range r.APIs {
 		handlerFunc := route.Handler
-		if route.Authenticated {
-			handlerFunc = r.authz.Authorize(handlerFunc)
-		}
+		// if route.Authenticated {
+		// 	handlerFunc = r.authz.Authorize(handlerFunc)
+		// }
 		router.Method(route.Method, route.Pattern, handlerFunc)
 	}
 	r.Mount("/api", router)
