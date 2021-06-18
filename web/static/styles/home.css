@@ -23,13 +23,43 @@ div.logo-container {
 
 button.status {
   background: none;
-  border-radius: 50%;
+  border-radius: none;
+  padding: 0;
+  padding-right: 5px;
   width: auto;
   margin-right: 30px;
 }
 
+button.error {
+  animation: pulse-error 2s infinite;
+}
+
+button.error a span {
+  color: var(--error);
+}
+
+button.Pending a span {
+  color: var(--info);
+  line-height: 30px;
+  display: inline-block;
+}
+
+button.Pending a span::before {
+  display: inline-block;
+  content: url("../icons/inprogress.svg");
+  height: 30px;
+  width: 30px;
+  line-height: 30px;
+  margin-right: 10px;
+}
+
+button.Pending a img {
+  display: none;
+}
+
+
 button.status a span {
-  font-size: 20px;
+  font-size: 30px;
   margin-left: 10px;
 }
 
@@ -89,4 +119,19 @@ li a img {
   display: block;
   width: 25px;
   margin-bottom: 10px;
+}
+
+@keyframes pulse-error {
+  0% {
+    box-shadow: 0 0 0 0 rgba(233, 28, 28, 0.315);
+    background-color: rgba(233, 28, 28, 0.397);
+  }
+
+  70% {
+    box-shadow: 0 0 0 13px rgba(0, 0, 0, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
 }

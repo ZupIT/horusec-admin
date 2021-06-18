@@ -14,27 +14,6 @@
  * limitations under the License.
  */
 
-function setCurrentValues() {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', '/api/config', true);
-    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhr.setRequestHeader('X-Horusec-Authorization', getCookie('horusec::access_token'))
-
-    xhr.send()
-
-    xhr.onreadystatechange = function (ev) {
-        if (ev.currentTarget.status === 401) {
-            window.location.href = '/view/not-authorized'
-        }
-
-        if (ev.currentTarget.status === 200 && ev.currentTarget.response) {
-            const result = JSON.parse(ev.currentTarget.response)
-
-            console.log(result)
-        }
-    }
-}
-
 function setAuthType(authType) {
     const inputAuthType = document.getElementsByName('components.auth.type')[0];
     inputAuthType.value = authType;

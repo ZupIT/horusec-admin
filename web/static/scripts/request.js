@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-function sendRequest(body) {
+function saveData(body) {
     try {
         const xhr = new XMLHttpRequest();
         xhr.open('PATCH', '/api/config', true);
@@ -36,4 +36,25 @@ function sendRequest(body) {
         console.error(error)
         showSnackBar('error')
     }
+}
+
+function getCurrentData() {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', '/api/config', true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.setRequestHeader('X-Horusec-Authorization', getCookie('horusec::access_token'))
+
+    xhr.send()
+
+    return new Promise((resolve) => {
+        xhr.onreadystatechange = function (ev) {
+            if (ev.currentTarget.status === 401) {
+                window.location.href = '/view/not-authorized'
+            }
+
+            if (ev.currentTarget.status === 200 && ev.currentTarget.response) {
+                resolve(JSON.parse(ev.currentTarget.response))
+            }
+        }
+    })
 }

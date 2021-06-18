@@ -200,15 +200,15 @@
 </body>
 
 <script type="text/javascript">
-window.onload = () => {
-    setCurrentValues()
+window.onload = async () => {
+    const result = await getCurrentData();
 };
 function submitForm(event) {
     event.preventDefault();
 
     const body = toK8sObject(event.target)
 
-    sendRequest(body)
+    saveData(body)
 }
 </script>
 

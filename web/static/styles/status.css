@@ -60,7 +60,7 @@ ul.services li {
   border-radius: 4px;
   height: auto;
   margin: 30px;
-  cursor: pointer;
+  /* cursor: pointer; */
   transition: ease 0.5s;
 }
 
@@ -101,28 +101,49 @@ ul.services li.inprogress span.status::after {
   color: var(--info);
 }
 
-ul.services li.success span.status::before {
+ul.services li.True span.status::before {
   content: url("../icons/running.svg");
 }
 
-ul.services li.success span.status::after {
+ul.services li.True span.status::after {
   content: "Running";
   margin-left: 5px;
   color: var(--success);
 }
 
-ul.services li.error {
+ul.services li.Unknown {
   animation: pulse-error 2s infinite;
 }
 
-ul.services li.error span.status::before {
+ul.services li.Unknown span.status::before {
   content: url("../icons/error.svg");
 }
 
-ul.services li.error span.status::after {
+ul.services li.Unknown span.status::after {
   content: "Error";
   color: var(--error);
   margin-left: 5px;
+}
+
+ul.services li div.log {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  padding: 4px;
+  margin: 6px 0;
+}
+
+ul.services li div.log span.date {
+  display: block;
+  margin: 5px 0;
+  font-weight: bold;
+  color: var(--textSecundary);
+}
+
+ul.services li div.log span.content {
+  display: block;
+  color: var(--textSecundary);
 }
 
 div.modal {

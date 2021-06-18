@@ -26,29 +26,10 @@
             </button>
         </div>
 
-        <ul class="services">
-            <li class="error" onclick="openModal()">
-                <span class="title">Broker RabbitMQ</span>
-                <span class="status" />
-            </li>
-
-            <li class="success" onclick="openModal()">
-                <span class="title">Core service</span>
-                <span class="status" />
-            </li>
-
-            <li class="inprogress" onclick="openModal()">
-                <span class="title">Auth service</span>
-                <span class="status" />
-            </li>
-
-            <li class="notconfigured" onclick="openModal()">
-                <span class="title">Analytic service</span>
-                <span class="status" />
-            </li>
+        <ul id="services" class="services">
         </ul>
 
-        <div id="modal" class="modal">
+        {{/* <div id="modal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1>
@@ -80,17 +61,44 @@
                     </li>
                 </ul>
             </div>
-        </div>
+        </div> */}}
     </section>
 </body>
 
 <script type="text/javascript">
+window.onload = async () => {
+    const data = (await getCurrentData()).status;
+    setStatusData(data)
+};
+
 function openModal () {
     document.getElementById('modal').style.display = 'flex'
 }
 
 function closeModal () {
     document.getElementById('modal').style.display = 'none'
+}
+
+function setStatusData(data) {
+    const { conditions } = data;
+    const listOfServices = document.getElementById('services');
+
+    conditions.forEach((service) => {
+        const serviceName = service.type.replace('Available', '');
+        const li = document.createElement('li');
+        li.className += service.status;
+        li.innerHTML += `
+            <span class="title">${serviceName}</span>
+
+            <span class="status"></span>
+
+            <div class="log">
+                <span class="date">${service.lastTransitionTime}</span>
+                <span class="content">${service.message}</span>
+            </div>
+        `;
+        listOfServices.appendChild(li);
+    })
 }
 
 </script>
