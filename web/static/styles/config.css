@@ -27,6 +27,11 @@ h1 img {
   margin-right: 10px;
 }
 
+* a {
+  color: var(--info);
+  width: auto;
+}
+
 div.form-container-column,
 div.form-container-row {
   height: calc(100vh - 220px);
@@ -61,7 +66,7 @@ div.form-container-row {
   padding: 20px;
   background-color: var(--disabled);
   border-radius: 5px;
-  width: 350px;
+  width: 390px;
   margin: 10px;
 }
 
@@ -73,6 +78,8 @@ div.form-container-row {
 
 .divider label.key {
   font-weight: bold;
+  display: block;
+  margin-bottom: 10px;
 }
 
 .divider span.description {
@@ -105,4 +112,29 @@ h3 a {
 .btns-wrapper button {
   margin: 0;
   margin-left: 30px;
+}
+
+.secret {
+  border: 1px dotted #f1f1f1;
+  margin-top: 10px;
+  padding: 10px;
+  min-width: 370px;
+}
+
+.secret-title {
+  margin-bottom: 3px;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.secret-title img {
+  width: 18px;
+  margin-right: 5px;
+}
+
+.secret-description {
+  display: block;
+  font-size: 15px;
+  color: var(--textSecundary);
 }

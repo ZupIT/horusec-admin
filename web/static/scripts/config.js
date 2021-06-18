@@ -45,47 +45,23 @@ function setAuthType(authType) {
     if (authType !== 'horusec') document.getElementById(`${authType}-form`).style.display = 'flex';
 }
 
-function setDataOfAdminApplication(data) {
-    try {
-        const appAdminData = JSON.parse(data)
-
-        const { email, password, username } = appAdminData
-
-        document.getElementById('admin_data_username').value = username
-        document.getElementById('admin_data_email').value = email
-        document.getElementById('admin_data_password').value = password
-    } catch (e) {
-        console.info('No admin data to set')
-    }
+function setCheckboxValueByName(name) {
+    const checkbox = document.getElementsByName(name)[0]
+    checkbox.value = !toBoolean(checkbox.value);
 }
 
-function setEnableApplicationAdmin(value) {
-    document.getElementById('horusec_enable_application_admin').value = value
+function setApplicationAdmin() {
+    const switchInput = document.getElementsByName('components.auth.user.administrator.enabled')[0];
+    switchInput.value = !toBoolean(switchInput.value);
 
-    document.getElementById('admin_data_username').required = value == 'true' ? true : false
-    document.getElementById('admin_data_email').required = value == 'true' ? true : false
-    document.getElementById('admin_data_password').required = value == 'true' ? true : false
-
-    if (value == 'false') {
-        document.getElementById('horusec_application_admin_data').style.display = 'none'
-    } else {
-        document.getElementById('horusec_application_admin_data').style.display = 'flex'
-
-    }
+    const form = document.getElementById('application-admin-form');
+    form.style.display = toBoolean(switchInput.value) ? 'block' : 'none';
 }
 
-function setDisableEmail(value) {
-    document.getElementById('disable_emails').value = value
+function setDefaultUser() {
+    const switchInput = document.getElementsByName('components.auth.user.default.enabled')[0];
+    switchInput.value = !toBoolean(switchInput.value);
 
-    document.getElementById('smtp_username').required = value == 'true' ? false : true
-    document.getElementById('smtp_password').required = value == 'true' ? false : true
-    document.getElementById('smtp_host').required = value == 'true' ? false : true
-    document.getElementById('smtp_port').required = value == 'true' ? false : true
-    document.getElementById('email_from').required = value == 'true' ? false : true
-
-    if (value === 'false') {
-        document.getElementById('smtp-fields').style.display = 'flex'
-    } else {
-        document.getElementById('smtp-fields').style.display = 'none'
-    }
+    const form = document.getElementById('default-user-form');
+    form.style.display = toBoolean(switchInput.value) ? 'block' : 'none';
 }

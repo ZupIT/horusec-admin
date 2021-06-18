@@ -19,140 +19,118 @@
     </div>
 
     <section class="container">
-        <form onsubmit="event.preventDefault();submitGeneralForm()" id="form">
+        <form onsubmit="return submitForm(event)" id="form">
             <div class="form-container-row">
                 <div class="divider">
-                    <label class="key">HORUSEC_JWT</label>
+                    <label class="key">JWT</label>
 
-                     <span class="description">
-                        For security, the value of this secret must be created through the Kubernets secret managers.
-                    </span>
+                    <div class="secret">
+                        {{ template "secret" }}
 
-                    <span class="description italic">
-                        kubectl create secret generic $JWT_KEY --from-literal="$JWT_NAME={your_strong_value}"
-                    </span>
+                        <input name="global.jwt.secretKeyRef.name" placeholder="Key" type="text">
 
-                    <div class="inputs-group">
-                        <input name="global.jwt.secretKeyRef.name" placeholder="$JWT_NAME" type="text">
-
-                        <input name="global.jwt.secretKeyRef.key" placeholder="$JWT_KEY" type="text">
+                        <input name="global.jwt.secretKeyRef.key" placeholder="Name" type="text">
                     </div>
                 </div>
 
                 <div class="divider">
-                    <label class="key">HORUSEC_ENABLE_APPLICATION_ADMIN</label>
+                    <label class="key">APPLICATION ADMIN</label>
 
-                    <span class="description">Use this option to enable/disable the use of application admin. <br> View
-                        more
-                        about in this section of the <a target="_blank"
-                            href="https://docs.horusec.io/docs/tutorials/how-to-enable-disable-application-admin/">documentation</a>.</span>
+                    <span class="description">
+                        Use this option to enable/disable the use of application admin.
+                        <br>
+                        View more about in this section of the
+                        <a target="_blank" href="https://docs.horusec.io/docs/tutorials/how-to-enable-disable-application-admin/">documentation</a>.
+                    </span>
 
                     <label class="switch">
-                        <input id="horusec_enable_application_admin" name="components.auth.user.administrator.enabled" value="false" type="checkbox"
-                            onchange="handleSwitchEnableApp()">
+                        <input name="components.auth.user.administrator.enabled" value="false" type="checkbox" onchange="setApplicationAdmin()">
                         <span class="slider round"></span>
                     </label>
 
-                    <div class="embedded">
-                        <label class="key">EMAIL_ADMIN_APPLICATION</label>
+                    <span id="application-admin-form">
+                        <div class="embedded">
+                            <label class="key">Email</label>
 
-                        <span class="description">
-                            The email for admin application.
-                        </span>
+                            <span class="description">
+                                The email for admin application.
+                            </span>
 
-                        <input name="components.auth.user.administrator.email" placeholder="Email" type="email">
-                    </div>
-
-                    <div class="embedded">
-                        <label class="key">USER</label>
-
-                        <span class="description">
-                            <!-- TODO: Padrão secret -->
-                        </span>
-
-                        <div class="inputs-group">
-                            <input id="components.auth.user.administrator.user.secretKeyRef.key" placeholder="Username" type="text">
-
-                            <input id="components.auth.user.administrator.user.secretKeyRef.name" placeholder="Password" type="password">
+                            <input name="components.auth.user.administrator.email" placeholder="Email" type="email">
                         </div>
-                    </div>
 
-                    <div class="embedded">
-                        <label class="key">PASSWORD</label>
+                        <div class="embedded secret">
+                            <label class="key">USER</label>
 
-                        <span class="description">
-                            <!-- TODO: Padrão secret -->
-                        </span>
+                            {{ template "secret" }}
 
-                        <div class="inputs-group">
+                            <input id="components.auth.user.administrator.user.secretKeyRef.name" placeholder="Name" type="text">
+
+                            <input id="components.auth.user.administrator.user.secretKeyRef.key" placeholder="Key" type="text">
+                        </div>
+
+                        <div class="embedded secret">
+                            <label class="key">PASSWORD</label>
+
+                            {{ template "secret" }}
+
+                            <input id="components.auth.user.administrator.password.secretKeyRef.name" placeholder="Password" type="text">
+
                             <input id="components.auth.user.administrator.password.secretKeyRef.key" placeholder="Username" type="text">
-
-                            <input id="components.auth.user.administrator.password.secretKeyRef.name" placeholder="Password" type="password">
                         </div>
-                    </div>
+                    </span>
                 </div>
 
                  <div class="divider">
-                    <label class="key">HORUSEC_ENABLE_DEFAULT_USER</label>
+                    <label class="key">DEFAULT USER</label>
 
-                    <span class="description">Use this option to enable/disable the use of application admin. <br> View
-                        more
-                        about in this section of the <a target="_blank"
-                            href="https://docs.horusec.io/docs/tutorials/how-to-enable-disable-application-admin/">documentation</a>.</span>
+                    <span class="description">
+                        Use this option to enable/disable the use of application admin.
+                        <br>
+                        View more about in this section of the
+                        <a target="_blank"href="https://docs.horusec.io/docs/tutorials/how-to-enable-disable-application-admin/">documentation</a>.
+                    </span>
 
                     <label class="switch">
-                        <input id="horusec_enable_application_admin" name="components.auth.user.administrator.enabled" value="false" type="checkbox"
-                            onchange="handleSwitchEnableApp()">
+                        <input name="components.auth.user.default.enabled" value="false" type="checkbox" onchange="setDefaultUser()">
                         <span class="slider round"></span>
                     </label>
 
-                    <div class="embedded">
-                        <label class="key">EMAIL_ADMIN_APPLICATION</label>
+                    <span id="default-user-form">
+                        <div class="embedded">
+                            <label class="key">Email</label>
 
-                        <span class="description">
-                            The email for admin application.
-                        </span>
+                            <span class="description">
+                                The email for default user.
+                            </span>
 
-                        <input name="components.auth.user.administrator.email" placeholder="Email" type="email">
-                    </div>
-
-                    <div class="embedded">
-                        <label class="key">USER</label>
-
-                        <span class="description">
-                            <!-- TODO: Padrão secret -->
-                        </span>
-
-                        <div class="inputs-group">
-                            <input id="components.auth.user.administrator.user.secretKeyRef.key" placeholder="Username" type="text">
-
-                            <input id="components.auth.user.administrator.user.secretKeyRef.name" placeholder="Password" type="password">
+                            <input name="components.auth.user.default.email" placeholder="Email" type="email">
                         </div>
-                    </div>
 
-                    <div class="embedded">
-                        <label class="key">PASSWORD</label>
+                        <div class="embedded secret">
+                            <label class="key">USER</label>
 
-                        <span class="description">
-                            <!-- TODO: Padrão secret -->
-                        </span>
+                            {{ template "secret" }}
 
-                        <div class="inputs-group">
-                            <input id="components.auth.user.administrator.password.secretKeyRef.key" placeholder="Username" type="text">
+                            <input name="components.auth.user.default.user.secretKeyRef.name" placeholder="Name" type="text">
 
-                            <input id="components.auth.user.administrator.password.secretKeyRef.name" placeholder="Password" type="password">
+                            <input name="components.auth.user.default.user.secretKeyRef.key" placeholder="Key" type="text">
                         </div>
-                    </div>
+
+                        <div class="embedded secret">
+                            <label class="key">PASSWORD</label>
+
+                            {{ template "secret" }}
+
+                            <input name="components.auth.user.default.password.secretKeyRef.name" placeholder="Name" type="text">
+
+                            <input name="components.auth.user.default.password.secretKeyRef.key" placeholder="Key" type="text">
+                        </div>
+                    </span>
                 </div>
             </div>
 
-            <div class="btns-wrapper">
-                <button type="submit">SAVE</button>
-
-                <button class="outline">
-                    <a href="/view/home">BACK</a>
-                </button>
-            </div>
+            {{ template "options-form" }}
         </form>
     </section>
 </body>
@@ -162,22 +140,14 @@ window.onload = () => {
     setCurrentValues()
 };
 
-function submitGeneralForm(e) {
-    const inputs = document.querySelectorAll('input')
+function submitForm(event) {
+    event.preventDefault();
 
-    let body = {}
+    const body = toK8sObject(event.target);
 
-    inputs.forEach(item => {
-        const value = item.type === 'checkbox' ? toBoolean(item.value) : item.value
-
-        body = {
-            ...body,
-            [item.id]: value
-        }
-    })
-
-    sendRequest(body)
+    sendRequest(body);
 }
+
 function handleSwitchEnableApp() {
     let currentValue = document.getElementById('horusec_enable_application_admin').value
     const valueToSet = currentValue == 'true' ? 'false' : 'true'

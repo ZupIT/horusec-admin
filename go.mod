@@ -5,7 +5,7 @@ go 1.15
 require (
 	github.com/HdrHistogram/hdrhistogram-go v1.0.1 // indirect
 	github.com/ZupIT/horusec-devkit v0.0.0-20210318131703-025d34f2d2d7
-	github.com/evanphx/json-patch v4.9.0+incompatible // indirect
+	github.com/evanphx/json-patch v4.9.0+incompatible
 	github.com/go-chi/chi v1.5.4
 	github.com/google/go-cmp v0.5.5
 	github.com/google/wire v0.5.0

@@ -19,7 +19,7 @@
     </div>
 
     <section class="container">
-        <form onsubmit="event.preventDefault();submitGeneralForm()" id="form">
+        <form onsubmit="return submitForm(event)" id="form">
             <div class="form-container-row">
                 <h2>PostgreSQL - General Database</h2>
 
@@ -30,7 +30,7 @@
 
                     <span class="description">Address for connect in your database.</span>
 
-                    <input required id="general_db_host" placeholder="http://0.0.0.0" type="text">
+                    <input required name="global.database.host" placeholder="http://0.0.0.0" type="text">
                 </div>
 
                 <div class="divider">
@@ -38,7 +38,7 @@
 
                     <span class="description">Port to connect in your database.</span>
 
-                    <input required id="general_db_port" placeholder="5432" type="text">
+                    <input required name="global.database.port" placeholder="5432" type="text">
                 </div>
 
                 <div class="divider">
@@ -46,7 +46,7 @@
 
                     <span class="description">Name of your database</span>
 
-                    <input required id="general_db_name" placeholder="horusec_db" type="text">
+                    <input required name="global.database.name" placeholder="horusec_db" type="text">
                 </div>
 
                 <div class="divider">
@@ -55,18 +55,9 @@
                     <span class="description">Enable the verbose logs option.</span>
 
                     <label class="switch">
-                        <input type="checkbox" id="general_db_log_mode" value="false"
-                            onchange="setCheckboxValue('general_db_log_mode')">
+                        <input type="checkbox" name="global.database.logMode" value="false" onchange="setCheckboxValueByName('global.database.logMode')">
                         <span class="slider round"></span>
                     </label>
-                </div>
-
-                <div class="divider">
-                    <label class="key">Database secret name</label>
-
-                    <span class="description">A long and security name.</span>
-
-                    <input required id="general_db_secret_name" placeholder="long and security" type="text">
                 </div>
 
                 <div class="divider">
@@ -75,10 +66,29 @@
                     <span class="description">Enable SSL mode for your database.</span>
 
                     <label class="switch">
-                        <input type="checkbox" id="general_db_ssl_mode" value="false"
-                            onchange="setCheckboxValue('general_db_ssl_mode')">
+                        <input type="checkbox" name="global.database.sslMode" value="false" onchange="setCheckboxValueByName('global.database.sslMode')">
                         <span class="slider round"></span>
                     </label>
+                </div>
+
+                <div class="divider secret">
+                    <label class="key">Database User</label>
+
+                    {{ template "secret" }}
+
+                    <input required name="global.database.user.secretKeyRef.name" placeholder="Name" type="text">
+
+                    <input required name="global.database.user.secretKeyRef.key" placeholder="Key" type="text">
+                </div>
+
+                <div class="divider secret">
+                    <label class="key">Database Password</label>
+
+                    {{ template "secret" }}
+
+                    <input required name="global.database.passoword.secretKeyRef.name" placeholder="Name" type="text">
+
+                    <input required name="global.database.passoword.secretKeyRef.key" placeholder="Key" type="text">
                 </div>
 
                 <h2>PostgreSQL - Analytic Database</h2>
@@ -90,7 +100,7 @@
 
                     <span class="description">Address for connect in your database.</span>
 
-                    <input required id="analytic_db_host" placeholder="http://0.0.0.0" type="text">
+                    <input required name="components.analytic.database.host" placeholder="http://0.0.0.0" type="text">
                 </div>
 
                 <div class="divider">
@@ -98,7 +108,7 @@
 
                     <span class="description">Port to connect in your database.</span>
 
-                    <input required id="analytic_db_port" placeholder="5432" type="text">
+                    <input required name="components.analytic.database.port" placeholder="5432" type="text">
                 </div>
 
                 <div class="divider">
@@ -106,7 +116,7 @@
 
                     <span class="description">Name of your database</span>
 
-                    <input required id="analytic_db_name" placeholder="horusec_analytic_db" type="text">
+                    <input required name="components.analytic.database.name" placeholder="horusec_db" type="text">
                 </div>
 
                 <div class="divider">
@@ -115,18 +125,9 @@
                     <span class="description">Enable the verbose logs option.</span>
 
                     <label class="switch">
-                        <input type="checkbox" id="analytic_db_log_mode" value="false"
-                            onchange="setCheckboxValue('analytic_db_log_mode')">
+                        <input type="checkbox" name="components.analytic.database.logMode" value="false" onchange="setCheckboxValueByName('components.analytic.database.logMode')">
                         <span class="slider round"></span>
                     </label>
-                </div>
-
-                <div class="divider">
-                    <label class="key">Database secret name</label>
-
-                    <span class="description">A long and security name.</span>
-
-                    <input required id="analytic_db_secret_name" placeholder="long and security" type="text">
                 </div>
 
                 <div class="divider">
@@ -135,10 +136,29 @@
                     <span class="description">Enable SSL mode for your database.</span>
 
                     <label class="switch">
-                        <input type="checkbox" id="analytic_db_ssl_mode" value="false"
-                            onchange="setCheckboxValue('analytic_db_ssl_mode')">
+                        <input type="checkbox" name="components.analytic.database.sslMode" value="false" onchange="setCheckboxValueByName('components.analytic.database.sslMode')">
                         <span class="slider round"></span>
                     </label>
+                </div>
+
+                <div class="divider secret">
+                    <label class="key">Database User</label>
+
+                    {{ template "secret" }}
+
+                    <input required name="components.analytic.database.user.secretKeyRef.name" placeholder="Name" type="text">
+
+                    <input required name="components.analytic.database.user.secretKeyRef.key" placeholder="Key" type="text">
+                </div>
+
+                <div class="divider secret">
+                    <label class="key">Database Password</label>
+
+                    {{ template "secret" }}
+
+                    <input required name="components.analytic.database.passoword.secretKeyRef.name" placeholder="Name" type="text">
+
+                    <input required name="components.analytic.database.passoword.secretKeyRef.key" placeholder="Key" type="text">
                 </div>
 
                 <h2>Message Broker - RabbitMQ</h2>
@@ -150,7 +170,7 @@
 
                     <span class="description">The host for connect in your broker.</span>
 
-                    <input required id="broker_host" placeholder="http://0.0.0.0" type="text">
+                    <input required name="global.broker.host" placeholder="http://0.0.0.0" type="text">
                 </div>
 
                 <div class="divider">
@@ -158,98 +178,91 @@
 
                     <span class="description">The port for connect in your broker.</span>
 
-                    <input required id="broker_port" placeholder="5672" type="text">
+                    <input required name="global.broker.port" placeholder="5672" type="text">
                 </div>
 
-                <div class="divider">
-                    <label class="key">Broker Username</label>
+                <div class="divider secret">
+                    <label class="key">Broker User</label>
 
-                    <span class="description">The username for connect in your broker.</span>
+                    {{ template "secret" }}
 
-                    <input required id="broker_username" placeholder="5672" type="text">
+                    <input required name="global.broker.user.secretKeyRef.name" placeholder="Name" type="text">
+
+                    <input required name="global.broker.user.secretKeyRef.key" placeholder="Key" type="text">
                 </div>
 
-                <div class="divider">
+                <div class="divider secret">
                     <label class="key">Broker Password</label>
 
-                    <span class="description">The password for connect in your broker.</span>
+                    {{ template "secret" }}
 
-                    <input required id="broker_password" placeholder="5672" type="text">
-                </div>
+                    <input required name="global.broker.password.secretKeyRef.name" placeholder="Name" type="text">
 
-                <div class="divider">
-                    <label class="key">Broker secret name</label>
-
-                    <span class="description">A long and security name.</span>
-
-                    <input required id="broker_secret_name" placeholder="long and security" type="text">
+                    <input required name="global.broker.password.secretKeyRef.key" placeholder="Key" type="text">
                 </div>
 
                 <h2>SMTP</h2>
 
                 <h3>Documentation section <a href="https://docs.horusec.io/docs/tutorials/how-to-enable-disable-messaging-service/">about SMTP and messaging</a>.</h3>
 
-                <div class="divider row">
+                <div class="divider">
                     <label class="key">Disabled emails</label>
 
                     <span class="description">Enable/Disable send email in Horusec Flow.</span>
 
                     <label class="switch">
-                        <input type="checkbox" id="disable_emails" value="false" onchange="handleSetEnableEmail()">
+                        <input type="checkbox" name="components.messages.mailServer.enabled" value="false" onchange="setCheckboxValueByName('components.messages.mailServer.enabled')">
                         <span class="slider round"></span>
                     </label>
-
-                    <div class="divider" id="smtp-fields">
-                        <div class="embedded">
-                            <label class="key" for="smtp_username">Username</label>
-
-                            <span class="description">The username for connect in your SMTP server.</span>
-
-                            <input id="smtp_username" placeholder="guest" type="text">
-                        </div>
-
-                        <div class="embedded">
-                            <label class="key" for="smtp_password">Password</label>
-
-                            <span class="description">The password for connect in your SMTP server.</span>
-
-                            <input id="smtp_password" placeholder="*****" type="text">
-                        </div>
-
-                        <div class="embedded">
-                            <label class="key" for="smtp_host">Host</label>
-
-                            <span class="description">The Host for connect in your SMTP server.</span>
-
-                            <input id="smtp_host" placeholder="http://mysmtpserver.com" type="text">
-                        </div>
-
-                        <div class="embedded">
-                            <label class="key" for="smtp_port">Port</label>
-
-                            <span class="description">The Port for connect in your SMTP server</span>
-
-                            <input id="smtp_port" placeholder="5054" type="text">
-                        </div>
-
-                        <div class="embedded">
-                            <label class="key" id="email_from">Email from</label>
-
-                            <span class="description">Email that will send.</span>
-
-                            <input type="email" id="email_from" placeholder="sender@email.com   ">
-                        </div>
-                    </div>
                 </div>
+
+                <div class="divider">
+                    <label class="key" for="smtp_host">Host</label>
+
+                    <span class="description">The Host for connect in your SMTP server.</span>
+
+                    <input name="components.messages.mailServer.host" placeholder="http://mysmtpserver.com" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key" for="smtp_port">Port</label>
+
+                    <span class="description">The Port for connect in your SMTP server</span>
+
+                    <input name="components.messages.mailServer.port" placeholder="5054" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key" id="email_from">Email from</label>
+
+                    <span class="description">Email that will send.</span>
+
+                    <input type="email" name="components.auth.mailServer.emailFrom" placeholder="sender@email.com   ">
+                </div>
+
+                <div class="divider secret">
+                    <label class="key">SMPT User</label>
+
+                    {{ template "secret" }}
+
+                    <input required name="components.messages.mailServer.user.secretKeyRef.name" placeholder="Name" type="text">
+
+                    <input required name="components.messages.mailServer.user.secretKeyRef.key" placeholder="Key" type="text">
+                </div>
+
+                <div class="divider secret">
+                    <label class="key">SMPT Password</label>
+
+                    {{ template "secret" }}
+
+                    <input required name="components.messages.mailServer.password.secretKeyRef.name" placeholder="Name" type="text">
+
+                    <input required name="components.messages.mailServer.password.secretKeyRef.key" placeholder="Key" type="text">
+                </div>
+
             </div>
 
-            <div class="btns-wrapper">
-                <button type="submit">SAVE</button>
-
-                <button class="outline">
-                    <a href="/view/home">BACK</a>
-                </button>
-            </div>
+            {{ template "options-form" }}
         </form>
     </section>
 </body>
@@ -259,35 +272,12 @@
         setCurrentValues()
     };
 
-    function submitGeneralForm() {
-        const inputs = document.querySelectorAll('input')
+    function submitForm(event) {
+        event.preventDefault();
 
-        let body = {}
+        const body = toK8sObject(event.target);
 
-        inputs.forEach(item => {
-            const value = item.type === 'checkbox' ? toBoolean(item.value) : item.value
-
-            body = {
-                ...body,
-                [item.id]: value
-            }
-        })
-
-        sendRequest(body)
-    }
-    function setCheckboxValue(id) {
-        const value = document.getElementById(id).value
-
-        if (value === 'true') {
-            document.getElementById(id).value = false
-        } else {
-            document.getElementById(id).value = true
-        }
-    }
-    function handleSetEnableEmail() {
-        let currentValue = document.getElementById('disable_emails').value
-        const valueToSet = currentValue == 'true' ? 'false' : 'true'
-        setDisableEmail(valueToSet)
+        sendRequest(body);
     }
 </script>
 
