@@ -36,9 +36,15 @@ function setAuthType(authType) {
     }
 }
 
-function setCheckboxValueByName(name) {
+function setCheckboxValueByName(name, isChecked) {
     const checkbox = document.getElementsByName(name)[0]
-    checkbox.value = !toBoolean(checkbox.value);
+
+    if (checkbox) {
+        const valueToSet = isChecked !== undefined ? isChecked : !toBoolean(checkbox.value);
+
+        checkbox.value = valueToSet;
+        checkbox.checked = valueToSet;
+    }
 }
 
 function setApplicationAdmin(value) {

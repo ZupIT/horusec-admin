@@ -19,7 +19,7 @@
 
     <section class="status-container">
         <div class="sub-header">
-            <h2>Track the status of Horusec services on your server.</h2>
+            <h2 id="message"></h2>
 
             <button class="back">
                 <a href="/view/home">Home</a>
@@ -83,6 +83,8 @@ function setStatusData(data) {
     const { conditions } = data;
 
     if (conditions) {
+        document.getElementById("message").innerHTML = 'Track the status of Horusec services on your server.'
+
         const listOfServices = document.getElementById('services');
 
         conditions.forEach((service) => {
@@ -101,6 +103,8 @@ function setStatusData(data) {
             `;
             listOfServices.appendChild(li);
         })
+    } else {
+        document.getElementById("message").innerHTML = '🛠 No service has status available, please do some configuration and check status again.'
     }
 
 }
