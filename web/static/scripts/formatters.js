@@ -26,7 +26,11 @@ function toK8sObject(formData) {
   let body = {}
 
   inputs.forEach(item => {
-    const value = item.type === 'checkbox' ? toBoolean(item.value) : item.value
+    let value;
+
+    if (item.type === 'checkbox') value = toBoolean(item.value);
+    else if (item.type === 'number') value = parseInt(item.value);
+    else value = item.value;
 
     if (item.name && !item.name.startsWith('!')) _.set(body, item.name, value)
   })
@@ -34,17 +38,32 @@ function toK8sObject(formData) {
   return body;
 }
 
-function toFormData(formData) {
-  if (_.isEmpty(formData)) return {}
+function toFormData(form, spec) {
+  if (_.isEmpty(form) || _.isEmpty(spec)) return;
 
-  const inputs = [...formData.elements]
-  let body = {}
+  const elements = [...form.elements]
 
-  inputs.forEach(item => {
-    const value = item.type === 'checkbox' ? toBoolean(item.value) : item.value
+  elements.forEach((el) => {
+    const value = _.get(spec, el.name);
 
-    if (item.name && !item.name.startsWith('!')) _.set(body, item.name, value)
+    switch (el.name) {
+      case 'components.auth.user.administrator.enabled':
+        setApplicationAdmin(value);
+        break;
+
+      case 'components.auth.user.default.enabled':
+        setDefaultUser(value);
+        break;
+
+      case 'components.auth.type':
+        setAuthType(value);
+        break;
+
+      default:
+        el.value = value ? value : '';
+        break;
+    }
   })
 
-  return body;
+  return form;
 }

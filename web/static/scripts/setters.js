@@ -14,9 +14,19 @@
  * limitations under the License.
  */
 
+async function setCurrentValues() {
+    const form = document.getElementsByTagName('form')[0];
+    const data = await getCurrentData();
+    const { spec } = data;
+    toFormData(form, spec);
+}
+
 function setAuthType(authType) {
     const inputAuthType = document.getElementsByName('components.auth.type')[0];
     inputAuthType.value = authType;
+
+    const radioOption = document.getElementById(`radio-auth-${authType}`);
+    radioOption.checked = true;
 
     document.getElementById('keycloak-form').style.display = 'none';
     document.getElementById('ldap-form').style.display = 'none';
@@ -29,18 +39,26 @@ function setCheckboxValueByName(name) {
     checkbox.value = !toBoolean(checkbox.value);
 }
 
-function setApplicationAdmin() {
-    const switchInput = document.getElementsByName('components.auth.user.administrator.enabled')[0];
-    switchInput.value = !toBoolean(switchInput.value);
+function setApplicationAdmin(value) {
+    const checkboxInput = document.getElementsByName('components.auth.user.administrator.enabled')[0];
+
+    const valueToSet = value !== undefined ? value : !toBoolean(checkboxInput.value);
+
+    checkboxInput.value = valueToSet;
+    checkboxInput.checked = valueToSet;
 
     const form = document.getElementById('application-admin-form');
-    form.style.display = toBoolean(switchInput.value) ? 'block' : 'none';
+    form.style.display = valueToSet ? 'block' : 'none';
 }
 
-function setDefaultUser() {
-    const switchInput = document.getElementsByName('components.auth.user.default.enabled')[0];
-    switchInput.value = !toBoolean(switchInput.value);
+function setDefaultUser(value) {
+    const checkboxInput = document.getElementsByName('components.auth.user.default.enabled')[0];
+
+    const valueToSet = value !== undefined ? value : !toBoolean(checkboxInput.value);
+
+    checkboxInput.value = valueToSet;
+    checkboxInput.checked = valueToSet;
 
     const form = document.getElementById('default-user-form');
-    form.style.display = toBoolean(switchInput.value) ? 'block' : 'none';
+    form.style.display = valueToSet ? 'block' : 'none';
 }

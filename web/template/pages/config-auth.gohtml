@@ -37,12 +37,12 @@
                     </label>
 
                     <label class="radio-item">
-                        <input id="radio-auth-keycloak" name="!authType" type="radio" onchange="setAuthType('keycloak')">
+                        <input id="radio-auth-keycloak" name="!authType" value="keycloak" type="radio" onchange="setAuthType('keycloak')">
                         <img src="/images/keycloak.svg">
                     </label>
 
                     <label class="radio-item">
-                        <input id="radio-auth-ldap" name="!authType" value="keycloak" type="radio" onchange="setAuthType('ldap')">
+                        <input id="radio-auth-ldap" name="!authType" value="ldap" type="radio" onchange="setAuthType('ldap')">
                         <img src="/images/ldap.svg">
                     </label>
                 </div>
@@ -117,7 +117,7 @@
 
                     <span class="description">LDAP connection host</span>
 
-                    <input name="global.ldap.port" placeholder="389" type="text">
+                    <input name="global.ldap.port" placeholder="389" type="number">
                 </div>
 
                 <div class="divider">
@@ -161,12 +161,14 @@
                     <input name="global.ldap.bindDn" placeholder="cn=admin,dc=example,dc=org" type="text">
                 </div>
 
-                <div class="divider">
-                    <label class="key" for="">Bin password</label>
+                <div class="divider secret">
+                    <label class="key">Bin password</label>
 
-                    <span class="description">Definition for Idap admin entity</span>
+                    {{ template "secret" }}
 
-                    <input name="global.ldap.bindPassword" placeholder="admin" type="text">
+                    <input name="global.ldap.bindPassword.secretKeyRef.name" placeholder="Name" type="text">
+
+                    <input name="global.ldap.bindPassword.secretKeyRef.key" placeholder="Key" type="text">
                 </div>
 
                 <div class="divider">
@@ -182,7 +184,7 @@
 
                     <span class="description">What is the group administrators name</span>
 
-                    <input id="global.ldap.groupFilter" placeholder="(memberUid=%s)" type="text">
+                    <input name="global.ldap.groupFilter" placeholder="(memberUid=%s)" type="text">
                 </div>
 
                 <div class="divider">
@@ -201,7 +203,7 @@
 
 <script type="text/javascript">
 window.onload = async () => {
-    const result = await getCurrentData();
+    setCurrentValues()
 };
 function submitForm(event) {
     event.preventDefault();

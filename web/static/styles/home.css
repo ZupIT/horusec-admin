@@ -34,29 +34,17 @@ button.error {
   animation: pulse-error 2s infinite;
 }
 
-button.error a span {
-  color: var(--error);
+button.Ready a span {
+  color: var(--success);
 }
 
 button.Pending a span {
   color: var(--info);
-  line-height: 30px;
-  display: inline-block;
 }
 
-button.Pending a span::before {
-  display: inline-block;
-  content: url("../icons/inprogress.svg");
-  height: 30px;
-  width: 30px;
-  line-height: 30px;
-  margin-right: 10px;
+button.Error a span {
+  color: var(--error);
 }
-
-button.Pending a img {
-  display: none;
-}
-
 
 button.status a span {
   font-size: 30px;

@@ -30,7 +30,7 @@
 
                     <span class="description">Address for connect in your database.</span>
 
-                    <input required name="global.database.host" placeholder="http://0.0.0.0" type="text">
+                    <input name="global.database.host" placeholder="http://0.0.0.0" type="text">
                 </div>
 
                 <div class="divider">
@@ -38,7 +38,7 @@
 
                     <span class="description">Port to connect in your database.</span>
 
-                    <input required name="global.database.port" placeholder="5432" type="text">
+                    <input name="global.database.port" placeholder="5432" type="number">
                 </div>
 
                 <div class="divider">
@@ -46,7 +46,7 @@
 
                     <span class="description">Name of your database</span>
 
-                    <input required name="global.database.name" placeholder="horusec_db" type="text">
+                    <input name="global.database.name" placeholder="horusec_db" type="text">
                 </div>
 
                 <div class="divider">
@@ -76,9 +76,9 @@
 
                     {{ template "secret" }}
 
-                    <input required name="global.database.user.secretKeyRef.name" placeholder="Name" type="text">
+                    <input name="global.database.user.secretKeyRef.name" placeholder="Name" type="text">
 
-                    <input required name="global.database.user.secretKeyRef.key" placeholder="Key" type="text">
+                    <input name="global.database.user.secretKeyRef.key" placeholder="Key" type="text">
                 </div>
 
                 <div class="divider secret">
@@ -86,9 +86,9 @@
 
                     {{ template "secret" }}
 
-                    <input required name="global.database.passoword.secretKeyRef.name" placeholder="Name" type="text">
+                    <input name="global.database.passoword.secretKeyRef.name" placeholder="Name" type="text">
 
-                    <input required name="global.database.passoword.secretKeyRef.key" placeholder="Key" type="text">
+                    <input name="global.database.passoword.secretKeyRef.key" placeholder="Key" type="text">
                 </div>
 
                 <h2>PostgreSQL - Analytic Database</h2>
@@ -100,7 +100,7 @@
 
                     <span class="description">Address for connect in your database.</span>
 
-                    <input required name="components.analytic.database.host" placeholder="http://0.0.0.0" type="text">
+                    <input name="components.analytic.database.host" placeholder="http://0.0.0.0" type="text">
                 </div>
 
                 <div class="divider">
@@ -108,7 +108,7 @@
 
                     <span class="description">Port to connect in your database.</span>
 
-                    <input required name="components.analytic.database.port" placeholder="5432" type="text">
+                    <input name="components.analytic.database.port" placeholder="5432" type="number">
                 </div>
 
                 <div class="divider">
@@ -116,7 +116,7 @@
 
                     <span class="description">Name of your database</span>
 
-                    <input required name="components.analytic.database.name" placeholder="horusec_db" type="text">
+                    <input name="components.analytic.database.name" placeholder="horusec_db" type="text">
                 </div>
 
                 <div class="divider">
@@ -146,9 +146,9 @@
 
                     {{ template "secret" }}
 
-                    <input required name="components.analytic.database.user.secretKeyRef.name" placeholder="Name" type="text">
+                    <input name="components.analytic.database.user.secretKeyRef.name" placeholder="Name" type="text">
 
-                    <input required name="components.analytic.database.user.secretKeyRef.key" placeholder="Key" type="text">
+                    <input name="components.analytic.database.user.secretKeyRef.key" placeholder="Key" type="text">
                 </div>
 
                 <div class="divider secret">
@@ -156,9 +156,9 @@
 
                     {{ template "secret" }}
 
-                    <input required name="components.analytic.database.passoword.secretKeyRef.name" placeholder="Name" type="text">
+                    <input name="components.analytic.database.passoword.secretKeyRef.name" placeholder="Name" type="text">
 
-                    <input required name="components.analytic.database.passoword.secretKeyRef.key" placeholder="Key" type="text">
+                    <input name="components.analytic.database.passoword.secretKeyRef.key" placeholder="Key" type="text">
                 </div>
 
                 <h2>Message Broker - RabbitMQ</h2>
@@ -170,7 +170,7 @@
 
                     <span class="description">The host for connect in your broker.</span>
 
-                    <input required name="global.broker.host" placeholder="http://0.0.0.0" type="text">
+                    <input name="global.broker.host" placeholder="http://0.0.0.0" type="text">
                 </div>
 
                 <div class="divider">
@@ -178,7 +178,7 @@
 
                     <span class="description">The port for connect in your broker.</span>
 
-                    <input required name="global.broker.port" placeholder="5672" type="text">
+                    <input name="global.broker.port" placeholder="5672" type="number">
                 </div>
 
                 <div class="divider secret">
@@ -186,9 +186,9 @@
 
                     {{ template "secret" }}
 
-                    <input required name="global.broker.user.secretKeyRef.name" placeholder="Name" type="text">
+                    <input name="global.broker.user.secretKeyRef.name" placeholder="Name" type="text">
 
-                    <input required name="global.broker.user.secretKeyRef.key" placeholder="Key" type="text">
+                    <input name="global.broker.user.secretKeyRef.key" placeholder="Key" type="text">
                 </div>
 
                 <div class="divider secret">
@@ -196,9 +196,9 @@
 
                     {{ template "secret" }}
 
-                    <input required name="global.broker.password.secretKeyRef.name" placeholder="Name" type="text">
+                    <input name="global.broker.password.secretKeyRef.name" placeholder="Name" type="text">
 
-                    <input required name="global.broker.password.secretKeyRef.key" placeholder="Key" type="text">
+                    <input name="global.broker.password.secretKeyRef.key" placeholder="Key" type="text">
                 </div>
 
                 <h2>SMTP</h2>
@@ -211,7 +211,7 @@
                     <span class="description">Enable/Disable send email in Horusec Flow.</span>
 
                     <label class="switch">
-                        <input type="checkbox" name="components.messages.mailServer.enabled" value="false" onchange="setCheckboxValueByName('components.messages.mailServer.enabled')">
+                        <input type="checkbox" name="components.messages.enabled" value="false" onchange="setCheckboxValueByName('components.messages.enabled')">
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -229,7 +229,7 @@
 
                     <span class="description">The Port for connect in your SMTP server</span>
 
-                    <input name="components.messages.mailServer.port" placeholder="5054" type="text">
+                    <input name="components.messages.mailServer.port" placeholder="5054" type="number">
                 </div>
 
                 <div class="divider">
@@ -237,7 +237,7 @@
 
                     <span class="description">Email that will send.</span>
 
-                    <input type="email" name="components.auth.mailServer.emailFrom" placeholder="sender@email.com   ">
+                    <input type="email" name="components.messages.emailFrom" placeholder="sender@email.com   ">
                 </div>
 
                 <div class="divider secret">
@@ -245,9 +245,9 @@
 
                     {{ template "secret" }}
 
-                    <input required name="components.messages.mailServer.user.secretKeyRef.name" placeholder="Name" type="text">
+                    <input name="components.messages.mailServer.user.secretKeyRef.name" placeholder="Name" type="text">
 
-                    <input required name="components.messages.mailServer.user.secretKeyRef.key" placeholder="Key" type="text">
+                    <input name="components.messages.mailServer.user.secretKeyRef.key" placeholder="Key" type="text">
                 </div>
 
                 <div class="divider secret">
@@ -255,9 +255,9 @@
 
                     {{ template "secret" }}
 
-                    <input required name="components.messages.mailServer.password.secretKeyRef.name" placeholder="Name" type="text">
+                    <input name="components.messages.mailServer.password.secretKeyRef.name" placeholder="Name" type="text">
 
-                    <input required name="components.messages.mailServer.password.secretKeyRef.key" placeholder="Key" type="text">
+                    <input name="components.messages.mailServer.password.secretKeyRef.key" placeholder="Key" type="text">
                 </div>
 
             </div>
