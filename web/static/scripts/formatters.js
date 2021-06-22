@@ -61,6 +61,15 @@ function toFormData(form, spec) {
 
       case 'components.auth.user.default.enabled':
       case 'components.auth.user.administrator.enabled':
+      case 'global.database.logMode':
+      case 'global.database.sslMode':
+      case 'components.analytic.database.logMode':
+      case 'components.analytic.database.sslMode':
+      case 'components.messages.enabled':
+      case 'global.keycloak.otp':
+      case 'global.ldap.useSsl':
+      case 'global.ldap.skipTls':
+      case 'global.ldap.insecureSkipVerify':
         setCheckboxValueByName(el.name, value)
         break;
 
