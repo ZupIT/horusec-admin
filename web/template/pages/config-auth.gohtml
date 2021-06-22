@@ -79,7 +79,7 @@
                     <span class="description">If you are using otp (one-time password).</span>
 
                     <label class="switch">
-                        <input type="checkbox" name="global.keycloak.otp" value="false" onchange="setCheckboxValueByName('horusec_keycloak_otp')">
+                        <input type="checkbox" name="global.keycloak.otp" value="false" onchange="setCheckboxValueByName('global.keycloak.otp')">
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -177,14 +177,6 @@
                     <span class="description">What is the way of filter for users</span>
 
                     <input name="global.ldap.userFilter" placeholder="(uid=%s)" type="text">
-                </div>
-
-                <div class="divider">
-                    <label class="key" for="">Group Filter</label>
-
-                    <span class="description">What is the group administrators name</span>
-
-                    <input name="global.ldap.groupFilter" placeholder="(memberUid=%s)" type="text">
                 </div>
 
                 <div class="divider">

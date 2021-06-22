@@ -13,7 +13,7 @@
 
         <button id="status" class="status">
             <a href="/view/status">
-                <img id="img-status">
+                <img id="img-status" src="/icons/activity.svg">
                 <span>Status</span>
             </a>
         </button>
@@ -61,8 +61,10 @@
 <script type="text/javascript">
 window.onload = async () => {
     const state = (await getCurrentData()).status.state;
-    document.getElementById('status').classList.add(state);
-    document.getElementById('img-status').src = `/icons/${state}.svg`
+    if (state !== '') {
+        document.getElementById('status').classList.add(state);
+        document.getElementById('img-status').src = `/icons/${state}.svg`
+    }
 };
 </script>
 

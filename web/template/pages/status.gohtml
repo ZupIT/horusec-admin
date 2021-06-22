@@ -81,24 +81,28 @@ function closeModal () {
 
 function setStatusData(data) {
     const { conditions } = data;
-    const listOfServices = document.getElementById('services');
 
-    conditions.forEach((service) => {
-        const serviceName = service.type.replace('Available', '');
-        const li = document.createElement('li');
-        li.className += service.status;
-        li.innerHTML += `
-            <span class="title">${serviceName}</span>
+    if (conditions) {
+        const listOfServices = document.getElementById('services');
 
-            <span class="status"></span>
+        conditions.forEach((service) => {
+            const serviceName = service.type.replace('Available', '');
+            const li = document.createElement('li');
+            li.className += service.status;
+            li.innerHTML += `
+                <span class="title">${serviceName}</span>
 
-            <div class="log">
-                <span class="date">${service.lastTransitionTime}</span>
-                <span class="content">${service.message}</span>
-            </div>
-        `;
-        listOfServices.appendChild(li);
-    })
+                <span class="status"></span>
+
+                <div class="log">
+                    <span class="date">${service.lastTransitionTime}</span>
+                    <span class="content">${service.message}</span>
+                </div>
+            `;
+            listOfServices.appendChild(li);
+        })
+    }
+
 }
 
 </script>

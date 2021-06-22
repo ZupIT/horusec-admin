@@ -22,16 +22,18 @@ async function setCurrentValues() {
 }
 
 function setAuthType(authType) {
-    const inputAuthType = document.getElementsByName('components.auth.type')[0];
-    inputAuthType.value = authType;
+    if (authType) {
+        const inputAuthType = document.getElementsByName('components.auth.type')[0];
+        inputAuthType.value = authType;
 
-    const radioOption = document.getElementById(`radio-auth-${authType}`);
-    radioOption.checked = true;
+        const radioOption = document.getElementById(`radio-auth-${authType}`);
+        radioOption.checked = true;
 
-    document.getElementById('keycloak-form').style.display = 'none';
-    document.getElementById('ldap-form').style.display = 'none';
+        document.getElementById('keycloak-form').style.display = 'none';
+        document.getElementById('ldap-form').style.display = 'none';
 
-    if (authType !== 'horusec') document.getElementById(`${authType}-form`).style.display = 'flex';
+        if (authType !== 'horusec') document.getElementById(`${authType}-form`).style.display = 'flex';
+    }
 }
 
 function setCheckboxValueByName(name) {
