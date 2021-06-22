@@ -15,6 +15,7 @@
 package handler
 
 import (
+	"github.com/ZupIT/horusec-admin/pkg/api/install/v2alpha1"
 	"net/http"
 
 	"github.com/ZupIT/horusec-admin/internal/tracing"
@@ -41,6 +42,9 @@ func (h *ConfigReading) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		span.SetError(err)
 		panic(err)
+	}
+	if cfg == nil {
+		cfg = &v2alpha1.HorusecPlatform{}
 	}
 
 	response := map[string]interface{}{
