@@ -59,6 +59,11 @@ function toFormData(form, spec) {
         setAuthType(value);
         break;
 
+      case 'components.auth.user.default.enabled':
+      case 'components.auth.user.administrator.enabled':
+        setCheckboxValueByName(el.name, value)
+        break;
+
       default:
         el.value = value ? value : '';
         break;
