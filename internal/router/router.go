@@ -17,16 +17,17 @@ package router
 import (
 	"net/http"
 
+	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
+	"github.com/heptiolabs/healthcheck"
+	"github.com/thedevsaddam/renderer"
+
 	"github.com/ZupIT/horusec-admin/internal/logger"
 	"github.com/ZupIT/horusec-admin/internal/router/api"
 	internal "github.com/ZupIT/horusec-admin/internal/router/middleware"
 	"github.com/ZupIT/horusec-admin/internal/router/page"
 	"github.com/ZupIT/horusec-admin/internal/router/static"
 	"github.com/ZupIT/horusec-admin/pkg/core"
-	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
-	"github.com/heptiolabs/healthcheck"
-	"github.com/thedevsaddam/renderer"
 )
 
 type router struct {

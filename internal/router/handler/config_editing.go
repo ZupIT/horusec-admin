@@ -18,9 +18,12 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"github.com/ZupIT/horusec-admin/internal/logger"
+
+	"github.com/thedevsaddam/renderer"
+
 	"github.com/ZupIT/horusec-admin/internal/tracing"
 	"github.com/ZupIT/horusec-admin/pkg/core"
-	"github.com/thedevsaddam/renderer"
 )
 
 type (
@@ -55,4 +58,5 @@ func (h *ConfigEditing) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// Answer
 	w.WriteHeader(http.StatusNoContent)
+	logger.WithPrefix(ctx, "[204]").Info("Configurations has been applied!")
 }

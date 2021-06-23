@@ -11,9 +11,9 @@
     <div class="logo-container">
         <img class="head-logo" src="/images/logo.svg" alt="Horusec Logo">
 
-        <button class="status">
+        <button id="status" class="status">
             <a href="/view/status">
-                <img id="status" src="/icons/activity.svg">
+                <img id="img-status" src="/icons/activity.svg">
                 <span>Status</span>
             </a>
         </button>
@@ -59,7 +59,13 @@
 </body>
 
 <script type="text/javascript">
-
+window.onload = async () => {
+    const state = (await getCurrentData()).status.state;
+    if (state !== '') {
+        document.getElementById('status').classList.add(state);
+        document.getElementById('img-status').src = `/icons/${state}.svg`
+    }
+};
 </script>
 
 </html>

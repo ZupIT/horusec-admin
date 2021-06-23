@@ -6,12 +6,13 @@
 package main
 
 import (
+	"github.com/go-chi/chi"
+	"github.com/google/wire"
+
 	"github.com/ZupIT/horusec-admin/internal/business"
 	"github.com/ZupIT/horusec-admin/internal/kubernetes"
 	"github.com/ZupIT/horusec-admin/internal/router"
 	"github.com/ZupIT/horusec-admin/pkg/core"
-	"github.com/go-chi/chi"
-	"github.com/google/wire"
 )
 
 // Injectors from wire.go:
@@ -21,12 +22,12 @@ func newRouter() (chi.Router, error) {
 	if err != nil {
 		return nil, err
 	}
-	horusecManagerInterface, err := kubernetes.NewHorusecManagerClient(config)
+	horusecPlatformInterface, err := kubernetes.NewHorusecManagerClient(config)
 	if err != nil {
 		return nil, err
 	}
 	objectComparator := &kubernetes.ObjectComparator{}
-	configService := business.NewConfigService(horusecManagerInterface, objectComparator)
+	configService := business.NewConfigService(horusecPlatformInterface, objectComparator)
 	chiRouter, err := router.New(configService, configService)
 	if err != nil {
 		return nil, err

@@ -19,10 +19,11 @@ import (
 	"fmt"
 	"os"
 
-	clientset "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned"
-	client "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v1alpha1"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
+
+	clientset "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned"
+	client "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v2alpha1"
 )
 
 func NewRestConfig() (*rest.Config, error) {
@@ -43,7 +44,7 @@ func NewRestConfig() (*rest.Config, error) {
 	return cfg, nil
 }
 
-func NewHorusecManagerClient(restConfig *rest.Config) (client.HorusecManagerInterface, error) {
+func NewHorusecManagerClient(restConfig *rest.Config) (client.HorusecPlatformInterface, error) {
 	namespace := os.Getenv("NAMESPACE")
 
 	if namespace == "" {
@@ -52,8 +53,8 @@ func NewHorusecManagerClient(restConfig *rest.Config) (client.HorusecManagerInte
 
 	c, err := clientset.NewForConfig(restConfig)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create a new HorusecManager client: %w", err)
+		return nil, fmt.Errorf("failed to create a new HorusecPlatform client: %w", err)
 	}
 
-	return c.InstallV1alpha1().HorusecManagers(namespace), nil
+	return c.InstallV2alpha1().HorusecPlatforms(namespace), nil
 }

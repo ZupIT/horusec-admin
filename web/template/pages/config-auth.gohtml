@@ -19,7 +19,7 @@
     </div>
 
     <section class="container">
-        <form onsubmit="event.preventDefault();submitAuthForm()">
+        <form onsubmit="return submitForm(event)">
             <div class="divider select-auth">
                 <label class="key" for="">HORUSEC_AUTH_TYPE</label>
 
@@ -29,20 +29,20 @@
                 </span>
 
                 <div class="radio-group">
-                    <input id="horusec_auth_type" hidden>
+                    <input name="components.auth.type" hidden>
 
                     <label class="radio-item">
-                        <input id="auth-horusec" name="horusec_auth_type" value="horusec" type="radio" onchange="setAuthType('horusec')">
+                        <input id="radio-auth-horusec" name="!authType" value="horusec" type="radio" onchange="setAuthType('horusec')">
                         <img src="/images/horusec.svg">
                     </label>
 
                     <label class="radio-item">
-                        <input id="auth-keycloak" name="horusec_auth_type" value="ldap" type="radio" onchange="setAuthType('keycloak')">
+                        <input id="radio-auth-keycloak" name="!authType" value="keycloak" type="radio" onchange="setAuthType('keycloak')">
                         <img src="/images/keycloak.svg">
                     </label>
 
                     <label class="radio-item">
-                        <input id="auth-ldap" name="horusec_auth_type" value="keycloak" type="radio" onchange="setAuthType('ldap')">
+                        <input id="radio-auth-ldap" name="!authType" value="ldap" type="radio" onchange="setAuthType('ldap')">
                         <img src="/images/ldap.svg">
                     </label>
                 </div>
@@ -50,211 +50,159 @@
 
             <div id="keycloak-form" class="form-container-row">
                 <div class="divider">
-                    <label class="key" for="">HORUSEC_KEYCLOAK_BASE_PATH</label>
+                    <label class="key" for="">Base Path</label>
 
                     <span class="description">What is the keycloak connection base.</span>
 
-                    <input id="horusec_keycloak_base_path" placeholder="Example: http://127.0.0.1:8080" type="text">
+                    <input name="global.keycloak.publicURL" placeholder="Example: http://127.0.0.1:8080" type="text">
                 </div>
 
                 <div class="divider">
-                    <label class="key" for="">HORUSEC_KEYCLOAK_CLIENT_ID</label>
+                    <label class="key" for="">Client ID</label>
 
                     <span class="description">What is the client_id that you use.</span>
 
-                    <input id="horusec_keycloak_client_id" placeholder="Example: account" type="text">
+                    <input name="global.keycloak.clients.public.id" placeholder="Example: account" type="text">
                 </div>
 
                 <div class="divider">
-                    <label class="key" for="">HORUSEC_KEYCLOAK_CLIENT_SECRET</label>
-
-                    <span class="description">What is secret  used to client_id.</span>
-
-                    <input id="horusec_keycloak_client_secret" placeholder="00000000-0000-0000-0000-000000000000" type="text">
-                </div>
-
-                <div class="divider">
-                    <label class="key" for="">HORUSEC_KEYCLOAK_REALM</label>
+                    <label class="key" for="">Realm</label>
 
                     <span class="description">What is the realm used.</span>
 
-                    <input id="horusec_keycloak_realm" placeholder="Example: master" type="text">
+                    <input name="global.keycloak.realm" placeholder="Example: master" type="text">
                 </div>
 
                 <div class="divider">
-                    <label class="key" for="">HORUSEC_KEYCLOAK_OTP</label>
+                    <label class="key" for="">OTP</label>
 
                     <span class="description">If you are using otp (one-time password).</span>
 
                     <label class="switch">
-                        <input type="checkbox" id="horusec_keycloak_otp" value="false" onchange="setCheckboxValue('horusec_keycloak_otp')">
+                        <input type="checkbox" name="global.keycloak.otp" value="false" onchange="setCheckboxValueByName('global.keycloak.otp')">
                         <span class="slider round"></span>
                     </label>
                 </div>
 
-                <div class="divider">
-                    <label class="key" for="">REACT_APP_KEYCLOAK_CLIENT_ID</label>
+                <div class="divider secret">
+                    <label class="key">Keycloack secret key</label>
 
-                    <span class="description">What is the Keycloak connection base for the horusec manager.</span>
+                    {{ template "secret" }}
 
-                    <input id="react_app_keycloak_client_id" placeholder="Example: http://127.0.0.1:8080" type="text">
-                </div>
+                    <input name="global.keycloak.clients.confidential.secretKeyRef.name" placeholder="Name" type="text">
 
-                <div class="divider">
-                    <label class="key" for="">REACT_APP_KEYCLOAK_REALM</label>
-
-                    <span class="description">What is the client_id that you use for the horusec manager.</span>
-
-                    <input id="react_app_keycloak_realm" placeholder="Example: account" type="text">
-                </div>
-
-                <div class="divider">
-                    <label class="key" for="">REACT_APP_KEYCLOAK_BASE_PATH</label>
-
-                    <span class="description">What is the realm used for the horusec manager.</span>
-
-                    <input id="react_app_keycloak_base_path" placeholder="Example: master" type="text">
+                    <input name="global.keycloak.clients.confidential.secretKeyRef.key" placeholder="Key" type="text">
                 </div>
             </div>
 
             <div id="ldap-form" class="form-container-row">
                 <div class="divider">
-                    <label class="key" for="">HORUSEC_LDAP_BASE</label>
+                    <label class="key" for="">Base</label>
 
                     <span class="description">LDAP connection base</span>
 
-                    <input id="horusec_ldap_base" placeholder="dc=example,dc=org" value="dc=example,dc=org" type="text">
+                    <input name="global.ldap.base" placeholder="dc=example,dc=org" value="dc=example,dc=org" type="text">
                 </div>
 
                 <div class="divider">
-                    <label class="key" for="">HORUSEC_LDAP_HOST</label>
+                    <label class="key" for="">Host</label>
 
                     <span class="description">LDAP connection host</span>
 
-                    <input id="horusec_ldap_host" placeholder="127.0.0.1" type="text">
+                    <input name="global.ldap.host" placeholder="127.0.0.1" type="text">
                 </div>
 
                 <div class="divider">
-                    <label class="key" for="">HORUSEC_LDAP_PORT</label>
+                    <label class="key" for="">Port</label>
 
                     <span class="description">LDAP connection host</span>
 
-                    <input id="horusec_ldap_port" placeholder="389" type="text">
+                    <input name="global.ldap.port" placeholder="389" type="number">
                 </div>
 
                 <div class="divider">
-                    <label class="key" for="">HORUSEC_LDAP_USESSL</label>
+                    <label class="key" for="">Use SSL</label>
 
                     <span class="description">Checks whether to use SSL</span>
 
                     <label class="switch">
-                        <input type="checkbox" id="horusec_ldap_usessl" value="false" onchange="setCheckboxValue('horusec_ldap_usessl')">
+                        <input type="checkbox" name="global.ldap.useSsl" value="false" onchange="setCheckboxValueByName('global.ldap.useSsl')">
                         <span class="slider round"></span>
                     </label>
                 </div>
 
                 <div class="divider">
-                    <label class="key" for="">HORUSEC_LDAP_SKIP_TLS</label>
+                    <label class="key" for="">Skip TLS</label>
 
                     <span class="description">Checks whether to skip TLS</span>
 
                     <label class="switch">
-                        <input type="checkbox" id="horusec_ldap_skip_tls" value="true" onchange="setCheckboxValue('horusec_ldap_skip_tls')">
+                        <input type="checkbox" name="global.ldap.skipTls" value="true" onchange="setCheckboxValueByName('global.ldap.skipTls')">
                         <span class="slider round"></span>
                     </label>
                 </div>
 
                 <div class="divider">
-                    <label class="key" for="">HORUSEC_LDAP_INSECURE_SKIP_VERIFY</label>
+                    <label class="key" for="">Insecure skip verify</label>
 
                     <span class="description">Checks whether to skip insecurity check</span>
 
                     <label class="switch">
-                        <input type="checkbox" id="horusec_ldap_insecure_skip_verify" value="true" onchange="setCheckboxValue('horusec_ldap_insecure_skip_verify')">
+                        <input type="checkbox" name="global.ldap.insecureSkipVerify" value="true" onchange="setCheckboxValueByName('global.ldap.insecureSkipVerify')">
                         <span class="slider round"></span>
                     </label>
                 </div>
 
                 <div class="divider">
-                    <label class="key" for="">HORUSEC_LDAP_BINDDN</label>
+                    <label class="key" for="">Bin DN</label>
 
                     <span class="description">Definition for Idap admin entity</span>
 
-                    <input id="horusec_ldap_binddn" placeholder="cn=admin,dc=example,dc=org" type="text">
+                    <input name="global.ldap.bindDn" placeholder="cn=admin,dc=example,dc=org" type="text">
+                </div>
+
+                <div class="divider secret">
+                    <label class="key">Bin password</label>
+
+                    {{ template "secret" }}
+
+                    <input name="global.ldap.bindPassword.secretKeyRef.name" placeholder="Name" type="text">
+
+                    <input name="global.ldap.bindPassword.secretKeyRef.key" placeholder="Key" type="text">
                 </div>
 
                 <div class="divider">
-                    <label class="key" for="">HORUSEC_LDAP_BINDPASSWORD</label>
-
-                    <span class="description">Definition for Idap admin entity</span>
-
-                    <input id="horusec_ldap_bindpassword" placeholder="admin" type="text">
-                </div>
-
-                <div class="divider">
-                    <label class="key" for="">HORUSEC_LDAP_USERFILTER</label>
+                    <label class="key" for="">User Filter</label>
 
                     <span class="description">What is the way of filter for users</span>
 
-                    <input id="horusec_ldap_userfilter" placeholder="(uid=%s)" type="text">
+                    <input name="global.ldap.userFilter" placeholder="(uid=%s)" type="text">
                 </div>
 
                 <div class="divider">
-                    <label class="key" for="">HORUSEC_LDAP_GROUPFILTER</label>
+                    <label class="key" for="">Admin Group</label>
 
                     <span class="description">What is the group administrators name</span>
 
-                    <input id="horusec_ldap_groupfilter" placeholder="(memberUid=%s)" type="text">
-                </div>
-
-                <div class="divider">
-                    <label class="key" for="">HORUSEC_LDAP_ADMIN_GROUP</label>
-
-                    <span class="description">What is the group administrators name</span>
-
-                    <input id="horusec_ldap_admin_group" placeholder="admin" type="text">
+                    <input name="global.ldap.adminGroup" placeholder="admin" type="text">
                 </div>
             </div>
 
-            <div class="btns-wrapper">
-                <button type="submit">SAVE</button>
-
-                <button class="outline">
-                    <a href="/view/home">BACK</a>
-                </button>
-            </div>
+            {{ template "options-form" }}
         </form>
     </section>
 </body>
 
 <script type="text/javascript">
-window.onload = () => {
+window.onload = async () => {
     setCurrentValues()
 };
-function submitAuthForm() {
-    const inputs = document.querySelectorAll('input')
+function submitForm(event) {
+    event.preventDefault();
 
-    let body = {}
+    const body = toK8sObject(event.target)
 
-    inputs.forEach(item => {
-        const value = item.type === 'checkbox' ? toBoolean(item.value) : item.value
-
-        body = {
-            ...body,
-            [item.id]: value
-        }
-    })
-
-    sendRequest(body)
-}
-function setCheckboxValue(id) {
-    const value = document.getElementById(id).value
-
-    if (value === 'true') {
-        document.getElementById(id).value = false
-    } else {
-        document.getElementById(id).value = true
-    }
+    saveData(body)
 }
 </script>
 

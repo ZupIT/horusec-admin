@@ -18,82 +18,28 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/ZupIT/horusec-admin/internal/business/adapter"
+
+	jsonpatch "github.com/evanphx/json-patch"
+	k8s "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/util/json"
+
 	"github.com/ZupIT/horusec-admin/internal/kubernetes"
 	"github.com/ZupIT/horusec-admin/internal/logger"
 	"github.com/ZupIT/horusec-admin/internal/tracing"
-	api "github.com/ZupIT/horusec-admin/pkg/api/install/v1alpha1"
-	client "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v1alpha1"
-	"github.com/ZupIT/horusec-admin/pkg/core"
-	k8s "k8s.io/apimachinery/pkg/apis/meta/v1"
+	api "github.com/ZupIT/horusec-admin/pkg/api/install/v2alpha1"
+	client "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v2alpha1"
 )
 
 type ConfigService struct {
-	client     client.HorusecManagerInterface
+	client     client.HorusecPlatformInterface
 	comparator *kubernetes.ObjectComparator
 }
 
-func NewConfigService(c client.HorusecManagerInterface, cmp *kubernetes.ObjectComparator) *ConfigService {
+func NewConfigService(c client.HorusecPlatformInterface, cmp *kubernetes.ObjectComparator) *ConfigService {
 	return &ConfigService{client: c, comparator: cmp}
 }
 
-func (s *ConfigService) GetConfig(ctx context.Context) (*core.Configuration, error) {
-	cr, err := s.getOne(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	if cr == nil {
-		cr = &api.HorusecManager{}
-	}
-
-	cfg := adapter.ForCustomResource(cr).ToConfiguration()
-	return cfg, nil
-}
-
-func (s *ConfigService) CreateOrUpdate(ctx context.Context, raw []byte) error {
-	r, err := s.getOne(ctx)
-	if err != nil {
-		return err
-	}
-
-	if r == nil {
-		return s.create(ctx, raw)
-	}
-
-	return s.updatePartially(ctx, r, raw)
-}
-
-func (s *ConfigService) create(ctx context.Context, raw []byte) error {
-	cfg, err := adapter.ForConfigurationRaw(raw)
-	if err != nil {
-		return err
-	}
-
-	cr, err := cfg.ToCustomResource()
-	if err != nil {
-		return err
-	}
-
-	return s.createResource(ctx, cr)
-}
-
-func (s *ConfigService) updatePartially(ctx context.Context, older *api.HorusecManager, raw []byte) error {
-	cfg := adapter.ForCustomResource(older).ToConfiguration()
-	merged, err := adapter.ForConfiguration(cfg).MergePatch(raw)
-	if err != nil {
-		return err
-	}
-
-	newest, err := merged.ToCustomResource()
-	if err != nil {
-		return err
-	}
-
-	return s.updateResourceIfNeeded(ctx, older, newest)
-}
-
-func (s *ConfigService) getOne(ctx context.Context) (*api.HorusecManager, error) {
+func (s *ConfigService) GetConfig(ctx context.Context) (*api.HorusecPlatform, error) {
 	log := logger.WithPrefix(ctx, "config_service")
 
 	hm, err := s.list(ctx)
@@ -102,28 +48,58 @@ func (s *ConfigService) getOne(ctx context.Context) (*api.HorusecManager, error)
 	}
 
 	if len(hm) > 1 {
-		return nil, errors.New("more than one HorusecManager CR were found")
+		return nil, errors.New("more than one HorusecPlatform CR were found")
 	} else if len(hm) == 0 {
-		log.Debug("no HorusecManager was found")
+		log.Debug("no HorusecPlatform was found")
 		return nil, nil
 	}
 
 	return &hm[0], nil
 }
 
-func (s *ConfigService) list(ctx context.Context) ([]api.HorusecManager, error) {
+// nolint:funlen // is necessary for now
+func (s *ConfigService) CreateOrUpdate(ctx context.Context, raw []byte) error {
+	if raw == nil {
+		return errors.New("not accept raw empty")
+	}
+	spec := api.HorusecPlatformSpec{}
+	if err := json.Unmarshal(raw, &spec); err != nil {
+		return err
+	}
+	newEntity := &api.HorusecPlatform{
+		Spec: spec,
+	}
+	older, err := s.GetConfig(ctx)
+	if err != nil {
+		return err
+	}
+	if older == nil {
+		return s.createResource(ctx, newEntity)
+	}
+	newEntityMerged, err := s.mergePatch(older, newEntity)
+	if err != nil {
+		return err
+	}
+	return s.updatePartially(ctx, older, newEntityMerged)
+}
+
+func (s *ConfigService) updatePartially(ctx context.Context, older, newest *api.HorusecPlatform) error {
+	return s.updateResourceIfNeeded(ctx, older, newest)
+}
+
+func (s *ConfigService) list(ctx context.Context) ([]api.HorusecPlatform, error) {
 	span, ctx := tracing.StartSpanFromContext(ctx, "internal/business.(*ConfigService).list")
 	defer span.Finish()
 
 	cfg, err := s.client.List(ctx, k8s.ListOptions{})
 	if err != nil {
 		span.SetError(err)
-		return nil, fmt.Errorf("failed to list HorusecManager: %w", err)
+		return nil, fmt.Errorf("failed to list HorusecPlatform: %w", err)
 	}
 	return cfg.Items, nil
 }
 
-func (s *ConfigService) createResource(ctx context.Context, r *api.HorusecManager) error {
+func (s *ConfigService) createResource(ctx context.Context, r *api.HorusecPlatform) error {
 	span, ctx := tracing.StartSpanFromContext(ctx, "internal/business.(*ConfigService).createResource")
 	defer span.Finish()
 
@@ -131,14 +107,14 @@ func (s *ConfigService) createResource(ctx context.Context, r *api.HorusecManage
 	_, err := s.client.Create(ctx, r, k8s.CreateOptions{})
 	if err != nil {
 		span.SetError(err)
-		return fmt.Errorf("failed to create HorusecManager: %w", err)
+		return fmt.Errorf("failed to create HorusecPlatform: %w", err)
 	}
 
 	logger.WithPrefix(ctx, "config_service").Debug("resource created")
 	return nil
 }
 
-func (s *ConfigService) updateResourceIfNeeded(ctx context.Context, older, newest *api.HorusecManager) error {
+func (s *ConfigService) updateResourceIfNeeded(ctx context.Context, older, newest *api.HorusecPlatform) error {
 	log := logger.WithPrefix(ctx, "config_service")
 
 	newest.SetName(older.GetName())
@@ -154,16 +130,33 @@ func (s *ConfigService) updateResourceIfNeeded(ctx context.Context, older, newes
 	return nil
 }
 
-func (s *ConfigService) updateResource(ctx context.Context, r *api.HorusecManager) error {
+func (s *ConfigService) updateResource(ctx context.Context, r *api.HorusecPlatform) error {
 	span, ctx := tracing.StartSpanFromContext(ctx, "internal/business.(*ConfigService).updateResource")
 	defer span.Finish()
 
 	_, err := s.client.Update(ctx, r, k8s.UpdateOptions{})
 	if err != nil {
 		span.SetError(err)
-		return fmt.Errorf("failed to update HorusecManager: %w", err)
+		return fmt.Errorf("failed to update HorusecPlatform: %w", err)
 	}
 
 	logger.WithPrefix(ctx, "config_service").Debug("resource updated")
 	return nil
+}
+
+func (s *ConfigService) mergePatch(older, newest *api.HorusecPlatform) (*api.HorusecPlatform, error) {
+	olderBytes := older.ToBytes()
+	newBytes := newest.ToBytes()
+
+	merged, err := jsonpatch.MergePatch(olderBytes, newBytes)
+	if err != nil {
+		return nil, err
+	}
+
+	var result *api.HorusecPlatform
+	if err := json.Unmarshal(merged, &result); err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }

@@ -14,13 +14,17 @@
 
 package core
 
-import "context"
+import (
+	"context"
+
+	api "github.com/ZupIT/horusec-admin/pkg/api/install/v2alpha1"
+)
 
 type (
 	ConfigurationWriter interface {
 		CreateOrUpdate(context.Context, []byte) error
 	}
 	ConfigurationReader interface {
-		GetConfig(context.Context) (*Configuration, error)
+		GetConfig(context.Context) (*api.HorusecPlatform, error)
 	}
 )

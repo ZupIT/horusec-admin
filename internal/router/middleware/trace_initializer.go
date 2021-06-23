@@ -18,8 +18,9 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/ZupIT/horusec-admin/internal/tracing"
 	"github.com/go-chi/chi/middleware"
+
+	"github.com/ZupIT/horusec-admin/internal/tracing"
 )
 
 type TraceInitializer struct{}
