@@ -58,7 +58,6 @@ run: install-semver ## Run container on port 8007
 run-dev:
 	go run ./cmd/app/
 
-
 stop: ## Stop and remove a running container
 	docker stop $(APP_NAME)
 
