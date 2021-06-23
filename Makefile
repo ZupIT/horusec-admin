@@ -61,6 +61,11 @@ run-dev:
 stop: ## Stop and remove a running container
 	docker stop $(APP_NAME)
 
+generate-service-yaml: kustomize install-semver
+	mkdir -p $(shell pwd)/tmp
+	cd $(PROJECT_DIR)/deployments/k8s/overlays/$(ENVIRONMENT); $(KUSTOMIZE) edit set image $(REGISTRY_IMAGE)
+	$(KUSTOMIZE) build deployments/k8s/overlays/$(ENVIRONMENT) > $(shell pwd)/tmp/horusec-admin.yaml
+
 deploy: kustomize install-semver ## Deploy horusec-admin in the configured Kubernetes cluster in ~/.kube/config
 	cd $(PROJECT_DIR)/deployments/k8s/overlays/$(ENVIRONMENT); $(KUSTOMIZE) edit set image $(REGISTRY_IMAGE)
 	$(KUSTOMIZE) build deployments/k8s/overlays/$(ENVIRONMENT) | kubectl apply -f -
