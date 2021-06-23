@@ -17,9 +17,10 @@
 package fake
 
 import (
-	v2alpha1 "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v2alpha1"
 	rest "k8s.io/client-go/rest"
 	testing "k8s.io/client-go/testing"
+
+	v2alpha1 "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v2alpha1"
 )
 
 type FakeInstallV2alpha1 struct {

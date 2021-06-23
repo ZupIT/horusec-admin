@@ -19,10 +19,11 @@ import (
 	"fmt"
 	"os"
 
-	clientset "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned"
-	client "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v2alpha1"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
+
+	clientset "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned"
+	client "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v2alpha1"
 )
 
 func NewRestConfig() (*rest.Config, error) {

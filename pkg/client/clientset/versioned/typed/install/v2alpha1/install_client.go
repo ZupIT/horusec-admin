@@ -17,9 +17,10 @@
 package v2alpha1
 
 import (
+	rest "k8s.io/client-go/rest"
+
 	v2alpha1 "github.com/ZupIT/horusec-admin/pkg/api/install/v2alpha1"
 	"github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/scheme"
-	rest "k8s.io/client-go/rest"
 )
 
 type InstallV2alpha1Interface interface {

@@ -15,10 +15,11 @@
 package v2alpha1
 
 import (
-	"github.com/ZupIT/horusec-admin/pkg/api/install/v2alpha1/state"
 	corev1 "k8s.io/api/core/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/json"
+
+	"github.com/ZupIT/horusec-admin/pkg/api/install/v2alpha1/state"
 )
 
 //

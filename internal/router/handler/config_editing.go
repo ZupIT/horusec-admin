@@ -15,13 +15,15 @@
 package handler
 
 import (
-	"github.com/ZupIT/horusec-admin/internal/logger"
 	"io/ioutil"
 	"net/http"
 
+	"github.com/ZupIT/horusec-admin/internal/logger"
+
+	"github.com/thedevsaddam/renderer"
+
 	"github.com/ZupIT/horusec-admin/internal/tracing"
 	"github.com/ZupIT/horusec-admin/pkg/core"
-	"github.com/thedevsaddam/renderer"
 )
 
 type (

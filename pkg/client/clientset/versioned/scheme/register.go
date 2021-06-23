@@ -17,12 +17,13 @@
 package scheme
 
 import (
-	installv2alpha1 "github.com/ZupIT/horusec-admin/pkg/api/install/v2alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	serializer "k8s.io/apimachinery/pkg/runtime/serializer"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
+
+	installv2alpha1 "github.com/ZupIT/horusec-admin/pkg/api/install/v2alpha1"
 )
 
 var Scheme = runtime.NewScheme()

@@ -18,14 +18,16 @@ import (
 	"context"
 	"errors"
 	"fmt"
+
+	jsonpatch "github.com/evanphx/json-patch"
+	k8s "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/util/json"
+
 	"github.com/ZupIT/horusec-admin/internal/kubernetes"
 	"github.com/ZupIT/horusec-admin/internal/logger"
 	"github.com/ZupIT/horusec-admin/internal/tracing"
 	api "github.com/ZupIT/horusec-admin/pkg/api/install/v2alpha1"
 	client "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v2alpha1"
-	jsonpatch "github.com/evanphx/json-patch"
-	k8s "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/util/json"
 )
 
 type ConfigService struct {
@@ -55,6 +57,7 @@ func (s *ConfigService) GetConfig(ctx context.Context) (*api.HorusecPlatform, er
 	return &hm[0], nil
 }
 
+// nolint:funlen,gocyclo // is necessary for now
 func (s *ConfigService) CreateOrUpdate(ctx context.Context, raw []byte) error {
 	if raw == nil {
 		return errors.New("not accept raw empty")
@@ -141,9 +144,9 @@ func (s *ConfigService) updateResource(ctx context.Context, r *api.HorusecPlatfo
 	return nil
 }
 
-func (s *ConfigService) mergePatch(older, new *api.HorusecPlatform) (*api.HorusecPlatform, error) {
+func (s *ConfigService) mergePatch(older, newest *api.HorusecPlatform) (*api.HorusecPlatform, error) {
 	olderBytes := older.ToBytes()
-	newBytes := new.ToBytes()
+	newBytes := newest.ToBytes()
 
 	merged, err := jsonpatch.MergePatch(olderBytes, newBytes)
 	if err != nil {

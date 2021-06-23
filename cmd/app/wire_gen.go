@@ -6,12 +6,13 @@
 package main
 
 import (
+	"github.com/go-chi/chi"
+	"github.com/google/wire"
+
 	"github.com/ZupIT/horusec-admin/internal/business"
 	"github.com/ZupIT/horusec-admin/internal/kubernetes"
 	"github.com/ZupIT/horusec-admin/internal/router"
 	"github.com/ZupIT/horusec-admin/pkg/core"
-	"github.com/go-chi/chi"
-	"github.com/google/wire"
 )
 
 // Injectors from wire.go:

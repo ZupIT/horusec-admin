@@ -17,6 +17,9 @@
 package router
 
 import (
+	"github.com/go-chi/chi"
+	"github.com/google/wire"
+
 	"github.com/ZupIT/horusec-admin/internal/authz"
 	"github.com/ZupIT/horusec-admin/internal/router/api"
 	"github.com/ZupIT/horusec-admin/internal/router/handler"
@@ -25,8 +28,6 @@ import (
 	"github.com/ZupIT/horusec-admin/internal/router/render"
 	"github.com/ZupIT/horusec-admin/internal/router/static"
 	"github.com/ZupIT/horusec-admin/pkg/core"
-	"github.com/go-chi/chi"
-	"github.com/google/wire"
 )
 
 var providers = wire.NewSet(

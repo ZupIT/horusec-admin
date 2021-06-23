@@ -15,12 +15,14 @@
 package handler
 
 import (
-	"github.com/ZupIT/horusec-admin/pkg/api/install/v2alpha1"
 	"net/http"
+
+	"github.com/ZupIT/horusec-admin/pkg/api/install/v2alpha1"
+
+	"github.com/thedevsaddam/renderer"
 
 	"github.com/ZupIT/horusec-admin/internal/tracing"
 	"github.com/ZupIT/horusec-admin/pkg/core"
-	"github.com/thedevsaddam/renderer"
 )
 
 type (
@@ -34,6 +36,7 @@ func NewConfigReading(render *renderer.Render, reader core.ConfigurationReader) 
 	return &ConfigReading{render: render, reader: reader}
 }
 
+// nolint:funlen // is necessary for now
 func (h *ConfigReading) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	span, ctx := tracing.StartSpanFromContext(r.Context(), "internal/router/handler.(*ConfigReading).ServeHTTP")
 	defer span.Finish()
@@ -47,10 +50,7 @@ func (h *ConfigReading) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		cfg = &v2alpha1.HorusecPlatform{}
 	}
 
-	response := map[string]interface{}{
-		"spec": cfg.Spec,
-		"status": cfg.Status,
-	}
+	response := map[string]interface{}{"spec": cfg.Spec, "status": cfg.Status}
 
 	// Answer
 	if err = h.render.JSON(w, http.StatusOK, response); err != nil {

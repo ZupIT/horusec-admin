@@ -1,10 +1,11 @@
 package v2alpha1
 
 import (
+	"testing"
+
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/apimachinery/pkg/util/json"
-	"testing"
 )
 
 func Test(_ *testing.T) {
