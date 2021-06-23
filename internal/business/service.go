@@ -57,7 +57,7 @@ func (s *ConfigService) GetConfig(ctx context.Context) (*api.HorusecPlatform, er
 	return &hm[0], nil
 }
 
-// nolint:funlen,gocyclo // is necessary for now
+// nolint:funlen // is necessary for now
 func (s *ConfigService) CreateOrUpdate(ctx context.Context, raw []byte) error {
 	if raw == nil {
 		return errors.New("not accept raw empty")

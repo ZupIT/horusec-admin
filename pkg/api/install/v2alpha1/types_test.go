@@ -3,12 +3,14 @@ package v2alpha1
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/apimachinery/pkg/util/json"
 )
 
-func Test(_ *testing.T) {
+func Test(test *testing.T) {
 	var f = false
 	var t = true
 	entity := HorusecPlatformSpec{
@@ -619,9 +621,17 @@ func Test(_ *testing.T) {
 				SkipTLS:            false,
 				InsecureSkipVerify: false,
 				BindDN:             "",
-				BindPassword:       "",
-				UserFilter:         "",
-				AdminGroup:         "",
+				BindPassword: LdapBindPassword{
+					SecretKeyRef: &corev1.SecretKeySelector{
+						LocalObjectReference: corev1.LocalObjectReference{
+							Name: "secret",
+						},
+						Key:      "horusec-platform-jwt",
+						Optional: &f,
+					},
+				},
+				UserFilter: "",
+				AdminGroup: "",
 			},
 			GrpcUseCerts: false,
 		},
@@ -630,4 +640,5 @@ func Test(_ *testing.T) {
 	bytes, _ := json.Marshal(entity)
 
 	print(string(bytes))
+	assert.NotEmpty(test, bytes)
 }

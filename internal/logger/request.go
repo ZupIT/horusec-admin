@@ -18,7 +18,7 @@ import (
 	"context"
 
 	"github.com/go-chi/chi/middleware"
-	log "github.com/sirupsen/logrus" //nolint:depguard // logger package is responsible to deal with project logging
+	log "github.com/sirupsen/logrus"
 )
 
 type (

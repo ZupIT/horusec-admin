@@ -10,6 +10,7 @@ GOFMT_FILES?=$$(find . -name '*.go' | grep -v vendor)
 GOCILINT ?= ./bin/golangci-lint
 CONTROLLER_GEN ?= $(shell pwd)/bin/controller-gen
 KUSTOMIZE = $(shell pwd)/bin/kustomize
+HORUSEC ?= horusec
 PROJECT_DIR := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
 
 .PHONY: help
@@ -71,7 +72,18 @@ fmt: ## Format all Go files
 	$(GOFMT) -w $(GOFMT_FILES)
 
 coverage: ## Check coverage in application
-	curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec-devkit/main/scripts/coverage.sh | bash -s 50 .
+	curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec-devkit/main/scripts/coverage.sh | bash -s 0 .
+
+build: ## Check coverage in application
+	$(GO) build -o "./tmp/bin/admin" ./cmd/app
+
+security: # Run security pipeline
+    ifeq (, $(shell which $(HORUSEC)))
+		curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec/master/deployments/scripts/install.sh | bash -s latest
+		$(HORUSEC) start -p="./" -e="true"
+    else
+		$(HORUSEC) start -p="./" -e="true"
+    endif
 
 lint: ## Run lint checks
     ifeq ($(wildcard $(GOCILINT)), $(GOCILINT))

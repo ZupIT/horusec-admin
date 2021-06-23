@@ -83,6 +83,7 @@ func (s *Span) SetHTTPResponseStatus(status int) {
 }
 
 func (s *Span) Panic(err interface{}) {
+	// nolint:gomnd // is necessary for now
 	ext.HTTPStatusCode.Set(s, uint16(500))
 	ext.Error.Set(s, true)
 	s.SetTag("error.type", "panic")
