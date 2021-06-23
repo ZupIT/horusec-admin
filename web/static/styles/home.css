@@ -14,56 +14,112 @@
  * limitations under the License.
  */
 
-@import './main.css';
+@import "./main.css";
 
-img.illustration {
-    display: block;
-    max-width: 800px;
-    width: 100%;
-    height: auto;
+div.logo-container {
+  display: flex;
+  justify-content: space-between;
 }
 
-h1, h2 {
-    font-size: 24px;
-    margin-top: 10px;
+button.status {
+  background: none;
+  border-radius: none;
+  padding: 0;
+  padding-right: 5px;
+  width: auto;
+  margin-right: 30px;
+}
+
+button.error {
+  animation: pulse-error 2s infinite;
+}
+
+button.Ready a span {
+  color: var(--success);
+}
+
+button.Pending a span {
+  color: var(--info);
+}
+
+button.Error a span {
+  color: var(--error);
+}
+
+button.status a span {
+  font-size: 30px;
+  margin-left: 10px;
+}
+
+button.status a img {
+  padding: 5px;
+  border-radius: 50%;
+}
+
+img.illustration {
+  display: block;
+  max-width: 800px;
+  width: 100%;
+  height: auto;
+}
+
+h1,
+h2 {
+  font-size: 24px;
+  margin-top: 10px;
 }
 
 ul {
-    display: flex;
-    margin-bottom: 250px;
-    margin-top: 50px;
+  display: flex;
+  margin-bottom: 250px;
+  margin-top: 50px;
 }
 
 li {
-    background: var(--darkSecundary);
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column-reverse;
-    align-items: center;
-    margin-right: 30px;
-    width: 130px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-    cursor: pointer;
+  background: var(--darkSecundary);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  margin-right: 30px;
+  width: 130px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  cursor: pointer;
 }
 
 li:hover {
-    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
 li a {
-    color: var(--text);
-    text-decoration: none;
-    width: 100%;
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column-reverse;
+  color: var(--text);
+  text-decoration: none;
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column-reverse;
 }
 
 li a img {
-    display: block;
-    width: 25px;
-    margin-bottom: 10px;
+  display: block;
+  width: 25px;
+  margin-bottom: 10px;
+}
+
+@keyframes pulse-error {
+  0% {
+    box-shadow: 0 0 0 0 rgba(233, 28, 28, 0.315);
+    background-color: rgba(233, 28, 28, 0.397);
+  }
+
+  70% {
+    box-shadow: 0 0 0 13px rgba(0, 0, 0, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
 }

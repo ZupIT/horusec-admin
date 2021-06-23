@@ -8,7 +8,16 @@
 </head>
 
 <body>
-    {{ template "logo" }}
+    <div class="logo-container">
+        <img class="head-logo" src="/images/logo.svg" alt="Horusec Logo">
+
+        <button id="status" class="status">
+            <a href="/view/status">
+                <img id="img-status" src="/icons/activity.svg">
+                <span>Status</span>
+            </a>
+        </button>
+    </div>
 
     <section class="container">
         <img src="/images/horusec_config.svg" class="illustration" alt="Horusec Config Illustation">
@@ -26,6 +35,13 @@
             </li>
 
             <li>
+                <a href="/view/config-resources">
+                    <span>Resources</span>
+                    <img src="/icons/resources.svg" alt="settings">
+                </a>
+            </li>
+
+            <li>
                 <a href="/view/config-auth">
                     <span>Authentication</span>
                     <img src="/icons/unlocked.svg" alt="settings">
@@ -33,9 +49,9 @@
             </li>
 
             <li>
-                <a href="/view/config-manager">
-                    <span>Manager</span>
-                    <img src="/icons/pie.svg" alt="settings">
+                <a href="/view/config-hosts">
+                    <span>Hosts</span>
+                    <img src="/icons/globe.svg" alt="settings">
                 </a>
             </li>
         </ul>
@@ -43,7 +59,13 @@
 </body>
 
 <script type="text/javascript">
-
+window.onload = async () => {
+    const state = (await getCurrentData()).status.state;
+    if (state !== '') {
+        document.getElementById('status').classList.add(state);
+        document.getElementById('img-status').src = `/icons/${state}.svg`
+    }
+};
 </script>
 
 </html>

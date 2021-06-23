@@ -14,24 +14,43 @@
  * limitations under the License.
  */
 
-@import './reset.css';
+@import "./reset.css";
 
 :root {
-    --dark: #1C1C1E;
-    --darkSecundary: #3c3c3d;
-    --primary: #EF4123;
-    --secundary: #F7941E;
-    --disabled: #2C2C2E;
-    --text: #F2F2F9;
-    --textSecundary: #b4b4b4;
-    --success: #10AA80;
-    --error: #FF453A;
-    --info: #5C6BC0;
+  --dark: #1c1c1e;
+  --darkSecundary: #3c3c3d;
+  --primary: #ef4123;
+  --secundary: #f7941e;
+  --disabled: #2c2c2e;
+  --text: #f2f2f9;
+  --textSecundary: #b4b4b4;
+  --success: #10aa80;
+  --error: #ff453a;
+  --info: #5c6bc0;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #000;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  background: #3a3a3c;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: #1c1c1e;
 }
 
 body {
-    background-color: var(--dark);
-    height: 100vh;
+  background-color: var(--dark);
+  height: 100vh;
 }
 
 span,
@@ -45,175 +64,195 @@ input,
 label,
 input::placeholder,
 ul li {
-    font-family: 'Lato', sans-serif;
-    color: var(--text);
+  font-family: "Lato", sans-serif;
+  color: var(--text);
 }
 
 form {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
 }
 
 input {
-    border: none;
-    outline: none;
-    background: none;
-    border-bottom: 1px solid var(--text);
-    width: 250px;
-    margin: 20px 0;
+  border: none;
+  outline: none;
+  background: none;
+  border-bottom: 1px solid var(--text);
+  width: 250px;
+  margin: 20px 0;
 }
 
 input::placeholder {
-    color: var(--textSecundary);
+  color: var(--textSecundary);
 }
 
 button {
-    background: linear-gradient(90deg, var(--primary) 0%, var(--secundary) 100%);
-    color: var(--text);
-    border-radius: 18px;
-    box-sizing: border-box;
-    border: none;
-    outline: none;
-    font-size: 12px;
-    cursor: pointer;
-    text-align: center;
-    width: 250px;
-    height: 40px;
-    margin: 20px 0;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--secundary) 100%);
+  color: var(--text);
+  border-radius: 18px;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: center;
+  width: 250px;
+  height: 40px;
+  margin: 20px 0;
+}
+
+.italic {
+  font-style: italic;
 }
 
 button.outline {
-    background: none;
-    border: 1px solid var(--text);
+  background: none;
+  border: 1px solid var(--text);
 }
 
 button a {
-    display: block;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    color: var(--text);
+  display: block;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: var(--text);
 }
 
 button:hover:not(:disabled) {
-    transform: scale(1.03);
+  transform: scale(1.03);
 }
 
 button:disabled {
-    cursor: default;
-    background: var(--disabled);
+  cursor: default;
+  background: var(--disabled);
 }
 
 div.logo-container {
-    padding: 30px 0 30px 30px;
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 div.logo-container img.head-logo {
-    width: 180px;
-    display: block;
+  width: 180px;
+  display: block;
 }
 
 section.container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    height: calc(100% - 200px);
-    position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: calc(100% - 105px);
+  position: relative;
 }
 
 .switch {
-    position: relative;
-    display: inline-block;
-    width: 40px;
-    height: 20px;
-    margin-top: 20px;
-  }
-  
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+  margin-top: 20px;
+}
+
 .switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
 .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 .slider:before {
-    position: absolute;
-    content: "";
-    height: 16px;
-    width: 16px;
-    left: 2px;
-    bottom: 2px;
-    background-color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 input:checked + .slider {
-    background-color: var(--primary);
+  background-color: var(--primary);
 }
 
 input:focus + .slider {
-    box-shadow: 0 0 1px var(--primary);
+  box-shadow: 0 0 1px var(--primary);
 }
 
 input:checked + .slider:before {
-    -webkit-transform: translateX(18px);
-    -ms-transform: translateX(18px);
-    transform: translateX(18px);
+  -webkit-transform: translateX(18px);
+  -ms-transform: translateX(18px);
+  transform: translateX(18px);
 }
 
 .slider.round {
-    border-radius: 24px;
+  border-radius: 24px;
 }
 
 .slider.round:before {
-    border-radius: 50%;
+  border-radius: 50%;
 }
 
-div.error-bar, div.success-bar {
-    width: 100%;
-    color: var(--text);
-    position: fixed;
-    z-index: 1;
-    padding: 10px;
-    text-transform: uppercase;
-    text-align: center;
-    bottom: -40px;
-    transition: all 1s ease;
+div.error-bar,
+div.success-bar {
+  width: 100%;
+  color: var(--text);
+  position: fixed;
+  z-index: 1;
+  padding: 10px;
+  text-transform: uppercase;
+  text-align: center;
+  bottom: -40px;
+  transition: all 1s ease;
 }
 
-
-.error-active, .success-active {
-    animation: showAndHidden 6s;
+.error-active,
+.success-active {
+  animation: showAndHidden 6s;
 }
 
 div.error-bar {
-    background-color: var(--error);
+  background-color: var(--error);
 }
 
 div.success-bar {
-    background-color: var(--success);
+  background-color: var(--success);
 }
 
 @keyframes showAndHidden {
-    0%   { bottom: -40px; }
-    25%   { bottom: 0px; }
-    50%   { bottom: 0px; }
-    75%   { bottom: 0px; }
-    100% { bottom: -40px; }
+  0% {
+    bottom: -40px;
+  }
+  25% {
+    bottom: 0px;
+  }
+  50% {
+    bottom: 0px;
+  }
+  75% {
+    bottom: 0px;
+  }
+  100% {
+    bottom: -40px;
+  }
 }

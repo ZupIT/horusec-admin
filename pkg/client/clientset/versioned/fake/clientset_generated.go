@@ -17,14 +17,15 @@
 package fake
 
 import (
-	clientset "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned"
-	installv1alpha1 "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v1alpha1"
-	fakeinstallv1alpha1 "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v1alpha1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"
 	fakediscovery "k8s.io/client-go/discovery/fake"
 	"k8s.io/client-go/testing"
+
+	clientset "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned"
+	installv2alpha1 "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v2alpha1"
+	fakeinstallv2alpha1 "github.com/ZupIT/horusec-admin/pkg/client/clientset/versioned/typed/install/v2alpha1/fake"
 )
 
 // NewSimpleClientset returns a clientset that will respond with the provided objects.
@@ -74,7 +75,7 @@ func (c *Clientset) Tracker() testing.ObjectTracker {
 
 var _ clientset.Interface = &Clientset{}
 
-// InstallV1alpha1 retrieves the InstallV1alpha1Client
-func (c *Clientset) InstallV1alpha1() installv1alpha1.InstallV1alpha1Interface {
-	return &fakeinstallv1alpha1.FakeInstallV1alpha1{Fake: &c.Fake}
+// InstallV2alpha1 retrieves the InstallV2alpha1Client
+func (c *Clientset) InstallV2alpha1() installv2alpha1.InstallV2alpha1Interface {
+	return &fakeinstallv2alpha1.FakeInstallV2alpha1{Fake: &c.Fake}
 }

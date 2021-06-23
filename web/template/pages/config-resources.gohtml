@@ -1,0 +1,284 @@
+{{ define "config-resources" }}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{ template "head" }}
+    <link href="/styles/config-resources.css" rel="stylesheet" />
+</head>
+
+<body>
+    {{ template "snackbar" }}
+    <div class="logo-container">
+        <img class="head-logo" src="/images/logo.svg" alt="Horusec Logo">
+
+        <h1>
+            <img src="/icons/resources.svg">
+            Resources
+        </h1>
+    </div>
+
+    <section class="container">
+        <form onsubmit="return submitForm(event)" id="form">
+            <div class="form-container-row">
+                <h2>PostgreSQL - General Database</h2>
+
+                <h3>Documentation section <a href="https://docs.horusec.io/docs/web/services/database/">about Database</a>.</h3>
+
+                <div class="divider">
+                    <label class="key">Database host</label>
+
+                    <span class="description">Address for connect in your database.</span>
+
+                    <input required name="global.database.host" placeholder="http://0.0.0.0" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key">Database port</label>
+
+                    <span class="description">Port to connect in your database.</span>
+
+                    <input required name="global.database.port" placeholder="5432" type="number">
+                </div>
+
+                <div class="divider">
+                    <label class="key">Database name</label>
+
+                    <span class="description">Name of your database</span>
+
+                    <input required name="global.database.name" placeholder="horusec_db" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key">Database log mode</label>
+
+                    <span class="description">Enable the verbose logs option.</span>
+
+                    <label class="switch">
+                        <input type="checkbox" name="global.database.logMode" value="false" onchange="setCheckboxValueByName('global.database.logMode')">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div class="divider">
+                    <label class="key">Database SSL mode</label>
+
+                    <span class="description">Enable SSL mode for your database.</span>
+
+                    <label class="switch">
+                        <input type="checkbox" name="global.database.sslMode" value="false" onchange="setCheckboxValueByName('global.database.sslMode')">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div class="divider secret">
+                    <label class="key">Database User</label>
+
+                    {{ template "secret" }}
+
+                    <input required name="global.database.user.secretKeyRef.name" placeholder="Name" type="text">
+
+                    <input name="global.database.user.secretKeyRef.key" placeholder="Key" type="text">
+                </div>
+
+                <div class="divider secret">
+                    <label class="key">Database Password</label>
+
+                    {{ template "secret" }}
+
+                    <input required name="global.database.password.secretKeyRef.name" placeholder="Name" type="text">
+
+                    <input required name="global.database.password.secretKeyRef.key" placeholder="Key" type="text">
+                </div>
+
+                <h2>PostgreSQL - Analytic Database</h2>
+
+                <h3>Documentation section <a href="https://docs.horusec.io/docs/web/services/database/">about Database</a>.</h3>
+
+                <div class="divider">
+                    <label class="key">Database host</label>
+
+                    <span class="description">Address for connect in your database.</span>
+
+                    <input required name="components.analytic.database.host" placeholder="http://0.0.0.0" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key">Database port</label>
+
+                    <span class="description">Port to connect in your database.</span>
+
+                    <input required name="components.analytic.database.port" placeholder="5432" type="number">
+                </div>
+
+                <div class="divider">
+                    <label class="key">Database name</label>
+
+                    <span class="description">Name of your database</span>
+
+                    <input required name="components.analytic.database.name" placeholder="horusec_analytic_db" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key">Database log mode</label>
+
+                    <span class="description">Enable the verbose logs option.</span>
+
+                    <label class="switch">
+                        <input type="checkbox" name="components.analytic.database.logMode" value="false" onchange="setCheckboxValueByName('components.analytic.database.logMode')">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div class="divider">
+                    <label class="key">Database SSL mode</label>
+
+                    <span class="description">Enable SSL mode for your database.</span>
+
+                    <label class="switch">
+                        <input type="checkbox" name="components.analytic.database.sslMode" value="false" onchange="setCheckboxValueByName('components.analytic.database.sslMode')">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div class="divider secret">
+                    <label class="key">Database User</label>
+
+                    {{ template "secret" }}
+
+                    <input required name="components.analytic.database.user.secretKeyRef.name" placeholder="Name" type="text">
+
+                    <input required name="components.analytic.database.user.secretKeyRef.key" placeholder="Key" type="text">
+                </div>
+
+                <div class="divider secret">
+                    <label class="key">Database Password</label>
+
+                    {{ template "secret" }}
+
+                    <input required name="components.analytic.database.password.secretKeyRef.name" placeholder="Name" type="text">
+
+                    <input required name="components.analytic.database.password.secretKeyRef.key" placeholder="Key" type="text">
+                </div>
+
+                <h2>Message Broker - RabbitMQ</h2>
+
+                <h3>Documentation section <a href="https://docs.horusec.io/docs/web/services/broker/">about Broker</a>.</h3>
+
+                <div class="divider">
+                    <label class="key">Broker host</label>
+
+                    <span class="description">The host for connect in your broker.</span>
+
+                    <input required name="global.broker.host" placeholder="http://0.0.0.0" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key">Broker port</label>
+
+                    <span class="description">The port for connect in your broker.</span>
+
+                    <input required name="global.broker.port" placeholder="5672" type="number">
+                </div>
+
+                <div class="divider secret">
+                    <label class="key">Broker User</label>
+
+                    {{ template "secret" }}
+
+                    <input required name="global.broker.user.secretKeyRef.name" placeholder="Name" type="text">
+
+                    <input required name="global.broker.user.secretKeyRef.key" placeholder="Key" type="text">
+                </div>
+
+                <div class="divider secret">
+                    <label class="key">Broker Password</label>
+
+                    {{ template "secret" }}
+
+                    <input required name="global.broker.password.secretKeyRef.name" placeholder="Name" type="text">
+
+                    <input required name="global.broker.password.secretKeyRef.key" placeholder="Key" type="text">
+                </div>
+
+                <h2>SMTP</h2>
+
+                <h3>Documentation section <a href="https://docs.horusec.io/docs/tutorials/how-to-enable-disable-messaging-service/">about SMTP and messaging</a>.</h3>
+
+                <div class="divider">
+                    <label class="key">Enabled emails</label>
+
+                    <span class="description">Enable/Disable send email in Horusec Flow.</span>
+
+                    <label class="switch">
+                        <input type="checkbox" name="components.messages.enabled" value="false" onchange="setCheckboxValueByName('components.messages.enabled')">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div class="divider">
+                    <label class="key" for="smtp_host">Host</label>
+
+                    <span class="description">The Host for connect in your SMTP server.</span>
+
+                    <input required name="components.messages.mailServer.host" placeholder="http://mysmtpserver.com" type="text">
+                </div>
+
+                <div class="divider">
+                    <label class="key" for="smtp_port">Port</label>
+
+                    <span class="description">The Port for connect in your SMTP server</span>
+
+                    <input required name="components.messages.mailServer.port" placeholder="5054" type="number">
+                </div>
+
+                <div class="divider">
+                    <label class="key" id="email_from">Email from</label>
+
+                    <span class="description">Email that will send.</span>
+
+                    <input required type="email" name="components.messages.emailFrom" placeholder="sender@email.com">
+                </div>
+
+                <div class="divider secret">
+                    <label class="key">SMPT User</label>
+
+                    {{ template "secret" }}
+
+                    <input required name="components.messages.mailServer.user.secretKeyRef.name" placeholder="Name" type="text">
+
+                    <input required name="components.messages.mailServer.user.secretKeyRef.key" placeholder="Key" type="text">
+                </div>
+
+                <div class="divider secret">
+                    <label class="key">SMPT Password</label>
+
+                    {{ template "secret" }}
+
+                    <input required name="components.messages.mailServer.password.secretKeyRef.name" placeholder="Name" type="text">
+
+                    <input required name="components.messages.mailServer.password.secretKeyRef.key" placeholder="Key" type="text">
+                </div>
+            </div>
+
+            {{ template "options-form" }}
+        </form>
+    </section>
+</body>
+
+<script type="text/javascript">
+    window.onload = () => {
+        setCurrentValues()
+    };
+
+    function submitForm(event) {
+        event.preventDefault();
+
+        const body = toK8sObject(event.target);
+
+        saveData(body);
+    }
+</script>
+
+</html>
+{{end}}

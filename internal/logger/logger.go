@@ -21,7 +21,6 @@ import (
 
 	"github.com/ZupIT/horusec-admin/internal/tracing"
 
-	// nolint
 	log "github.com/sirupsen/logrus"
 	prefixed "github.com/x-cray/logrus-prefixed-formatter"
 )

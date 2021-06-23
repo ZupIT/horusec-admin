@@ -14,79 +14,127 @@
  * limitations under the License.
  */
 
-@import './main.css';
+@import "./main.css";
 
 h1 {
-    font-size: 1.8em;
-    display: flex;
-    align-items: center;
-    margin-bottom: 50px;
+  font-size: 1.8em;
+  display: flex;
+  align-items: center;
 }
 
 h1 img {
-    width: 30px;
-    margin-right: 10px;
+  width: 30px;
+  margin-right: 10px;
+}
+
+* a {
+  color: var(--info);
+  width: auto;
+}
+
+div.form-container-column,
+div.form-container-row {
+  height: calc(100vh - 220px);
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  overflow-y: auto;
+  margin-top: 30px;
+  padding: 0 30px;
+  margin-right: 20px;
+}
+
+div.form-container-column {
+  flex-direction: column;
+}
+
+div.form-container-row {
+  flex-direction: row;
+}
+
+.column {
+  flex-direction: column;
 }
 
 .divider {
-    display: flex;
-    align-items: flex-start;
-    flex-direction: column;
-    justify-content: center;
-    padding: 20px;
-    background-color: var(--disabled);
-    border-radius: 5px;
-    width: 600px;
-    margin-top: 20px;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+  background-color: var(--disabled);
+  border-radius: 5px;
+  width: 390px;
+  margin: 10px;
+}
+
+.divider .embedded {
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
 }
 
 .divider label.key {
-    font-weight: bold;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 10px;
 }
 
 .divider span.description {
-    color: var(--textSecundary);
-    margin-top: 10px;
+  color: var(--textSecundary);
+  margin-top: 10px;
+}
+
+h3 {
+  color: var(--textSecundary);
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+h3 a {
+  color: var(--primary);
 }
 
 .divider span.description a {
-    color: var(--primary);
+  color: var(--primary);
 }
 
 .btns-wrapper {
-    margin-top: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  margin: 25px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-div.form-group {
-    display: flex;
-    flex-wrap: wrap;
-    max-width: 800px;
-    max-height: 300px;
-    justify-content: space-between;
-    overflow-y: auto;
-    padding-right: 10px;
-    margin-top: 20px;
-    scrollbar-width: thin;
-    scrollbar-color: #000;
+.btns-wrapper button {
+  margin: 0;
+  margin-left: 30px;
 }
 
-div.form-group::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+.secret {
+  border: 1px dotted #f1f1f1;
+  margin-top: 10px;
+  padding: 10px;
+  min-width: 370px;
 }
 
-div.form-group::-webkit-scrollbar-thumb{
-    border-radius: 2px;
-    background: #3A3A3C;
+.secret-title {
+  margin-bottom: 3px;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
 }
 
-div.form-group::-webkit-scrollbar-track {
-    background-color: #1C1C1E;
+.secret-title img {
+  width: 18px;
+  margin-right: 5px;
 }
 
-div.form-group .divider {
-    width: 350px;
+.secret-description {
+  display: block;
+  font-size: 15px;
+  color: var(--textSecundary);
 }

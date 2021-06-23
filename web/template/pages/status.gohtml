@@ -1,0 +1,113 @@
+{{ define "status" }}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{ template "head" }}
+    <link href="/styles/status.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="logo-container">
+        <img class="head-logo" src="/images/logo.svg" alt="Horusec Logo">
+
+        <h1>
+            <img id="status" src="/icons/activity.svg">
+            Status
+        </h1>
+    </div>
+
+    <section class="status-container">
+        <div class="sub-header">
+            <h2 id="message"></h2>
+
+            <button class="back">
+                <a href="/view/home">Home</a>
+            </button>
+        </div>
+
+        <ul id="services" class="services">
+        </ul>
+
+        {{/* <div id="modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1>
+                        <img src="/icons/info.svg">
+                        <span id="modal-title">Details for status</span>
+                    </h1>
+
+                    <button class="close" onclick="closeModal()">
+                        <img src="/icons/close.svg">
+                        Close
+                    </button>
+                </div>
+
+                <ul id="details-list">
+                    <li>
+                        The HORUSEC_DATABASE_PORT is not defined.
+                    </li>
+
+                    <li>
+                        2021/05/27 12:17:52
+                        /go/pkg/mod/github.com/!zup!i!t/horusec-devkit@v1.0.3/pkg/services/database/database.go:134
+                        ERROR: duplicate key value violates unique constraint "accounts_email_key" (SQLSTATE 23505)
+                    </li>
+
+                    <li>
+                        goroutine 1 [running]:
+                        main.main()
+                        /auth/cmd/app/main.go:19 +0x7d
+                    </li>
+                </ul>
+            </div>
+        </div> */}}
+    </section>
+</body>
+
+<script type="text/javascript">
+window.onload = async () => {
+    const data = (await getCurrentData()).status;
+    setStatusData(data)
+};
+
+function openModal () {
+    document.getElementById('modal').style.display = 'flex'
+}
+
+function closeModal () {
+    document.getElementById('modal').style.display = 'none'
+}
+
+function setStatusData(data) {
+    const { conditions } = data;
+
+    if (conditions) {
+        document.getElementById("message").innerHTML = 'Track the status of Horusec services on your server.'
+
+        const listOfServices = document.getElementById('services');
+
+        conditions.forEach((service) => {
+            const serviceName = service.type.replace('Available', '');
+            const li = document.createElement('li');
+            li.className += service.status;
+            li.innerHTML += `
+                <span class="title">${serviceName}</span>
+
+                <span class="status"></span>
+
+                <div class="log">
+                    <span class="date">${service.lastTransitionTime}</span>
+                    <span class="content">${service.message}</span>
+                </div>
+            `;
+            listOfServices.appendChild(li);
+        })
+    } else {
+        document.getElementById("message").innerHTML = '🛠 No service has status available, please do some configuration and check status again.'
+    }
+
+}
+
+</script>
+{{end}}

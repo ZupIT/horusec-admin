@@ -34,6 +34,7 @@ func (a *Authorizer) Authorize(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		tokenStr := r.Header.Get("X-Horusec-Authorization")
 		if !a.authz.IsValid(tokenStr) {
+			// nolint:gomnd // is necessary for now
 			w.WriteHeader(401)
 			_, _ = w.Write([]byte("Unauthorized"))
 
