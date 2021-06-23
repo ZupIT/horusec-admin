@@ -8,6 +8,8 @@ COPY go.sum go.sum
 # cache deps before copying source
 RUN go mod download
 
+RUN go get github.com/google/wire/cmd/wire@v0.5.0
+
 # Copy the go source
 COPY cmd/ cmd/
 COPY internal/ internal/
