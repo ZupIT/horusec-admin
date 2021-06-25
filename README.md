@@ -5,7 +5,7 @@
 <p></p>
 
 <p align="center">
-    <a href="https://github.com/ZupIT/horusec-engine/pulse" alt="activity">
+    <a href="https://github.com/ZupIT/horusec-admin/pulse" alt="activity">
         <img src="https://img.shields.io/github/commit-activity/m/ZupIT/horusec-admin?label=activity"/></a>
     <a href="https://github.com/ZupIT/horusec-admin/graphs/contributors" alt="contributors">
         <img src="https://img.shields.io/github/contributors/ZupIT/horusec-admin?label=contributors"/></a>
