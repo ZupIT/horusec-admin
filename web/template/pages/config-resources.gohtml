@@ -221,7 +221,7 @@
 
                     <span class="description">The Host for connect in your SMTP server.</span>
 
-                    <input required name="components.messages.mailServer.host" placeholder="http://mysmtpserver.com" type="text">
+                    <input name="components.messages.mailServer.host" placeholder="http://mysmtpserver.com" type="text">
                 </div>
 
                 <div class="divider">
@@ -229,7 +229,7 @@
 
                     <span class="description">The Port for connect in your SMTP server</span>
 
-                    <input required name="components.messages.mailServer.port" placeholder="5054" type="number">
+                    <input name="components.messages.mailServer.port" placeholder="5054" type="number">
                 </div>
 
                 <div class="divider">
@@ -237,7 +237,7 @@
 
                     <span class="description">Email that will send.</span>
 
-                    <input required type="email" name="components.messages.emailFrom" placeholder="sender@email.com">
+                    <input type="email" name="components.messages.emailFrom" placeholder="sender@email.com">
                 </div>
 
                 <div class="divider secret">
@@ -245,9 +245,9 @@
 
                     {{ template "secret" }}
 
-                    <input required name="components.messages.mailServer.user.secretKeyRef.name" placeholder="Name" type="text">
+                    <input name="components.messages.mailServer.user.secretKeyRef.name" placeholder="Name" type="text">
 
-                    <input required name="components.messages.mailServer.user.secretKeyRef.key" placeholder="Key" type="text">
+                    <input name="components.messages.mailServer.user.secretKeyRef.key" placeholder="Key" type="text">
                 </div>
 
                 <div class="divider secret">
@@ -255,9 +255,9 @@
 
                     {{ template "secret" }}
 
-                    <input required name="components.messages.mailServer.password.secretKeyRef.name" placeholder="Name" type="text">
+                    <input name="components.messages.mailServer.password.secretKeyRef.name" placeholder="Name" type="text">
 
-                    <input required name="components.messages.mailServer.password.secretKeyRef.key" placeholder="Key" type="text">
+                    <input name="components.messages.mailServer.password.secretKeyRef.key" placeholder="Key" type="text">
                 </div>
             </div>
 
