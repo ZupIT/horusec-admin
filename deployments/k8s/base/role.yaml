@@ -18,5 +18,5 @@ metadata:
   name: horusec-admin
 rules:
   - apiGroups: [ "install.horusec.io" ]
-    resources: [ "horusecmanagers" ]
+    resources: [ "horusecplatforms" ]
     verbs: [ "create", "delete", "deletecollection", "get", "list", "patch" ,"update", "watch" ]
