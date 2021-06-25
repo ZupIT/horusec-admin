@@ -29,14 +29,7 @@ See all horusec admin details in [our documentation](https://horusec.io/docs/web
 ## Requirements
 To use horusec-admin you need to configure some secrets and dependencies of horusec, they are:
 * [Kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl) and connection with your cluster
-* [Horusec-Operator](https://github.com/ZupIT/horusec-operator) installed
-* Connection with a database
-  * You can upload a pod from a PostgreSQL database [as shown in our example](#development-environment), or you can only create secrets of connection with your database.
-  * Create two databases for the horusec-platform and horusec-analytic
-* Connection with a message broker
-  * You can upload a pod from a RabbitMQ message broker [as shown in our example](#development-environment), or you can only create secrets of connection with your message broker.
-* Others secrets necessary
-  * The secrets you need to configure may vary depending on how you use horusec. [See possible configuration options](https://horusec.io/docs/web/installation/install-with-horusec-operator#resources).
+* [Horusec-Operator](https://github.com/ZupIT/horusec-operator) installed.
 
 ## Installing
 After configuring your database connection, connecting to your broker and creating the secrets you need to install horusec-operator on your cluster, see an example below:
