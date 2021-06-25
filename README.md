@@ -95,7 +95,6 @@ time="2021-06-25 11:29:12 +0000" level=info msg="Valid until:2021-06-25 13:29:12
 time="2021-06-25 11:29:12 +0000" level=info msg=listening addr=":3000" prefix=server
 ```
 The token in this case is `04cd71a59715bc535cdc3ef6050c4f0ad49f12f0`
-![](./assets/tokens-page.png)
 
 
 ### When you access internal pages you can see the pages:
@@ -106,7 +105,7 @@ Select which configuration you want to perform on the platform
 
 ### - Status Page
 Check the status of the services and if available
-![](./assets/home-page.png)
+![](./assets/status-page.png)
 
 ### - General Page
 Perform general application settings such as data for users of the application among others.
