@@ -151,7 +151,10 @@ ul.services li div.log {
 ul.services li div.log span.date {
   display: block;
   margin: 5px 0;
-  font-weight: bold;status
+  font-weight: bold;
+  color: var(--textSecundary);
+}
+
 ul.services li div.log span.content {
   display: block;
   color: var(--textSecundary);
