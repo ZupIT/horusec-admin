@@ -125,6 +125,20 @@ ul.services li.Unknown span.status::after {
   margin-left: 5px;
 }
 
+ul.services li.False {
+  animation: pulse-error 2s infinite;
+}
+
+ul.services li.False span.status::before {
+  content: url("../icons/error.svg");
+}
+
+ul.services li.False span.status::after {
+  content: "Error";
+  color: var(--error);
+  margin-left: 5px;
+}
+
 ul.services li div.log {
   display: flex;
   align-items: center;
@@ -137,10 +151,7 @@ ul.services li div.log {
 ul.services li div.log span.date {
   display: block;
   margin: 5px 0;
-  font-weight: bold;
-  color: var(--textSecundary);
-}
-
+  font-weight: bold;status
 ul.services li div.log span.content {
   display: block;
   color: var(--textSecundary);
