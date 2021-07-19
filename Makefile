@@ -12,6 +12,7 @@ CONTROLLER_GEN ?= $(shell pwd)/bin/controller-gen
 KUSTOMIZE = $(shell pwd)/bin/kustomize
 HORUSEC ?= horusec
 PROJECT_DIR := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
+ADDLICENSE ?= addlicense
 
 .PHONY: help
 
@@ -105,6 +106,14 @@ fix-imports: # Setup all imports to default mode
     else
 		$(GO_IMPORTS) -local $(GO_IMPORTS_LOCAL) -w $(GOFMT_FILES)
     endif
+
+license:
+	$(GO) get -u github.com/google/addlicense
+	@$(ADDLICENSE) -check -f ./copyright.txt $(shell find -regex '.*\.\(go\|js\|ts\|yml\|yaml\|sh\|dockerfile\)')
+
+license-fix:
+	$(GO) get -u github.com/google/addlicense
+	@$(ADDLICENSE) -f ./copyright.txt $(shell find -regex '.*\.\(go\|js\|ts\|yml\|yaml\|sh\|dockerfile\)')
 
 # go-get-tool will 'go get' any package $2 and install it to $1.
 define go-get-tool
