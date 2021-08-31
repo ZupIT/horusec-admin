@@ -8,7 +8,7 @@ require (
 	github.com/evanphx/json-patch v4.9.0+incompatible
 	github.com/go-chi/chi v1.5.4
 	github.com/google/addlicense v0.0.0-20210428195630-6d92264d7170 // indirect
-	github.com/google/go-cmp v0.5.5
+	github.com/google/go-cmp v0.5.6
 	github.com/google/wire v0.5.0
 	github.com/heptiolabs/healthcheck v0.0.0-20180807145615-6ff867650f40
 	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d // indirect
