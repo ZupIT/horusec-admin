@@ -82,7 +82,7 @@ function closeModal () {
 function setStatusData(data) {
     const { conditions } = data;
 
-    if (conditions) {
+    if (data && conditions) {
         document.getElementById("message").innerHTML = 'Track the status of Horusec services on your server.'
 
         const listOfServices = document.getElementById('services');
