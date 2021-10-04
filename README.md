@@ -21,6 +21,8 @@
         <img src="https://img.shields.io/badge/license-Apache%202-blue"/></a>
 </p>
 
+> :warning: **This project will be discontinued from October 2021.** We will leave the repository here in case the community wants to continue its development.
+
 # Horusec-Admin
 The main function of horusec-admin is to carry out basic modifications to your kubernetes cluster through a user-friendly interface.
 Its creation is based in conjunction with the [horusec-operator](https://github.com/ZupIT/horusec-operator), where it can have a simpler way to install the services in an environment using kubernetes.
