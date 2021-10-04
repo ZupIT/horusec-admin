@@ -21,69 +21,76 @@
         <img src="https://img.shields.io/badge/license-Apache%202-blue"/></a>
 </p>
 
-> :warning: **This project will be discontinued from October 2021.** We will leave the repository here in case the community wants to continue its development.
+> :warning: **This project will be deprecated in October 2021.** We will leave the repository here in case the community wants to continue its development.
 
-# Horusec-Admin
-The main function of horusec-admin is to carry out basic modifications to your kubernetes cluster through a user-friendly interface.
-Its creation is based in conjunction with the [horusec-operator](https://github.com/ZupIT/horusec-operator), where it can have a simpler way to install the services in an environment using kubernetes.
-See all horusec admin details in [our documentation](https://horusec.io/docs/web/installation/install-with-horusec-admin/)
+# **Horusec-Admin**
+Horusec-admin carries out basic modifications to your Kubernetes cluster through a user-friendly interface.
+The creation was based on the conjunction with [**Horusec-Operator**](https://github.com/ZupIT/horusec-operator), where it can have a simpler way to install the services in an environment using Kubernetes.
 
-## Requirements
-To use horusec-admin you need to configure some secrets and dependencies of horusec, they are:
-* [Kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl) and connection with your cluster
-* [Horusec-Operator](https://github.com/ZupIT/horusec-operator) installed.
 
-## Installing
-After configuring your database connection, connecting to your broker and creating the secrets you need to install horusec-operator on your cluster, see an example below:
+## **Requirements**
+To use Horusec-Admin you need to configure some secrets and dependencies, check them below:
+* [**Kubectl**](https://kubernetes.io/docs/tasks/tools/#kubectl) and connection with your cluster
+* [**Horusec-Operator**](https://github.com/ZupIT/horusec-operator) installed.
+
+## **Installing Admin**
+Install Horusec-Operator in your cluster, see below:
+
 ```bash
 kubectl apply -f "https://github.com/ZupIT/horusec-operator/releases/download/v2.0.0/horusec-operator.yaml"
 ```
-See the resource if was installed with sucess!
+Check if the resource was installed: 
+
 ```bash
 kubectl api-resources | grep horus
 ```
-you can see an output like this:
+You may see an output like this:
 ```text
 $ kubectl api-resources | grep horus                                                           
 horusecplatforms                  horus        install.horusec.io             true         HorusecPlatform
 ```
 
-And now is necessary install horusec-admin in your cluster
+Now it is necessary to install Horusec-Admin in your cluster:
+
 ```bash
 kubectl apply -f "https://github.com/ZupIT/horusec-admin/releases/download/v2.0.0/horusec-admin.yaml"
 ```
 
-See the pod running!
+See the pod running: 
 ```bash
 kubectl get pods
 ```
-you can see an output like this:
+You may see an output like this:
 ```text
 $ kubectl get pods                                                           
 NAME                                                    READY   STATUS      RESTARTS   AGE
 horusec-admin-74594694f-sdmr8                           1/1     Running     0          1m
 ```
 
-## Usage
+## **Usage**
 
-**Is not possible realize changes in horusec-operator with an yaml file and you see this data in horusec-admin, is recommended usage some one project to configured horusec services. In other words, just the horusec-admin or just horusec-operator**
+**It is not possible to make changes in Horusec-Operator with a YAML file and you will see this data in Horusec-Admin. We recommend the usage of one project to configure Horusec services. In other words, just the horusec-admin or just horusec-operator**
 
-The Horusec-admin is running in your cluster by default in internal port http 3000 is necessary expose in your local machine to access interface this project.
+The Horusec-admin is running in your cluster by default in an internal port HTTP 3000 is necessary to expose in your local machine to access interface this project.
 
-**WARNING! DON'T EXPOSE THIS SERVICE TO EXTERNAL INTERNET BECAUSE CONTAINS SENSITIVE DATA !!!**
+**WARNING! DON'T EXPOSE THIS SERVICE TO EXTERNAL INTERNET BECAUSE CONTAINS SENSITIVE DATA!!!**
 
-And now in your terminal start in port-forward of this service how:
+Follow the steps to configure: 
+
+1. In your terminal start in port-forward of this service how:
 ```bash
 kubectl port-forward horusec-admin-74594694f-sdmr8 3000:3000
 ```
-and if you access `http://localhost:3000` you see horusec-admin page
+If you access `http://localhost:3000` you will see Horusec-Admin page:
 ![](./assets/tokens-page.png)
 
-To get this access token, is necessary see the logs of the service, because the token was showed only internal pod and renewd every 10 minutes. See follow example:
+2. Get the access token, it is necessary to see the logs of the service because the token was only showed in the internal pod and renewed every 10 minutes. See the follow example:
+
 ```bash
 kubectl logs pod/horusec-admin-74594694f-sdmr8
 ```
-and your output:
+Your output:
+
 ```text
 time="2021-06-25 11:29:12 +0000" level=info msg="Token:04cd71a59715bc535cdc3ef6050c4f0ad49f12f0" prefix=authz
 time="2021-06-25 11:29:12 +0000" level=info msg="Valid until:2021-06-25 13:29:12.454049573 +0000 UTC m=+7200.016119300" prefix=authz
@@ -92,50 +99,56 @@ time="2021-06-25 11:29:12 +0000" level=info msg=listening addr=":3000" prefix=se
 The token in this case is `04cd71a59715bc535cdc3ef6050c4f0ad49f12f0`
 
 
-### When you access internal pages you can see the pages:
+### **When you access internal pages, you can see the following:**
 
-### - Home Page
-Select which configuration you want to perform on the platform
+### **Home Page**
+Select which configuration you want to perform on the platform:
 ![](./assets/home-page.png)
 
-### - Status Page
-Check the status of the services and if available
+### **Status Page**
+Check the status of the services and if it's available: 
 ![](./assets/status-page.png)
 
-### - General Page
-Perform general application settings such as data for users of the application among others.
+### **General Page**
+Perform general application settings such as data for users of the application among others:
 ![](./assets/general-page.png)
 
-### - Resources Page
-Perform connection settings with services as required databases, Message Broker and SMTP.
+### **Resources Page**
+Perform connection settings with services as required databases, Message Broker and SMTP:
 **Remembering that Horusec does not create these features only accomplishes the connection!**
 ![](./assets/resources-page.png)
 
-### - Authentication Page
-Change the type of authentication you want to use in your environment!
+### **Authentication Page**
+Change the type of authentication you want to use in your environment:
 ![](./assets/authentication-page.png)
 
-### - Hosts Page
-Update simply and quickly the host of your application that will be exposed in the ingress of your Kubbernetes cluster
+### **Hosts Page**
+Update simply and quickly the host of your application that will be exposed in the ingress of your Kubbernetes cluster:
 ![](./assets/hosts-page.png)
 
-## Development Environment
-First Step is necessary you [configure horusec-operator](https://github.com/ZupIT/horusec-operator#development-environment) and all connections and secrets.
+## **Development Environment**
+This is an example to use Horusec-Admin. Check the requirements: 
 
-For usage this example is necessary installing [helm](https://helm.sh/docs/intro/install/#from-script) and [kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) in your local machine
-After of you install you can run follow commands and see horusec-operator up all horusec web services.
+- [**Configure horusec-operator**](https://github.com/ZupIT/horusec-operator#development-environment) and all connections and secrets.
+- [**Helm**](https://helm.sh/docs/intro/install/#from-script); 
+- [**Kind**](https://kind.sigs.k8s.io/docs/user/quick-start/#installation);
 
-Clone horusec-operator project
+After of you install, follow the steps below: 
+
+**Step 1.** Clone horusec-operator project:
+
 ```bash
 git clone https://github.com/ZupIT/horusec-operator.git && cd horusec-operator
 ```
 
-Up kubernetes cluster with all dependencies and wait finish!
+**Step 2.** Up kubernetes cluster with all dependencies and wait to finish:
+
 ```bash
 make up-sample
 ```
 
-If you see this message
+If you see this message:
+
 ```text
 Creating horusec_analytic_db...
 If you don't see a command prompt, try pressing enter.
@@ -147,67 +160,78 @@ pod default/postgresql-client terminated (Error)
 ```
 Don't worry this is normal because the script is trying create new database, but the pod of the postgresql is not ready, it will run again until create new database.
 
-After script finish. Install Horusec-Operator
+**Step 3.** After the script finishes, install Horusec-Operator:
+
 ```bash
 kubectl apply -f "https://github.com/ZupIT/horusec-operator/releases/download/v2.0.0/horusec-operator.yaml"
 ```
 
-See the resource if was installed with sucess!
+**Step 4.** Check if the resource was installed:
+
 ```bash
 kubectl api-resources | grep horus
 ```
-you can see an output like this:
+You may see an output like this:
+
 ```text
 $ kubectl api-resources | grep horus                                                           
 horusecplatforms                  horus        install.horusec.io             true         HorusecPlatform
 ```
 
-And you can see the pod manager by this resource
+And you can see the pod manager by this resource:
 ```text
 $ kubectl get pods -n horusec-operator-system
 NAME                                                   READY   STATUS              RESTARTS   AGE
 horusec-operator-controller-manager-7b9696d4c4-t7w2q   2/2     Running             0          2m10s
 ```
 
-And now is necessary install horusec-admin in your cluster
+**Step 5.** Now, install horusec-admin in your cluster:
+
 ```bash
 kubectl apply -f "https://github.com/ZupIT/horusec-admin/releases/download/v2.0.0/horusec-admin.yaml"
 ```
 
-See the pod running!
+See the pod running:
+
 ```bash
 kubectl get pods
 ```
-you can see an output like this:
+You may see an output like this:
 ```text
 $ kubectl get pods                                                           
 NAME                                                    READY   STATUS      RESTARTS   AGE
 horusec-admin-74594694f-sdmr8                           1/1     Running     0          1m
 ```
 
-And now in your terminal start in port-forward of this service how:
+**Step 6.** Now in your terminal, start in port-forward of this service:
+
 ```bash
 kubectl port-forward horusec-admin-74594694f-sdmr8 3000:3000
 ```
-and if you access `http://localhost:3000` you see horusec-admin page
+If you access `http://localhost:3000` you will see horusec-admin page.
 
-To get this access token, is necessary see the logs of the service, because the token was showed only internal pod and renewd every 10 minutes. See follow example:
+
+**Step 7.** Get the access token. See the logs of the service because the token was showed only in the internal pod and renewed every 10 minutes. See follow example:
+
 ```bash
 kubectl logs pod/horusec-admin-74594694f-sdmr8
 ```
-and your output:
+And your output may be:
 ```text
 time="2021-06-25 11:29:12 +0000" level=info msg="Token:04cd71a59715bc535cdc3ef6050c4f0ad49f12f0" prefix=authz
 time="2021-06-25 11:29:12 +0000" level=info msg="Valid until:2021-06-25 13:29:12.454049573 +0000 UTC m=+7200.016119300" prefix=authz
 time="2021-06-25 11:29:12 +0000" level=info msg=listening addr=":3000" prefix=server
 ```
+
 The token in this case is `04cd71a59715bc535cdc3ef6050c4f0ad49f12f0`.
 
-Setup authentication go to the page general and **click in "Save" button**, and all horusec services is upload with default configuration. You can see with command
+**Step 8.** Setup the authentication. Go to the general page and **click on "Save" button**, and all Horusec services will upload with default configuration. You can see with command:
+
 ```bash
 kubectl get pods
 ```
-you can see an output like this:
+The output will be like this:
+
 ```text
 $ kubectl get pods
 NAME                                                    READY   STATUS      RESTARTS   AGE
@@ -227,29 +251,32 @@ vulnerability-7d789fd655-tpjp8                          1/1     Running     0   
 webhook-7b5c45c859-cq4nf                                1/1     Running     0          73s
 ```
 
-## Contributing Guide
+## **Documentation**
 
-Read our [contributing guide](CONTRIBUTING.md) to learn about our development process, how to propose bugfixes and improvements, and how to build and test your changes to horusec.
+For more information about Horusec, please check out the [**documentation**](https://horusec.io/docs/).
 
-## Communication
 
-We have a few channels for contact, feel free to reach out to us at:
+## **Contributing**
 
-- [GitHub Issues](https://github.com/ZupIT/horusec-admin/issues)
-- [Zup Open Source Forum](https://forum.zup.com.br)
+If you want to contribute to this repository, access our [**Contributing Guide**](https://github.com/ZupIT/charlescd/blob/main/CONTRIBUTING.md). 
+And if you want to know more about Horusec, check out some of our other projects:
 
-## Contributing with others projects
 
-Feel free to use, recommend improvements, or contribute to new implementations.
+- [**Charts**](https://github.com/ZupIT/charlescd/tree/main/circle-matcher)
+- [**Devkit**](https://github.com/ZupIT/horusec-devkit)
+- [**Engine**](https://github.com/ZupIT/horusec-engine)
+- [**Jenkins**](https://github.com/ZupIT/horusec-jenkins-sharedlib)
+- [**Operator**](https://github.com/ZupIT/horusec-operator)
+- [**Platform**](https://github.com/ZupIT/horusec-platform)
+- [**VSCode plugin**](https://github.com/ZupIT/horusec-vscode-plugin)
+- [**Kotlin**](https://github.com/ZupIT/horusec-tree-sitter-kotlin)
+- [**Vulnerabilities**](https://github.com/ZupIT/horusec-examples-vulnerabilities)
 
-If this is our first repository that you visit, or would like to know more about Horusec,
-check out some of our other projects.
+## **Community**
+Feel free to reach out to us at:
 
-- [Horusec CLI](https://github.com/ZupIT/horusec)
-- [Horusec Platform](https://github.com/ZupIT/horusec-platform)
-- [Horusec DevKit](https://github.com/ZupIT/horusec-devkit)
-- [Horusec Engine](https://github.com/ZupIT/horusec-engine)
-- [Horusec Admin](https://github.com/ZupIT/horusec-admin)
-- [Horusec VsCode](https://github.com/ZupIT/horusec-vscode-plugin)
+- [**GitHub Issues**](https://github.com/ZupIT/horusec-devkit/issues)
+- [**Zup Open Source Forum**](https://forum.zup.com.br)
+
 
 This project exists thanks to all the contributors. You rock! ❤️🚀
